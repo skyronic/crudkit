@@ -1,0 +1,26 @@
+{
+    "name": "crudkit/crudkit",
+    "description": "Toolkit to quickly build powerful mobile-friendly CRUD (create/read/update/delete) interfaces for PHP, Laravel, and Codeigniter apps. Works with MySQL and other databases.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Anirudh Sanjeev",
+            "email": "skyronic@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "CrudKit\\": "src/CrudKit/"
+        }
+    },
+    "minimum-stability": "beta",
+    "require": {
+        "doctrine/dbal": "2.6.*@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.8.*@dev"
+    },
+    "scripts": {
+        "phpunit":"vendor/bin/phpunit"
+    }
+}
