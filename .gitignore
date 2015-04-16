@@ -33,4 +33,4 @@ build
 bower_components
 vendor
 .idea/*
-.composer.lock
+composer.lock

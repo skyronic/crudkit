@@ -6,6 +6,6 @@ use CrudKit\Pages\BasePage;
 require "../vendor/autoload.php";
 
 $crud = new CrudKit();
-$crud->addPage(new BasePage());
+$crud->setStaticRoot("/src/static/");
 
-echo $crud->say();
+$crud->render();
