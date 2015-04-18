@@ -3,13 +3,13 @@
 namespace CrudKit;
 
 use CrudKit\Pages\BasePage;
+use CrudKit\Util\TwigUtil;
 use Twig_Autoloader;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
 
-define("CK_BASE_PATH", dirname(dirname(__FILE__)));
 
-class CrudKit {
+class CrudKitApp {
     protected $staticRoot;
 
     /**
@@ -29,11 +29,8 @@ class CrudKit {
             throw new \Exception("Please set static root using `setStaticRoot`");
         }
 
-        Twig_Autoloader::register();
-        $loader = new Twig_Loader_Filesystem(CK_BASE_PATH."/templates/");
-        $twig = new Twig_Environment($loader, array(
-        ));
-        return $twig->render("layout.twig", array(
+        $twig = new TwigUtil();
+        return $twig->renderTemplateToString("layout.twig", array(
             'staticRoot' => $this->staticRoot
         ));
     }

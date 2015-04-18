@@ -1,11 +1,11 @@
 <?php
 
-use CrudKit\CrudKit;
+use CrudKit\CrudKitApp;
 use CrudKit\Pages\BasePage;
 
 require "../vendor/autoload.php";
 
-$crud = new CrudKit();
+$crud = new CrudKitApp();
 $crud->setStaticRoot("/src/static");
 
 $crud->render();
