@@ -17,6 +17,7 @@ class CrudKit {
      * @param $staticRoot
      */
     public function setStaticRoot ($staticRoot) {
+        // TODO: strip trailing slash
         $this->staticRoot = $staticRoot;
     }
 
@@ -32,7 +33,9 @@ class CrudKit {
         $loader = new Twig_Loader_Filesystem(CK_BASE_PATH."/templates/");
         $twig = new Twig_Environment($loader, array(
         ));
-        return $twig->render("layout.twig", array());
+        return $twig->render("layout.twig", array(
+            'staticRoot' => $this->staticRoot
+        ));
     }
 
     /**

@@ -2,6 +2,10 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     watch: {
+        lessFiles: {
+            files: ["src/static/less/*.less"],
+            tasks: ['less:main']
+        }
     },
     copy:{
 
