@@ -33,14 +33,15 @@ class BaseController {
 
         $action = $this->url->get('action');
         if($action !== null && method_exists($this, "handle_".$action)) {
-            return call_user_func(array($this, "handle_", $action));
+            $result = call_user_func(array($this, "handle_". $action));
+            return $this->renderTemplate($result['template'], $result['data']);
         }
         else  {
             return $this->default_page ();
         }
     }
 
-    public function default_page () {
+    public function renderTemplate ($templateName, $data = array()) {
         $pageMap = [];
         /** @var BasePage $pageItem */
         foreach($this->app->getPages() as $pageItem) {
@@ -51,9 +52,15 @@ class BaseController {
         }
 
         $twig = new TwigUtil();
-        return $twig->renderTemplateToString("layout.twig", array(
+        $template_data = array_merge(array(
             'staticRoot' => $this->app->getStaticRoot(),
             'pageMap' => $pageMap
-        ));
+        ), $data);
+
+        return $twig->renderTemplateToString($templateName, $template_data);
+    }
+
+    public function default_page () {
+        return $this->renderTemplate("layout.twig", array());
     }
 }

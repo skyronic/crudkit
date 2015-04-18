@@ -15,7 +15,7 @@
                 <div class="panel-body">
                     <div class="nav nav-pills nav-stacked">
                     {% for item in pageMap %}
-                    <li role="presentation"><a href="{{ route.openPage(item.id) }}">{{ item.name }}</a></li>
+                    <li role="presentation"><a href="{{ route.openPage(item.id)|raw }}">{{ item.name }}</a></li>
                     {% endfor %}
                     </div>
                 </div>
@@ -23,6 +23,7 @@
         </div>
         <div class="col-md-9">
             <h2>Main Area</h2>
+            {% block mainContent %}{% endblock %}
         </div>
     </div>
 </div>

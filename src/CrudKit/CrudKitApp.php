@@ -18,6 +18,11 @@ class CrudKitApp {
     protected $pages = array();
 
     /**
+     * @var array
+     */
+    protected $pageById = array();
+
+    /**
      * Set a static root which contains the "crudkit/" directory of css and JS
      * @param $staticRoot
      */
@@ -31,6 +36,7 @@ class CrudKitApp {
      */
     public function addPage ($page) {
         $this->pages []= $page;
+        $this->pageById[$page->getId()] = $page;
     }
 
     public function getPages () {
@@ -52,6 +58,18 @@ class CrudKitApp {
 
         $controller = new MainController($this);
         return $controller->handle();
+    }
+
+    /**
+     * @param $id
+     * @return BasePage
+     */
+    public function getPageById ($id) {
+        if(isset($this->pageById[$id])) {
+            return $this->pageById[$id];
+        } else {
+            return null;
+        }
     }
 
     /**
