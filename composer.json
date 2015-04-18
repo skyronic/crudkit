@@ -17,7 +17,9 @@
     "require": {
         "doctrine/dbal": "2.6.*@dev",
         "twig/twig": "1.18.0",
-        "brandonwamboldt/utilphp": "1.1.*"
+        "brandonwamboldt/utilphp": "1.1.*",
+      "jwage/purl": "dev-master",
+      "league/url": "3.3.1"
     },
     "require-dev": {
         "phpunit/phpunit": "4.8.*@dev"

@@ -15,7 +15,7 @@
                 <div class="panel-body">
                     <div class="nav nav-pills nav-stacked">
                     {% for item in pageMap %}
-                    <li role="presentation"><a href="#">{{ item.name }}</a></li>
+                    <li role="presentation"><a href="{{ route.openPage(item.id) }}">{{ item.name }}</a></li>
                     {% endfor %}
                     </div>
                 </div>

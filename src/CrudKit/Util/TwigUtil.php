@@ -19,6 +19,11 @@ class TwigUtil {
         $loader = new Twig_Loader_Filesystem($this->basePath);
         $twig = new Twig_Environment($loader, array(
         ));
-        return $twig->render($name, $dictionary);
+
+        $data = array_merge($dictionary, array(
+            'url' => new UrlHelper(),
+            'route' => new RouteGenerator()
+        ));
+        return $twig->render($name, $data);
     }
 }
