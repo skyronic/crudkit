@@ -8,7 +8,18 @@
 <div class="container">
     <div class="row">
         <div class="col-md-3">
-            <h2>Sidebar</h2>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Pages</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="nav nav-pills nav-stacked">
+                    {% for item in pageMap %}
+                    <li role="presentation"><a href="#">{{ item.name }}</a></li>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-md-9">
             <h2>Main Area</h2>
