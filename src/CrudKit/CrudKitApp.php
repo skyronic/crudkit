@@ -2,6 +2,7 @@
 
 namespace CrudKit;
 
+use CrudKit\Controllers\MainController;
 use CrudKit\Pages\BasePage;
 use CrudKit\Util\TwigUtil;
 use Twig_Autoloader;
@@ -32,6 +33,14 @@ class CrudKitApp {
         $this->pages []= $page;
     }
 
+    public function getPages () {
+        return $this->pages;
+    }
+
+    public function getStaticRoot () {
+        return $this->staticRoot;
+    }
+
 
     /**
      * Render your CrudKit app and return it as a string
@@ -41,20 +50,8 @@ class CrudKitApp {
             throw new \Exception("Please set static root using `setStaticRoot`");
         }
 
-        $pageMap = [];
-        /** @var BasePage $pageItem */
-        foreach($this->pages as $pageItem) {
-            $pageMap []= array(
-                'id' => $pageItem->getId(),
-                'name' => $pageItem->getName()
-            );
-        }
-
-        $twig = new TwigUtil();
-        return $twig->renderTemplateToString("layout.twig", array(
-            'staticRoot' => $this->staticRoot,
-            'pageMap' => $pageMap
-        ));
+        $controller = new MainController($this);
+        return $controller->handle();
     }
 
     /**

@@ -13,7 +13,7 @@ class RouteGenerator {
     }
 
     public function openPage($pageId) {
-        return $this->urlHelper->resetGetParams(array('page' => $pageId));
+        return $this->urlHelper->resetGetParams(array('page' => $pageId, 'action' => 'view_page'));
     }
 
 }

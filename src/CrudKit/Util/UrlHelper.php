@@ -27,4 +27,16 @@ class UrlHelper {
     public function resetGetParams ($params = array()) {
         return self::$url->setQuery($params);
     }
+
+    public function get ($key, $default = null) {
+        if(isset($_GET[$key])) {
+            return $_GET[$key];
+        }
+        else if(isset($_POST[$key])) {
+            return $_POST[$key];
+        }
+        else {
+            return $default;
+        }
+    }
 }
