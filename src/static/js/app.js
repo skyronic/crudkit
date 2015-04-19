@@ -47,6 +47,51 @@ var ckAjax = {
     }
 };
 
+var TableHead = React.createClass({
+    getInitialProps: {
+        schema: []
+    },
+    render: function () {
+        var tableHeadRow = function (item) {
+            return <th>{item.name}</th>
+        };
+        return (
+            <thead>
+            <tr>
+            {this.props.schema.map(tableHeadRow)}
+            </tr>
+            </thead>
+        )
+    }
+});
+
+var TableBody = React.createClass({
+    getInitialProps: {
+        schema: [],
+        rows: []
+    },
+    render: function () {
+        var makeCell = function (item) {
+            return (
+                <td>
+                {item}
+                </td>
+            )
+        };
+        var makeRow = function (row) {
+            return (
+                <tr>
+                {row.map(makeCell)}
+                </tr>
+            )
+        };
+        return (
+            <tbody>
+            {this.props.rows.map(makeRow)}
+            </tbody>
+        )
+    }
+});
 
 var SummaryTable = React.createClass({
     getInitialProps: function () {
@@ -56,8 +101,8 @@ var SummaryTable = React.createClass({
     },
     getInitialState: function () {
         return {
-            schema: {},
-            rows: {}
+            schema: [],
+            rows: []
         }
     },
     componentWillMount: function () {
@@ -74,7 +119,8 @@ var SummaryTable = React.createClass({
         return (
             <div>
                 <table className="table">
-
+                    <TableHead schema={this.state.schema} />
+                    <TableBody schema={this.state.schema} rows={this.state.rows} />
                 </table>
             </div>
         )

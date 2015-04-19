@@ -12,8 +12,8 @@ class DummyDataProvider extends BaseDataProvider {
         $data = array();
         for($i = 0; $i < $take; $i ++ ) {
             $data []= array(
-                'foo' => "A - " . ($skip + $i),
-                'bar' => "B - " . ($skip + $i),
+                "A - " . ($skip + $i),
+                "B - " . ($skip + $i),
             );
         }
 
@@ -23,11 +23,11 @@ class DummyDataProvider extends BaseDataProvider {
     public function getSummarySchema()
     {
         return array(
-            'foo' => array(
+            array(
                 'name' => "Foo",
                 'type' => 'text'
             ),
-            'bar' => array(
+            array(
                 'name' => "Bar",
                 'type' => 'text'
             )
