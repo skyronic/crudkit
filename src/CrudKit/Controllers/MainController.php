@@ -13,7 +13,8 @@ class MainController extends BaseController {
             'type' => 'template',
             'template' => "main_page.twig",
             'data' => array (
-                'page_content' => $page->render()
+                'page_content' => $page->render(),
+                'page' => $page
             )
         );
     }

@@ -83,7 +83,7 @@ class CrudKitApp {
             header("Content-type: application/json;");
         }
 
-        
+
         echo $content;
     }
 

@@ -11,6 +11,7 @@ class BasicDataPage extends BasePage{
     {
         $twig = new TwigUtil();
         return $twig->renderTemplateToString("pages/basicdata.twig", array(
+            'page' => $this,
             'name' => $this->name,
         ));
     }
@@ -19,6 +20,7 @@ class BasicDataPage extends BasePage{
         return array(
             'type' => 'json',
             'data' => array (
+                'schema' => $this->dataProvider->getSummarySchema(),
                 'data' => $this->dataProvider->getSummaryData()
             )
         );

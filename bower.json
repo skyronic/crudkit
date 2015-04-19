@@ -26,6 +26,8 @@
     "kendo-ui-core": "*",
     "bootstrap": "~3.3.4",
     "angular-bootstrap": "~0.12.1",
-    "open-sans-fontface": "~1.4.0"
+    "open-sans-fontface": "~1.4.0",
+    "react": "~0.13.2",
+    "jsurl": "*"
   }
 }
