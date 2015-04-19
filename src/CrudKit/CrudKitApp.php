@@ -76,6 +76,33 @@ class CrudKitApp {
      * Render your CrudKit app and output to HTML
      */
     public function render () {
-        echo $this->renderToString();
+        $content = $this->renderToString();
+
+        // Headers are also calculated in render to string
+        if($this->isJsonResponse()) {
+            header("Content-type: application/json;");
+        }
+
+        
+        echo $content;
     }
+
+    protected $jsonResponse = false;
+
+    /**
+     * @return boolean
+     */
+    public function isJsonResponse()
+    {
+        return $this->jsonResponse;
+    }
+
+    /**
+     * @param boolean $jsonResponse
+     */
+    public function setJsonResponse($jsonResponse)
+    {
+        $this->jsonResponse = $jsonResponse;
+    }
+
 }

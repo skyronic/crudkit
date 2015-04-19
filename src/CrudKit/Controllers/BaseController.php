@@ -34,7 +34,16 @@ class BaseController {
         $action = $this->url->get('action');
         if($action !== null && method_exists($this, "handle_".$action)) {
             $result = call_user_func(array($this, "handle_". $action));
-            return $this->renderTemplate($result['template'], $result['data']);
+            if($result['type'] === "template") {
+                return $this->renderTemplate($result['template'], $result['data']);
+            }
+            else if($result['type'] === "json") {
+                $this->app->setJsonResponse(true);
+                return json_encode($result['data']);
+            }
+            else {
+                throw new \Exception("Unknown result type");
+            }
         }
         else  {
             return $this->default_page ();
