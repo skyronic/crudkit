@@ -102,7 +102,11 @@ var SummaryTable = React.createClass({
     getInitialState: function () {
         return {
             schema: [],
-            rows: []
+            rows: [],
+            currentPage: 0,
+            loading: false,
+            pageCount: 5,
+            rowsPerPage: 10
         }
     },
     componentWillMount: function () {
@@ -115,6 +119,9 @@ var SummaryTable = React.createClass({
             });
         })
     },
+    changePage: function (page) {
+
+    },
     render: function () {
         return (
             <div>
@@ -122,6 +129,62 @@ var SummaryTable = React.createClass({
                     <TableHead schema={this.state.schema} />
                     <TableBody schema={this.state.schema} rows={this.state.rows} />
                 </table>
+                <TablePagination onPageChange={this.changePage} currentPage={this.state.currentPage} loadingFlag={this.state.loading} pageCount={this.state.pageCount} />
+            </div>
+        )
+    }
+});
+
+var TablePagination = React.createClass ({
+    getInitialProps: function () {
+        return {
+            loadingFlag: false,
+            pageCount: 1,
+            currentPage: 0
+        }
+    },
+    changePage: function (i, e) {
+        console.log("Page is now ", i)
+        
+    },
+    render: function () {
+        var loadingClass = this.props.loadingFlag ? 'hidden' : '';
+        var self = this;
+
+        var generatePageNodes = function () {
+            var items = [];
+            for(var i = 1; i <= self.props.pageCount; i++) {
+                var activeClass =
+                items.push(<li><a href="#" onClick={self.changePage.bind(null, i)} >{i}</a></li>);
+            }
+
+            return items;
+        };
+
+        return (
+            <div className="row">
+                <div className="col-md-4">
+                    <div className={loadingClass}>
+                        Loading...
+                    </div>
+                </div>
+                <div className="col-md-8">
+                    <nav>
+                        <ul className="pagination">
+                            <li>
+                                <a href="#">
+                                    <span>&laquo;</span>
+                                </a>
+                            </li>
+                            {generatePageNodes()}
+                            <li>
+                                <a href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
         )
     }

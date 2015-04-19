@@ -20,6 +20,7 @@ class BasicDataPage extends BasePage{
         return array(
             'type' => 'json',
             'data' => array (
+                'count' => $this->dataProvider->getRowCount(),
                 'schema' => $this->dataProvider->getSummarySchema(),
                 'data' => $this->dataProvider->getSummaryData()
             )
