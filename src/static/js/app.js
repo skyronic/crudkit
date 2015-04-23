@@ -98,8 +98,8 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
 	$scope.itemLink = function (val) {
 		return ckUrl.resetGetParams ({
 			action: "page_function",
-			func: "show_item",
-			id: val,
+			func: "edit_item",
+			item_id: val,
 			page: $scope.pageId
 		})
 	};
@@ -107,3 +107,6 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
 	update_data();
 });
 
+app.controller("AppFormController", function ($scope) {
+
+});

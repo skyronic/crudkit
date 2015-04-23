@@ -1,0 +1,9 @@
+{% extends "pages/base.twig" %}
+
+{% block pageContent %}
+    <h3>Data Table:</h3>
+    {{ editForm | raw }}
+    <script type="text/javascript">
+        window.pageId = "{{ page.getId() }}";
+    </script>
+{% endblock %}

@@ -37,6 +37,14 @@ class BaseController {
             if($result['type'] === "template") {
                 return $this->renderTemplate($result['template'], $result['data']);
             }
+            if($result['type'] === "transclude") {
+                $data = array (
+                    'page_content' => $result['content'],
+                    'page' => $result['page']
+                );
+
+                return $this->renderTemplate("main_page.twig", $data);
+            }
             else if($result['type'] === "json") {
                 $this->app->setJsonResponse(true);
                 return json_encode($result['data']);

@@ -1,0 +1,10 @@
+{# Here be dragons. Don't ask me what this file does, I won't be able to explain it #}
+<div ng-controller="CKFormController">
+    <form>
+        <ul>
+        {% for formItem in formItems %}
+            <li>{{ formItem.name }}</li>
+        {% endfor %}
+        </ul>
+    </form>
+</div>

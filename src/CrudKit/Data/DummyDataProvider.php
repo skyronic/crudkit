@@ -42,4 +42,18 @@ class DummyDataProvider extends BaseDataProvider {
     {
         return 100;
     }
+
+    public function getEditForm()
+    {
+        return array(
+            array(
+                'type' => 'text',
+                'name' => "Foo"
+            ),
+            array(
+                'type' => 'text',
+                'name' => "Bar"
+            ),
+        );
+    }
 }
