@@ -4,6 +4,7 @@ namespace CrudKit\Pages;
 
 use CrudKit\Data\BaseDataProvider;
 use CrudKit\Util\TwigUtil;
+use CrudKit\Util\UrlHelper;
 
 class BasicDataPage extends BasePage{
 
@@ -17,12 +18,20 @@ class BasicDataPage extends BasePage{
     }
 
     public function handle_get_summary_data () {
+        $url = new UrlHelper ();
+        $pageNumber = $url->get('pageNumber', 1);
+        $perPage = $url->get('perPage', 10);
+
+        $params = array(
+            'skip' => ($pageNumber - 1) * $perPage,
+            'perPage' => ($pageNumber) * $perPage
+        );
         return array(
             'type' => 'json',
             'data' => array (
                 'count' => $this->dataProvider->getRowCount(),
                 'schema' => $this->dataProvider->getSummarySchema(),
-                'data' => $this->dataProvider->getSummaryData()
+                'data' => $this->dataProvider->getSummaryData($params)
             )
         );
     }

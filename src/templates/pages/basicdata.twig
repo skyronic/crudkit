@@ -2,8 +2,35 @@
 
 {% block pageContent %}
     <h3>Data Table:</h3>
-    <div id="dataTable">
-
+    <div ng-controller="SummaryTableController">
+    <div cg-busy="loadingPromise">
+    {% verbatim %}
+    	<table class="table">
+    		<thead>
+    		<tr>
+    			<th ng-repeat="col in schema|after:1">
+    				{{ col.name }}
+    			</th>
+    		</tr>
+    		</thead>
+    		<tbody>
+    			<tr ng-repeat="row in rows">
+    				<td ng-repeat="col in schema|after:1">
+                        <div ng-switch on="col.type">
+                            <div ng-switch-when="text">
+                                {{ row[$index + 1] }}
+                            </div>
+                            <div ng-switch-when="link">
+                                <a ng-href="{{ itemLink(row[0]) }}">{{ row[$index + 1] }}</a>
+                            </div>
+                        </div>
+    				</td>
+    			</tr>
+    		</tbody>
+    	</table>
+    	<pagination total-items="rowCount" ng-model="currentPage" items-per-page=10  ng-change="pageChanged()"></pagination>
+    {% endverbatim %}
+    </div>
     </div>
     <script type="text/javascript">
         window.pageId = "{{ page.getId() }}";

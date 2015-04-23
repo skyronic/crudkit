@@ -12,6 +12,7 @@ class DummyDataProvider extends BaseDataProvider {
         $data = array();
         for($i = 0; $i < $take; $i ++ ) {
             $data []= array(
+                $skip + $i,
                 "A - " . ($skip + $i),
                 "B - " . ($skip + $i),
             );
@@ -24,8 +25,11 @@ class DummyDataProvider extends BaseDataProvider {
     {
         return array(
             array(
+                'type' => 'id'
+            ),
+            array(
                 'name' => "Foo",
-                'type' => 'text'
+                'type' => 'link',
             ),
             array(
                 'name' => "Bar",

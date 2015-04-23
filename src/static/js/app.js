@@ -22,173 +22,88 @@ var ckUrl = {
     }
 };
 
-window.ckUrl = ckUrl;
-var ckAjax = {
-    makeRequest: function (url, params, done) {
-        $.ajax(url, {
-            method: "POST",
-            data: params,
-            success: function (data) {
-                done(data);
-            },
-            error: function () {
+var app = angular.module("ckApp", [
+	'ui.bootstrap',
+	'cgBusy',
+	'angular.filter'
+]);
 
-            }
-        })
-    },
-    page: {
-        func: function (page_id, func_name, params, done) {
-            ckAjax.makeRequest(ckUrl.resetGetParams({
-                page: page_id,
-                func: func_name,
-                action: "page_function"
-            }), params, done);
+var GenerateAPIFactory = function (make_call_real) {
+    var make_call = function (url, params, urlOnly) {
+        if(urlOnly) {
+            return url;
         }
+        return make_call_real(url, params);
+    };
+
+    var apis = {
+    	page: {
+    		func: function (page_id, func_name, params) {
+    			return make_call(ckUrl.resetGetParams({
+    				page: page_id,
+    				func: func_name,
+    				action: "page_function"
+    			}), params);
+    		},
+    		get_summary_data: function (page_id, params) {
+    			return apis.page.func(page_id, "get_summary_data", params);
+    		}
+    	}
     }
+
+    return apis;
 };
 
-var TableHead = React.createClass({
-    getInitialProps: {
-        schema: []
-    },
-    render: function () {
-        var tableHeadRow = function (item) {
-            return <th>{item.name}</th>
-        };
-        return (
-            <thead>
-            <tr>
-            {this.props.schema.map(tableHeadRow)}
-            </tr>
-            </thead>
-        )
-    }
-});
+app.factory ("ckAPI", function ($http, $q) {
+    var make_call_real = function (url, params) {
+        var deferred = $q.defer();
 
-var TableBody = React.createClass({
-    getInitialProps: {
-        schema: [],
-        rows: []
-    },
-    render: function () {
-        var makeCell = function (item) {
-            return (
-                <td>
-                {item}
-                </td>
-            )
-        };
-        var makeRow = function (row) {
-            return (
-                <tr>
-                {row.map(makeCell)}
-                </tr>
-            )
-        };
-        return (
-            <tbody>
-            {this.props.rows.map(makeRow)}
-            </tbody>
-        )
-    }
-});
-
-var SummaryTable = React.createClass({
-    getInitialProps: function () {
-        return {
-            pageId: ""
-        }
-    },
-    getInitialState: function () {
-        return {
-            schema: [],
-            rows: [],
-            currentPage: 0,
-            loading: false,
-            pageCount: 5,
-            rowsPerPage: 10
-        }
-    },
-    componentWillMount: function () {
-        var self = this;
-
-        ckAjax.page.func(this.props.pageId, "get_summary_data", {}, function (data) {
-            self.setState({
-                schema: data.schema,
-                rows: data.data
-            });
-        })
-    },
-    changePage: function (page) {
-
-    },
-    render: function () {
-        return (
-            <div>
-                <table className="table">
-                    <TableHead schema={this.state.schema} />
-                    <TableBody schema={this.state.schema} rows={this.state.rows} />
-                </table>
-                <TablePagination onPageChange={this.changePage} currentPage={this.state.currentPage} loadingFlag={this.state.loading} pageCount={this.state.pageCount} />
-            </div>
-        )
-    }
-});
-
-var TablePagination = React.createClass ({
-    getInitialProps: function () {
-        return {
-            loadingFlag: false,
-            pageCount: 1,
-            currentPage: 0
-        }
-    },
-    changePage: function (i, e) {
-        console.log("Page is now ", i)
-        
-    },
-    render: function () {
-        var loadingClass = this.props.loadingFlag ? 'hidden' : '';
-        var self = this;
-
-        var generatePageNodes = function () {
-            var items = [];
-            for(var i = 1; i <= self.props.pageCount; i++) {
-                var activeClass =
-                items.push(<li><a href="#" onClick={self.changePage.bind(null, i)} >{i}</a></li>);
+        $http.post(url, params).error(function (data) {
+            console.error("XHR Failed!!");
+            deferred.reject($q.reject(data));
+        }).success(function (data) {
+            if(data.success === false) {
+                deferred.reject("Unknown error. Conflicting success codes");
+                return;
             }
+            deferred.resolve(data);
+        });
+        return deferred.promise;
+    };
 
-            return items;
-        };
-
-        return (
-            <div className="row">
-                <div className="col-md-4">
-                    <div className={loadingClass}>
-                        Loading...
-                    </div>
-                </div>
-                <div className="col-md-8">
-                    <nav>
-                        <ul className="pagination">
-                            <li>
-                                <a href="#">
-                                    <span>&laquo;</span>
-                                </a>
-                            </li>
-                            {generatePageNodes()}
-                            <li>
-                                <a href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        )
-    }
+    return GenerateAPIFactory(make_call_real);
 });
 
-React.render(<SummaryTable pageId={window.pageId} />, document.getElementById ("dataTable"));
+app.controller("SummaryTableController", function ($scope, ckAPI) {
+	$scope.pageId = window.pageId;
+	$scope.perPage = 10;
+	$scope.currentPage = 2;
+
+	var update_data = function (params) {
+		params = params ? params : {};
+		params['pageNumber'] = $scope.currentPage;
+		params['perPage'] = $scope.perPage;
+
+		$scope.loadingPromise = ckAPI.page.get_summary_data($scope.pageId, params).then(function (data) {
+			$scope.schema = data.schema;
+			$scope.rows = data.data;
+			$scope.rowCount = data.count;
+		});
+	};
+
+	$scope.pageChanged = function () {
+		update_data ();
+	};
+
+	$scope.itemLink = function (val) {
+		return ckUrl.resetGetParams ({
+			action: "page_function",
+			func: "show_item",
+			id: val,
+			page: $scope.pageId
+		})
+	};
+
+	update_data();
+});
 

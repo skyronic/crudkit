@@ -29,11 +29,24 @@ class UrlHelper {
     }
 
     public function get ($key, $default = null) {
+        $postdata = file_get_contents("php://input");
+        $json_post = array();
+
+        try {
+            $json_post = json_decode($postdata, true);
+        }
+        catch (Exception $e) {
+            // Don't do anything this is what's expected if json serialization fails
+        }
+
         if(isset($_GET[$key])) {
             return $_GET[$key];
         }
         else if(isset($_POST[$key])) {
             return $_POST[$key];
+        }
+        else if(isset($json_post[$key]))  {
+            return $json_post[$key];
         }
         else {
             return $default;
