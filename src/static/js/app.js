@@ -107,6 +107,6 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
 	update_data();
 });
 
-app.controller("AppFormController", function ($scope) {
-
+app.controller("CKFormController", function ($scope) {
+    $scope.formItems = [];
 });

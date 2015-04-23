@@ -1,10 +1,25 @@
 {# Here be dragons. Don't ask me what this file does, I won't be able to explain it #}
 <div ng-controller="CKFormController">
-    <form>
-        <ul>
-        {% for formItem in formItems %}
-            <li>{{ formItem.name }}</li>
+    <form class="form-horizontal">
+        {% for item in formItems %}
+            <div class="form-group">
+                <label for="item-{{ loop.index0 }}" class="col-sm-2 control-label">{{ item.name }}</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="item-{{ loop.index0 }}" placeholder="{{ item.name }}" ng-model="formItems[{{ loop.index0 }}]">
+                </div>
+            </div>
         {% endfor %}
-        </ul>
     </form>
+    <div class="debug">
+        <h4>Output:</h4>
+        <pre>
+            {% verbatim %}
+{{ formItems | json }}
+            {% endverbatim %}
+        </pre>
+        <h4>Input:</h4>
+        <pre>
+{{ formItems |json_encode(constant('JSON_PRETTY_PRINT')) }}
+        </pre>
+    </div>
 </div>
