@@ -6,6 +6,7 @@ use CrudKit\CrudKitApp;
 use CrudKit\Pages\BasePage;
 use CrudKit\Util\TwigUtil;
 use CrudKit\Util\UrlHelper;
+use Exception;
 
 class BaseController {
 
@@ -20,64 +21,77 @@ class BaseController {
     protected $app = null;
 
     /**
+     * @var TwigUtil
+     */
+    protected $twig = null;
+
+    /**
+     * @var BasePage
+     */
+    protected $page = null;
+
+    /**
      * @param $app CrudKitApp
      */
     public function __construct ($app) {
         $this->app = $app;
+        $this->url = new UrlHelper();
+        $this->twig = new TwigUtil();
     }
 
     public function handle () {
-        if($this->url === null) {
-            $this->url = new UrlHelper();
-        }
-
-        $action = $this->url->get('action');
-        if($action !== null && method_exists($this, "handle_".$action)) {
+        $action = $this->url->get("action", "default");
+        $result = null;
+        if(method_exists($this, "handle_".$action)) {
             $result = call_user_func(array($this, "handle_". $action));
-            if($result['type'] === "template") {
-                return $this->renderTemplate($result['template'], $result['data']);
-            }
-            if($result['type'] === "transclude") {
-                $data = array (
-                    'page_content' => $result['content'],
-                    'page' => $result['page']
-                );
-
-                return $this->renderTemplate("main_page.twig", $data);
-            }
-            else if($result['type'] === "json") {
-                $this->app->setJsonResponse(true);
-                return json_encode($result['data']);
-            }
-            else {
-                throw new \Exception("Unknown result type");
-            }
         }
-        else  {
-            return $this->default_page ();
+        else {
+            throw new Exception ("Unknown action");
         }
-    }
+        $output = "";
 
-    public function renderTemplate ($templateName, $data = array()) {
-        $pageMap = [];
-        /** @var BasePage $pageItem */
-        foreach($this->app->getPages() as $pageItem) {
-            $pageMap []= array(
-                'id' => $pageItem->getId(),
-                'name' => $pageItem->getName()
+        if(is_string($result)) {
+            $newResult = array(
+                'type' => 'transclude',
+                'content' => $result
             );
+
+            $result = $newResult;
         }
 
-        $twig = new TwigUtil();
-        $template_data = array_merge(array(
-            'staticRoot' => $this->app->getStaticRoot(),
-            'pageMap' => $pageMap
-        ), $data);
+        switch($result['type']) {
+            case "template":
+                $output = $this->twig->renderTemplateToString($result['template'], $result['data']);
+                break;
+            case "json":
+                $this->app->setJsonResponse(true);
+                $output = json_encode($result['data']);
+                break;
+            case "transclude":
+                $pageMap = [];
+                /** @var BasePage $pageItem */
+                foreach($this->app->getPages() as $pageItem) {
+                    $pageMap []= array(
+                        'id' => $pageItem->getId(),
+                        'name' => $pageItem->getName()
+                    );
+                }
+                $data = array(
+                    'staticRoot' => $this->app->getStaticRoot(),
+                    'pageMap' => $pageMap
+                );
+                if($this->page !== null) {
+                    $data['page'] = $this->page;
+                }
+                $data['page_content'] = $result['content'];
 
-        return $twig->renderTemplateToString($templateName, $template_data);
-    }
+                $output = $this->twig->renderTemplateToString("main_page.twig", $data);
+                break;
+            default:
+                throw new Exception ("Unknown result type");
+        }
 
-    public function default_page () {
-        return $this->renderTemplate("layout.twig", array());
+        return $output;
+
     }
 }

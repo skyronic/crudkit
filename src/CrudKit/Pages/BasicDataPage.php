@@ -51,12 +51,7 @@ class BasicDataPage extends BasePage{
             'editForm' => $formContent
         );
 
-
-        return array(
-            'type' => 'transclude',
-            'content' => $twig->renderTemplateToString("pages/basicdata/edit_item.twig", $templateData),
-            'page' => $this
-        );
+        return $twig->renderTemplateToString("pages/basicdata/edit_item.twig", $templateData);
     }
 
     /**
