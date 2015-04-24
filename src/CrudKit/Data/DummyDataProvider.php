@@ -43,18 +43,22 @@ class DummyDataProvider extends BaseDataProvider {
         return 100;
     }
 
-    public function getEditForm()
+    public function getEditFormConfig()
     {
         return array(
-            array(
-                'type' => 'text',
-                'name' => "Foo"
+            'foo' => array(
+                'label' => "Foo",
+                'type' => 'text'
             ),
-            array(
-                'type' => 'text',
-                'name' => "Bar"
-            ),
+            'bar' => array (
+                'label' => "Bar",
+                'type' => 'text'
+            )
         );
+    }
+
+    public function getEditFormOrder () {
+        return array('foo', 'bar');
     }
 
     public function getItemForId($id = null)

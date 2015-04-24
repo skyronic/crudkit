@@ -39,12 +39,12 @@ class BasicDataPage extends BasePage{
 
     public function handle_edit_item () {
         $twig = new TwigUtil();
-        $form = new FormHelper(array(), $this->dataProvider->getEditForm());
+        $form = new FormHelper(array(), $this->dataProvider->getEditFormConfig());
         $url = new UrlHelper();
 
         $form->setValues($this->dataProvider->getItemForId($url->get("item_id", null)));;
 
-        $formContent = $form->render();
+        $formContent = $form->render($this->dataProvider->getEditFormOrder());
         $templateData = array(
             'page' => $this,
             'name' => $this->name,

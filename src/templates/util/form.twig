@@ -2,12 +2,7 @@
 <div ng-controller="CKFormController">
     <form class="form-horizontal">
         {% for item in formItems %}
-            <div class="form-group">
-                <label for="item-{{ loop.index0 }}" class="col-sm-2 control-label">{{ item.name }}</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="item-{{ loop.index0 }}" placeholder="{{ item.name }}" ng-model="formItems[{{ loop.index0 }}]">
-                </div>
-            </div>
+            {{ item.render()|raw }}
         {% endfor %}
     </form>
     <div class="debug">

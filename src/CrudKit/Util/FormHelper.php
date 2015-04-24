@@ -9,6 +9,8 @@
 namespace CrudKit\Util;
 
 
+use CrudKit\Form\TextFormItem;
+
 class FormHelper {
     protected $config = array();
     protected $items = array();
@@ -17,17 +19,32 @@ class FormHelper {
         $this->items = $items;
     }
 
-    public function render () {
+    public function render ($order) {
         $twig = new TwigUtil();
+        $items = array();
+
+        foreach($order as $formKey) {
+            $items []= $this->createFormItem($formKey, $this->items[$formKey]);
+        }
         return $twig->renderTemplateToString("util/form.twig", array(
-            'formItems' => $this->items,
+            'formItems' => $items,
             'config' => $this->config
         ));
+    }
+
+    protected function createFormItem ($key, $config) {
+        switch($config['type']) {
+            case "text":
+                return new TextFormItem("foo", $key, $config);
+            default:
+                throw new \Exception("Can't find form item type");
+        }
     }
 
     public function setValues($values)
     {
         if(count($values) !== count($this->items)) {
+
         }
         foreach($this->items as $item) {
 
