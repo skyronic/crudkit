@@ -4,7 +4,7 @@ namespace CrudKit\Data;
 
 class DummyDataProvider extends BaseDataProvider {
 
-    public function getSummaryData($params = array())
+    public function getData($params = array())
     {
         $skip = isset($params['skip']) ? $params['skip'] : 0;
         $take = isset($params['take']) ? $params['take'] : 10;
@@ -12,28 +12,43 @@ class DummyDataProvider extends BaseDataProvider {
         $data = array();
         for($i = 0; $i < $take; $i ++ ) {
             $data []= array(
-                $skip + $i,
-                "A - " . ($skip + $i),
-                "B - " . ($skip + $i),
+                'id' => $skip + $i,
+                'foo' => "A - " . ($skip + $i),
+                'bar' => "B - " . ($skip + $i),
             );
         }
 
         return $data;
     }
 
-    public function getSummarySchema()
+    public function getSchema()
+    {
+        return array(
+            'id' => array (
+                'type' => "primary"
+            ),
+            'foo' => array(
+                'type' => 'text'
+            ),
+            'bar' => array (
+                'type' => 'text'
+            )
+        );
+    }
+
+    public function getSummaryColumns()
     {
         return array(
             array(
-                'type' => 'id'
-            ),
-            array(
+                'key' => 'foo',
                 'name' => "Foo",
-                'type' => 'link',
+                'renderType' => 'primaryLink',
+                'primaryColumn' => 'id'
             ),
             array(
+                'key' => 'bar',
                 'name' => "Bar",
-                'type' => 'text'
+                'renderType' => 'text'
             )
         );
     }
@@ -48,7 +63,7 @@ class DummyDataProvider extends BaseDataProvider {
         return array(
             'foo' => array(
                 'label' => "Foo",
-                'type' => 'text'
+                'type' => 'text',
             ),
             'bar' => array (
                 'label' => "Bar",
@@ -61,12 +76,14 @@ class DummyDataProvider extends BaseDataProvider {
         return array('foo', 'bar');
     }
 
-    public function getItemForId($id = null)
+    public function getRow($id = null)
     {
         $id = intval($id);
         return array(
-            "A - $id",
-            "B - $id"
+            'id' => $id,
+            'foo' => "A - $id",
+            'bar' => "B - $id"
         );
     }
+
 }

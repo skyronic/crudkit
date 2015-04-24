@@ -18,7 +18,26 @@ class BasicDataPage extends BasePage{
         ));
     }
 
-    public function handle_get_summary_data () {
+    /**
+     * Get the column specification and send to the client
+     * @return array
+     */
+    public function handle_get_colSpec () {
+        return array(
+            'type' => 'json',
+            'data' => array (
+                'count' => $this->dataProvider->getRowCount(),
+                'schema' => $this->dataProvider->getSchema(),
+                'columns' => $this->dataProvider->getSummaryColumns()
+            )
+        );
+    }
+
+    /**
+     * Get Data
+     * @return array
+     */
+    public function handle_get_data() {
         $url = new UrlHelper ();
         $pageNumber = $url->get('pageNumber', 1);
         $perPage = $url->get('perPage', 10);
@@ -30,9 +49,7 @@ class BasicDataPage extends BasePage{
         return array(
             'type' => 'json',
             'data' => array (
-                'count' => $this->dataProvider->getRowCount(),
-                'schema' => $this->dataProvider->getSummarySchema(),
-                'data' => $this->dataProvider->getSummaryData($params)
+                'rows' => $this->dataProvider->getData($params)
             )
         );
     }
@@ -42,7 +59,7 @@ class BasicDataPage extends BasePage{
         $form = new FormHelper(array(), $this->dataProvider->getEditFormConfig());
         $url = new UrlHelper();
 
-        $form->setValues($this->dataProvider->getItemForId($url->get("item_id", null)));;
+        $form->setValues($this->dataProvider->getRow($url->get("item_id", null)));;
 
         $formContent = $form->render($this->dataProvider->getEditFormOrder());
         $templateData = array(
@@ -52,6 +69,10 @@ class BasicDataPage extends BasePage{
         );
 
         return $twig->renderTemplateToString("pages/basicdata/edit_item.twig", $templateData);
+    }
+
+    public function handle_get_form_values () {
+
     }
 
     /**

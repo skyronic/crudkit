@@ -45,11 +45,14 @@ var GenerateAPIFactory = function (make_call_real) {
     				action: "page_function"
     			}), params);
     		},
-    		get_summary_data: function (page_id, params) {
-    			return apis.page.func(page_id, "get_summary_data", params);
-    		}
+    		get_colSpec: function (page_id) {
+    			return apis.page.func(page_id, "get_colSpec", {});
+    		},
+            get_data: function (page_id, params) {
+                return apis.page.func(page_id, "get_data", params);
+            }
     	}
-    }
+    };
 
     return apis;
 };
@@ -77,34 +80,43 @@ app.factory ("ckAPI", function ($http, $q) {
 app.controller("SummaryTableController", function ($scope, ckAPI) {
 	$scope.pageId = window.pageId;
 	$scope.perPage = 10;
-	$scope.currentPage = 2;
+	$scope.currentPage = 1;
 
 	var update_data = function (params) {
 		params = params ? params : {};
 		params['pageNumber'] = $scope.currentPage;
 		params['perPage'] = $scope.perPage;
-
-		$scope.loadingPromise = ckAPI.page.get_summary_data($scope.pageId, params).then(function (data) {
-			$scope.schema = data.schema;
-			$scope.rows = data.data;
-			$scope.rowCount = data.count;
-		});
+        $scope.loadingPromise = ckAPI.page.get_data($scope.pageId, params).then(function (data) {
+            console.log("Data is ", data.rows);
+            $scope.rows = data.rows;
+        });
 	};
+
+    $scope.loadingPromise = ckAPI.page.get_colSpec($scope.pageId).then(function (colSpec) {
+        $scope.rowCount = colSpec.count;
+
+        $scope.columns = _.map(colSpec.columns, function (val) {
+            return _.extend(val, colSpec.schema[val.key]);
+        });
+
+        console.log(colSpec);
+        console.log("The columns are ", $scope.columns);
+
+        update_data ();
+    });
 
 	$scope.pageChanged = function () {
 		update_data ();
 	};
 
-	$scope.itemLink = function (val) {
+	$scope.itemLink = function (row, col) {
 		return ckUrl.resetGetParams ({
 			action: "page_function",
 			func: "edit_item",
-			item_id: val,
+			item_id: row[col.primaryColumn],
 			page: $scope.pageId
 		})
 	};
-
-	update_data();
 });
 
 app.controller("CKFormController", function ($scope) {

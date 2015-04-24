@@ -3,10 +3,18 @@
 namespace CrudKit\Data;
 
 abstract class BaseDataProvider {
-    public abstract function getSummaryData ($params = array());
-    public abstract function getSummarySchema ();
+    // Data modelling
+    public abstract function getData ($params = array());
+    public abstract function getSchema ();
     public abstract function getRowCount ();
-    public abstract function getEditFormConfig ();
+
+    // Ordering
+    public abstract function getSummaryColumns ();
     public abstract function getEditFormOrder ();
-    public abstract function getItemForId ($id = null);
+
+    // Individual values
+    public abstract function getRow ($id = null);
+
+    // Editing Options
+    public abstract function getEditFormConfig ();
 }

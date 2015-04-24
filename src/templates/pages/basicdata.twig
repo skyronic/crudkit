@@ -8,20 +8,20 @@
     	<table class="table">
     		<thead>
     		<tr>
-    			<th ng-repeat="col in schema|after:1">
+    			<th ng-repeat="col in columns">
     				{{ col.name }}
     			</th>
     		</tr>
     		</thead>
     		<tbody>
     			<tr ng-repeat="row in rows">
-    				<td ng-repeat="col in schema|after:1">
-                        <div ng-switch on="col.type">
+    				<td ng-repeat="col in columns">
+                        <div ng-switch on="col.renderType">
                             <div ng-switch-when="text">
-                                {{ row[$index + 1] }}
+                                {{ row[col.key] }}
                             </div>
-                            <div ng-switch-when="link">
-                                <a ng-href="{{ itemLink(row[0]) }}">{{ row[$index + 1] }}</a>
+                            <div ng-switch-when="primaryLink">
+                                <a ng-href="{{ itemLink(row, col) }}">{{ row[col.key] }}</a>
                             </div>
                         </div>
     				</td>

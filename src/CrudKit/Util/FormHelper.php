@@ -43,11 +43,8 @@ class FormHelper {
 
     public function setValues($values)
     {
-        if(count($values) !== count($this->items)) {
-
-        }
-        foreach($this->items as $item) {
-
+        foreach($values as $key => $val) {
+            $this->items[$key]['value'] = $val;
         }
     }
 }
