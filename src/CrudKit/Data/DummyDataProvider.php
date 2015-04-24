@@ -56,4 +56,13 @@ class DummyDataProvider extends BaseDataProvider {
             ),
         );
     }
+
+    public function getItemForId($id = null)
+    {
+        $id = intval($id);
+        return array(
+            "A - $id",
+            "B - $id"
+        );
+    }
 }

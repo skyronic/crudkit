@@ -24,4 +24,13 @@ class FormHelper {
             'config' => $this->config
         ));
     }
+
+    public function setValues($values)
+    {
+        if(count($values) !== count($this->items)) {
+        }
+        foreach($this->items as $item) {
+
+        }
+    }
 }
