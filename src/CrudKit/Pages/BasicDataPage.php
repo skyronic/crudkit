@@ -59,20 +59,26 @@ class BasicDataPage extends BasePage{
         $form = new FormHelper(array(), $this->dataProvider->getEditFormConfig());
         $url = new UrlHelper();
 
-        $form->setValues($this->dataProvider->getRow($url->get("item_id", null)));;
 
         $formContent = $form->render($this->dataProvider->getEditFormOrder());
         $templateData = array(
             'page' => $this,
             'name' => $this->name,
-            'editForm' => $formContent
+            'editForm' => $formContent,
+            'rowId' => $url->get("row_id", null)
         );
 
         return $twig->renderTemplateToString("pages/basicdata/edit_item.twig", $templateData);
     }
 
     public function handle_get_form_values () {
-
+        $url = new UrlHelper ();
+        return array(
+            'type' => 'json',
+            'data' => array (
+                'values' => $this->dataProvider->getRow($url->get("row_id", null))
+            )
+        );
     }
 
     /**
