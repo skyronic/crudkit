@@ -119,6 +119,14 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
 	};
 });
 
-app.controller("CKFormController", function ($scope) {
+app.controller("CKFormController", function ($scope, $http, ckAPI) {
     $scope.formItems = {};
+    $scope.loadingPromise = null;
+
+    $scope.$watch('getValuesUrl', function (newVal, oldVal) {
+        console.log("Got a thing");
+        $scope.loadingPromise = $http.get(newVal).success(function (result) {
+            $scope.formItems = angular.extend($scope.formItems, result.values);
+        })
+    });
 });

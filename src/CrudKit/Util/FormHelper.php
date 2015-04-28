@@ -14,9 +14,17 @@ use CrudKit\Form\TextFormItem;
 class FormHelper {
     protected $config = array();
     protected $items = array();
+
+    // Extra params to be passed to the form
+    protected $params = array();
     public function __construct ($config, $items) {
         $this->config = $config;
         $this->items = $items;
+    }
+
+    public function setGetValuesUrl ($url) {
+        $this->params['fetchValues'] = true;
+        $this->params ['getValuesUrl'] = $url;
     }
 
     public function render ($order) {
@@ -26,10 +34,9 @@ class FormHelper {
         foreach($order as $formKey) {
             $items []= $this->createFormItem($formKey, $this->items[$formKey]);
         }
-        return $twig->renderTemplateToString("util/form.twig", array(
-            'formItems' => $items,
-            'config' => $this->config
-        ));
+        $this->params['formItems'] = $items;
+        $this->params['config'] = $this->config;
+        return $twig->renderTemplateToString("util/form.twig", $this->params);
     }
 
     protected function createFormItem ($key, $config) {

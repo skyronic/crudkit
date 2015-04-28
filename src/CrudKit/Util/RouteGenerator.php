@@ -17,7 +17,11 @@ class RouteGenerator {
     }
 
     public function pageFunc ($pageId, $func) {
-        return $this->urlHelper->resetGetParams(array('page' => $pageId, 'action' => 'page_action', 'func' => $func));
+        return $this->urlHelper->resetGetParams(array('page' => $pageId, 'action' => 'page_function', 'func' => $func));
+    }
+
+    public function itemFunc ($pageId, $rowId, $func) {
+        return $this->urlHelper->resetGetParams(array('page' => $pageId, 'action' => 'page_function', 'func' => $func, 'item_id' => $rowId));
     }
 
 }

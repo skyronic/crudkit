@@ -4,6 +4,7 @@ namespace CrudKit\Pages;
 
 use CrudKit\Data\BaseDataProvider;
 use CrudKit\Util\FormHelper;
+use CrudKit\Util\RouteGenerator;
 use CrudKit\Util\TwigUtil;
 use CrudKit\Util\UrlHelper;
 
@@ -57,7 +58,10 @@ class BasicDataPage extends BasePage{
     public function handle_edit_item () {
         $twig = new TwigUtil();
         $form = new FormHelper(array(), $this->dataProvider->getEditFormConfig());
+        $routeGen = new RouteGenerator();
         $url = new UrlHelper();
+        $rowId = $url->get("item_id", null);
+        $form->setGetValuesUrl($routeGen->itemFunc($this->id, $rowId , "get_form_values"));
 
 
         $formContent = $form->render($this->dataProvider->getEditFormOrder());
@@ -65,7 +69,7 @@ class BasicDataPage extends BasePage{
             'page' => $this,
             'name' => $this->name,
             'editForm' => $formContent,
-            'rowId' => $url->get("row_id", null)
+            'rowId' => $rowId
         );
 
         return $twig->renderTemplateToString("pages/basicdata/edit_item.twig", $templateData);
@@ -76,7 +80,7 @@ class BasicDataPage extends BasePage{
         return array(
             'type' => 'json',
             'data' => array (
-                'values' => $this->dataProvider->getRow($url->get("row_id", null))
+                'values' => $this->dataProvider->getRow($url->get("item_id", null))
             )
         );
     }
