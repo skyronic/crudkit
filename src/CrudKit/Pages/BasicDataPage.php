@@ -62,6 +62,7 @@ class BasicDataPage extends BasePage{
         $url = new UrlHelper();
         $rowId = $url->get("item_id", null);
         $form->setGetValuesUrl($routeGen->itemFunc($this->id, $rowId , "get_form_values"));
+        $form->setSetValuesUrl($routeGen->itemFunc($this->id, $rowId , "set_form_values"));
 
 
         $formContent = $form->render($this->dataProvider->getEditFormOrder());
@@ -83,6 +84,28 @@ class BasicDataPage extends BasePage{
                 'values' => $this->dataProvider->getRow($url->get("item_id", null))
             )
         );
+    }
+
+    public function handle_set_form_values () {
+        $form = new FormHelper(array(), $this->dataProvider->getEditFormConfig());
+        $url = new UrlHelper();
+
+        // let's not worry about validation right now.
+        $values = json_decode($url->get("values_json", "{}"), true);
+
+        if($form->validate($values)) {
+            $this->dataProvider->setRow($url->get("item_id", null), $values);
+            return array(
+                'type' => 'json',
+                'data' => array(
+                    'success' => true
+                )
+            );
+        }
+        else {
+            // TODO show errors on validation fail
+            throw new \Exception("Cannot validate values");
+        }
     }
 
     /**

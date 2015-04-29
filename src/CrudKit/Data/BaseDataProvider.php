@@ -14,6 +14,7 @@ abstract class BaseDataProvider {
 
     // Individual values
     public abstract function getRow ($id = null);
+    public abstract function setRow ($id = null, $values = array());
 
     // Editing Options
     public abstract function getEditFormConfig ();

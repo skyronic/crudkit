@@ -27,6 +27,11 @@ class FormHelper {
         $this->params ['getValuesUrl'] = $url;
     }
 
+    public function setSetValuesUrl ($url) {
+        $this->params['setValues'] = true;
+        $this->params ['setValuesUrl'] = $url;
+    }
+
     public function render ($order) {
         $twig = new TwigUtil();
         $items = array();
@@ -37,6 +42,11 @@ class FormHelper {
         $this->params['formItems'] = $items;
         $this->params['config'] = $this->config;
         return $twig->renderTemplateToString("util/form.twig", $this->params);
+    }
+
+    public function validate ($values) {
+        // TODO: Fix me
+        return true;
     }
 
     protected function createFormItem ($key, $config) {

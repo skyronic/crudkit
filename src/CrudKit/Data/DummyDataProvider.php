@@ -2,6 +2,8 @@
 
 namespace CrudKit\Data;
 
+use CrudKit\Util\LoggingHelper;
+
 class DummyDataProvider extends BaseDataProvider {
 
     public function getData($params = array())
@@ -64,10 +66,12 @@ class DummyDataProvider extends BaseDataProvider {
             'foo' => array(
                 'label' => "Foo",
                 'type' => 'text',
+                'validation' => 'required'
             ),
             'bar' => array (
                 'label' => "Bar",
-                'type' => 'text'
+                'type' => 'text',
+                'validation' => 'required'
             )
         );
     }
@@ -86,4 +90,10 @@ class DummyDataProvider extends BaseDataProvider {
         );
     }
 
+    public function setRow($id = null, $values = array())
+    {
+        $log = new LoggingHelper();
+        $log->log("Going to log  for $id");
+        $log->vardump($values);
+    }
 }

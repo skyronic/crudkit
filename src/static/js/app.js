@@ -124,9 +124,16 @@ app.controller("CKFormController", function ($scope, $http, ckAPI) {
     $scope.loadingPromise = null;
 
     $scope.$watch('getValuesUrl', function (newVal, oldVal) {
-        console.log("Got a thing");
         $scope.loadingPromise = $http.get(newVal).success(function (result) {
             $scope.formItems = angular.extend($scope.formItems, result.values);
         })
     });
+
+    $scope.saveValues = function () {
+        var vals = $scope.formItems;
+        $scope.loadingPromise = $http.post($scope.setValuesUrl, {
+            values_json: JSON.stringify(vals)
+        }).success(function (result) {
+        })
+    };
 });
