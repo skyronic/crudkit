@@ -34,3 +34,5 @@ bower_components
 vendor
 .idea/*
 composer.lock
+
+adminer.php

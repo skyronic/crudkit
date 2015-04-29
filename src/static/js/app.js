@@ -87,7 +87,6 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
 		params['pageNumber'] = $scope.currentPage;
 		params['perPage'] = $scope.perPage;
         $scope.loadingPromise = ckAPI.page.get_data($scope.pageId, params).then(function (data) {
-            console.log("Data is ", data.rows);
             $scope.rows = data.rows;
         });
 	};
@@ -99,8 +98,6 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
             return _.extend(val, colSpec.schema[val.key]);
         });
 
-        console.log(colSpec);
-        console.log("The columns are ", $scope.columns);
 
         update_data ();
     });

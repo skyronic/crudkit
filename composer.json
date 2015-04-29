@@ -15,7 +15,7 @@
     },
     "minimum-stability": "beta",
     "require": {
-        "doctrine/dbal": "2.6.*@dev",
+        "doctrine/dbal": "2.5.1",
         "twig/twig": "1.18.0",
         "brandonwamboldt/utilphp": "1.1.*",
       "jwage/purl": "dev-master",

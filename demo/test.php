@@ -2,6 +2,7 @@
 
 use CrudKit\CrudKitApp;
 use CrudKit\Data\DummyDataProvider;
+use CrudKit\Data\SQLiteDataProvider;
 use CrudKit\Pages\BasePage;
 use CrudKit\Pages\BasicDataPage;
 
@@ -25,5 +26,13 @@ $page3->setName("Data Dummy");
 $dummyProvider = new DummyDataProvider();
 $page3->setDataProvider($dummyProvider);
 $crud->addPage($page3);
+
+
+$page4 = new BasicDataPage('dummy4');
+$page4->setName("SQLITE PAGE");
+$sqliteProvider = new SQLiteDataProvider();
+$sqliteProvider->init("fixtures/chinook.sqlite");
+$page4->setDataProvider($sqliteProvider);
+$crud->addPage($page4);
 
 $crud->render();
