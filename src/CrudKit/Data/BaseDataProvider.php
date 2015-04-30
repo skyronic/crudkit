@@ -22,4 +22,12 @@ abstract class BaseDataProvider {
     public function init () {
 
     }
+    public function getRelationshipValues($foreign_key) {
+        return array(
+            'type' => 'json',
+            'data' => array(
+                'values' => array()
+            )
+        );
+    }
 }

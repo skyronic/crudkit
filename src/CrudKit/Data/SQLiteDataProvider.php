@@ -207,13 +207,36 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
                     'validation' => "TODO"
                 );
             }
+
+            if($colOpts['category'] === "foreign") {
+                $formSchema [$colName] = array(
+                    'label' => $colOpts['name'],
+                    'type' => $colOpts['type'],
+                    'validation' => "TODO"
+                );
+            }
         }
 
         return $formSchema;
     }
 
-    protected function getRelationshipValues ($colObject) {
+    public function getRelationshipValues ($foreign) {
 
+        $builder = $this->conn->createQueryBuilder();
+        $pk = $this->primary_col;
+        $forColumn = $this->columns[$foreign];
+        $forOpts = $forColumn['options'];
+        $statement = $builder->select(array($forOpts['foreign_name_col']." AS label", $forOpts['foreign_primary']." AS id"))
+            ->from($forOpts['foreign_table'])
+            ->setMaxResults(100)
+            ->execute();
+
+        return array(
+            'type' => 'json',
+            'data' => array (
+                'values' => $statement->fetchAll(PDO::FETCH_ASSOC)
+            )
+        );
     }
 
     public function manyToOne ($foreignKey, $externalTable, $primary, $nameColumn, $label) {

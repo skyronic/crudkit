@@ -86,6 +86,18 @@ class BasicDataPage extends BasePage{
         );
     }
 
+    public function handle_get_foreign () {
+        $url = new UrlHelper();
+        $foreign_key = $url->get("foreign_key", null);
+
+        return array(
+            'type' => 'json',
+            'data' => array (
+                'values' => $this->dataProvider->getRelationshipValues($foreign_key)
+            )
+        );
+    }
+
     public function handle_set_form_values () {
         $form = new FormHelper(array(), $this->dataProvider->getEditFormConfig());
         $url = new UrlHelper();
