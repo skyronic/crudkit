@@ -51,7 +51,7 @@ class FormHelper {
 
     protected function createFormItem ($key, $config) {
         switch($config['type']) {
-            case "text":
+            case "string":
                 return new TextFormItem("foo", $key, $config);
             default:
                 throw new \Exception("Can't find form item type");

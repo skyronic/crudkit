@@ -17,7 +17,7 @@
     			<tr ng-repeat="row in rows">
     				<td ng-repeat="col in columns">
                         <div ng-switch on="col.renderType">
-                            <div ng-switch-when="text">
+                            <div ng-switch-when="string">
                                 {{ row[col.key] }}
                             </div>
                             <div ng-switch-when="primaryLink">

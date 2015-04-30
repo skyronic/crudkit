@@ -31,6 +31,14 @@ $crud->addPage($page3);
 $page4 = new BasicDataPage('dummy4');
 $page4->setName("SQLITE PAGE");
 $sqliteProvider = new SQLiteDataProvider("fixtures/chinook.sqlite");
+$sqliteProvider->setTable("Customer");
+$sqliteProvider->setPrimaryColumn("CustomerId");
+$sqliteProvider->addColumn("FirstName", "First Name");
+$sqliteProvider->addColumn("LastName", "Last Name");
+$sqliteProvider->addColumn("City", "City");
+$sqliteProvider->addColumn("Country", "Country");
+$sqliteProvider->setSummaryColumns(array("FirstName", "City"));
+
 $page4->setDataProvider($sqliteProvider);
 $crud->addPage($page4);
 
