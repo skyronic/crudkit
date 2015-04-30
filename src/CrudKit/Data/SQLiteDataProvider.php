@@ -3,12 +3,43 @@
 namespace CrudKit\Data;
 
 
-use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use PDO;
 
 class SQLiteDataProvider extends BaseSQLDataProvider{
+
+    /**
+     * @param $id String A unique string id (exposed to client)
+     * @param $expr String The Expression/Column Name
+     * @param $name String Name of the column (Used on forms)
+     * @param array $options array of options
+     */
+    public function addColumn ($id, $expr, $name, $options = array()) {
+        $this->columns []= array(
+            'id' => $id,
+            'expr' => $expr,
+            'name' => $name,
+            'options' => $options
+        );
+    }
+
+    public function setTable ($table) {
+        $this->tableName = $table;
+    }
+
+    protected $url;
+
+    public function __construct($url) {
+        $this->url = $url;
+    }
+
+    protected function transformColumns () {
+
+    }
+
+    protected $columns = array();
+    protected $tableName = null;
 
     public function getData($params = array())
     {
@@ -119,10 +150,11 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
      */
     protected $conn = null;
 
-    public function init ($url) {
+    public function init () {
+        parent::init();
         $params = array(
             'driver' => 'pdo_sqlite',
-            'path' => $url
+            'path' => $this->url
         );
         $this->conn = DriverManager::getConnection($params);
     }

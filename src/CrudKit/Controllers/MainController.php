@@ -11,6 +11,7 @@ class MainController extends BaseController {
         // Handle the view page action
         $pageId = $this->url->get('page');
         $this->page = $this->app->getPageById($pageId);
+        $this->page->init();
 
         return $this->page->render();
     }
@@ -19,6 +20,7 @@ class MainController extends BaseController {
         $pageId = $this->url->get('page');
         $this->page = $this->app->getPageById($pageId);
         $func = $this->url->get("func");
+        $this->page->init();
 
         if(method_exists($this->page, "handle_".$func))
         {

@@ -18,4 +18,8 @@ abstract class BaseDataProvider {
 
     // Editing Options
     public abstract function getEditFormConfig ();
+
+    public function init () {
+
+    }
 }

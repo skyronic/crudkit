@@ -30,8 +30,7 @@ $crud->addPage($page3);
 
 $page4 = new BasicDataPage('dummy4');
 $page4->setName("SQLITE PAGE");
-$sqliteProvider = new SQLiteDataProvider();
-$sqliteProvider->init("fixtures/chinook.sqlite");
+$sqliteProvider = new SQLiteDataProvider("fixtures/chinook.sqlite");
 $page4->setDataProvider($sqliteProvider);
 $crud->addPage($page4);
 

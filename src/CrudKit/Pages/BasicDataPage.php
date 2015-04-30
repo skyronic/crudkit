@@ -129,4 +129,9 @@ class BasicDataPage extends BasePage{
         $this->dataProvider = $dataProvider;
     }
 
+    public function init () {
+        parent::init();
+        $this->dataProvider->init();
+    }
+
 }

@@ -22,6 +22,9 @@ abstract class BasePage {
         $this->id = $id;
     }
 
+    public function init () {
+    }
+
     /**
      * @return null
      */
