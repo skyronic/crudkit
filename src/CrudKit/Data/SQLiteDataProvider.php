@@ -6,6 +6,7 @@ namespace CrudKit\Data;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use PDO;
 
 class SQLiteDataProvider extends BaseSQLDataProvider{
 
@@ -63,22 +64,54 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
 
     public function getEditFormOrder()
     {
-        // TODO: Implement getEditFormOrder() method.
+        return array('CustomerId', 'FirstName', 'LastName');
     }
 
     public function getRow($id = null)
     {
-        // TODO: Implement getRow() method.
+        $builder = $this->conn->createQueryBuilder();
+        $exec = $builder->select(array("CustomerId", "FirstName", "LastName"))
+            ->from("Customer")
+            ->where("CustomerId = ".$builder->createNamedParameter($id))
+            ->execute();
+
+        return $exec->fetch(PDO::FETCH_ASSOC);
     }
 
     public function setRow($id = null, $values = array())
     {
-        // TODO: Implement setRow() method.
+        $builder = $this->conn->createQueryBuilder();
+        $exec = $builder->update("Customer")
+            ->set('FirstName', $builder->createNamedParameter($values['FirstName']))
+            ->set('LastName', $builder->createNamedParameter($values['LastName']))
+            ->where("CustomerId = ".$builder->createNamedParameter($id))
+            ->execute();
+
+//        $exec->execute();
+
+        return true;
+
     }
 
     public function getEditFormConfig()
     {
-        // TODO: Implement getEditFormConfig() method.
+        return array(
+            'CustomerId' => array(
+                'label' => "Customer Id",
+                'type' => 'text',
+                'validation' => 'required'
+            ),
+            'FirstName' => array (
+                'label' => "First Name",
+                'type' => 'text',
+                'validation' => 'required'
+            ),
+            'LastName' => array (
+                'label' => "Last Name",
+                'type' => 'text',
+                'validation' => 'required'
+            ),
+        );
     }
 
     /**
