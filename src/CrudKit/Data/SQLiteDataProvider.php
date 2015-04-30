@@ -12,7 +12,7 @@ use utilphp\util;
 class SQLiteDataProvider extends BaseSQLDataProvider{
 
     public function setPrimaryColumn ($expr) {
-        $this->addColumn($expr, "Primary", array('primary' => true));
+        $this->addColumn($expr, "Primary", array('primary' => true), 'primary');
     }
     /**
      * @param $id String A unique string id (exposed to client)
@@ -20,15 +20,19 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
      * @param $name String Name of the column (Used on forms)
      * @param array $options array of options
      */
-    public function addColumn ($expr, $name, $options = array()) {
+    public function addColumn ($expr, $name, $options = array(), $category = null) {
+        $category = !is_null($category) ? $category : "value";
         $item = array(
+            'category' => $category,
             'expr' => $expr,
             'name' => $name,
             'options' => $options
         );
 
         if(isset($options['primary']) && $options['primary']) {
+
             $item['primary'] = true;
+            $item['category'] = 'primary';
             $this->primary_col = $expr;
         }
         else
@@ -84,13 +88,25 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
 
     protected $tableName = null;
 
+    protected function listOfValueColumns () {
+        $valColumns = array();
+
+        foreach($this->columns as $key => $val){
+            if($val['category'] === 'value') {
+                $valColumns []= $key;
+            }
+        }
+
+        return $valColumns;
+    }
+
     public function getData($params = array())
     {
         $skip = isset($params['skip']) ? $params['skip'] : 0;
         $take = isset($params['take']) ? $params['take'] : 10;
 
         $builder = $this->conn->createQueryBuilder();
-        $exec = $builder->select(util::array_pluck($this->columns, 'expr'))
+        $exec = $builder->select($this->listOfValueColumns())
             ->from($this->tableName)
             ->setFirstResult($skip)
             ->setMaxResults($take)
@@ -149,14 +165,14 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
 
     public function getEditFormOrder()
     {
-        return $this->col_name_list;
+        return $this->listOfValueColumns();
     }
 
     public function getRow($id = null)
     {
         $pk = $this->primary_col;
         $builder = $this->conn->createQueryBuilder();
-        $exec = $builder->select(util::array_pluck($this->columns, 'expr'))
+        $exec = $builder->select($this->listOfValueColumns())
             ->from($this->tableName)
             ->where("$pk = ".$builder->createNamedParameter($id))
             ->execute();
@@ -184,18 +200,30 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
     {
         $formSchema = array();
         foreach($this->columns as $colName => $colOpts) {
-            if(isset($colOpts['primary']) && $colOpts['primary']) {
-                continue;
+            if($colOpts['category'] === "value") {
+                $formSchema [$colName] = array(
+                    'label' => $colOpts['name'],
+                    'type' => $colOpts['type'],
+                    'validation' => "TODO"
+                );
             }
-
-            $formSchema [$colName] = array(
-                'label' => $colOpts['name'],
-                'type' => $colOpts['type'],
-                'validation' => "TODO"
-            );
         }
 
         return $formSchema;
+    }
+
+    protected function getRelationshipValues ($colObject) {
+
+    }
+
+    public function manyToOne ($foreignKey, $externalTable, $primary, $nameColumn, $label) {
+        $this->addColumn($foreignKey, $label, array(
+            'foreign' => true,
+            'foreign_type' => 'manyToOne',
+            'foreign_table' => $externalTable,
+            'foreign_primary' => $primary,
+            'foreign_name_col' => $nameColumn
+        ), 'foreign');
     }
 
     /**

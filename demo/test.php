@@ -38,6 +38,7 @@ $sqliteProvider->addColumn("LastName", "Last Name");
 $sqliteProvider->addColumn("City", "City");
 $sqliteProvider->addColumn("Country", "Country");
 $sqliteProvider->setSummaryColumns(array("FirstName", "City"));
+$sqliteProvider->manyToOne("SupportRepId", "Employee", "EmployeeId", "FirstName", "Support Rep");
 
 $page4->setDataProvider($sqliteProvider);
 $crud->addPage($page4);
