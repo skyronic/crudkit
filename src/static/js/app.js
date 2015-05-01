@@ -25,7 +25,8 @@ var ckUrl = {
 var app = angular.module("ckApp", [
 	'ui.bootstrap',
 	'cgBusy',
-	'angular.filter'
+	'angular.filter',
+    'kendo.directives'
 ]);
 
 var GenerateAPIFactory = function (make_call_real) {
@@ -50,7 +51,13 @@ var GenerateAPIFactory = function (make_call_real) {
     		},
             get_data: function (page_id, params) {
                 return apis.page.func(page_id, "get_data", params);
+            },
+            get_foreign: function (page_id, key, params) {
+                params = params ? params : {};
+                params.foreign_key = key;
+                return apis.page.func(page_id, "get_foreign", params);
             }
+
     	}
     };
 
@@ -119,6 +126,11 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
 app.controller("CKFormController", function ($scope, $http, ckAPI) {
     $scope.formItems = {};
     $scope.loadingPromise = null;
+    $scope.selectValues = {
+    };
+
+    $scope.SupportRepId = 1;
+
 
     $scope.$watch('getValuesUrl', function (newVal, oldVal) {
         $scope.loadingPromise = $http.get(newVal).success(function (result) {
@@ -133,4 +145,11 @@ app.controller("CKFormController", function ($scope, $http, ckAPI) {
         }).success(function (result) {
         })
     };
+
+    $scope.$watch('relationships', function (newVal, oldVal) {
+        $scope.loadingPromise = ckAPI.page.get_foreign(window.pageId, newVal, {}).then(function (data) {
+            $scope.selectValues[newVal] = data.values;
+            $scope.formItems[newVal] = "4"
+        });
+    });
 });

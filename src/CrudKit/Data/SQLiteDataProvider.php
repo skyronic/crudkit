@@ -100,13 +100,41 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
         return $valColumns;
     }
 
+    public function allColumns () {
+        return array_keys($this->columns);
+    }
+
+    protected function listOfPrimaryColumns () {
+        $valColumns = array();
+
+        foreach($this->columns as $key => $val){
+            if($val['category'] === 'primary') {
+                $valColumns []= $key;
+            }
+        }
+
+        return $valColumns;
+    }
+
+    protected function listOfForeignColumns () {
+        $valColumns = array();
+
+        foreach($this->columns as $key => $val){
+            if($val['category'] === 'foreign') {
+                $valColumns []= $key;
+            }
+        }
+
+        return $valColumns;
+    }
+
     public function getData($params = array())
     {
         $skip = isset($params['skip']) ? $params['skip'] : 0;
         $take = isset($params['take']) ? $params['take'] : 10;
 
         $builder = $this->conn->createQueryBuilder();
-        $exec = $builder->select($this->listOfValueColumns())
+        $exec = $builder->select($this->allColumns())
             ->from($this->tableName)
             ->setFirstResult($skip)
             ->setMaxResults($take)
@@ -165,14 +193,14 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
 
     public function getEditFormOrder()
     {
-        return $this->listOfValueColumns();
+        return array_merge($this->listOfValueColumns(), $this->listOfForeignColumns());
     }
 
     public function getRow($id = null)
     {
         $pk = $this->primary_col;
         $builder = $this->conn->createQueryBuilder();
-        $exec = $builder->select($this->listOfValueColumns())
+        $exec = $builder->select($this->allColumns())
             ->from($this->tableName)
             ->where("$pk = ".$builder->createNamedParameter($id))
             ->execute();
@@ -211,7 +239,7 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
             if($colOpts['category'] === "foreign") {
                 $formSchema [$colName] = array(
                     'label' => $colOpts['name'],
-                    'type' => $colOpts['type'],
+                    'type' => 'foreign_manyToOne',
                     'validation' => "TODO"
                 );
             }
@@ -231,12 +259,7 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
             ->setMaxResults(100)
             ->execute();
 
-        return array(
-            'type' => 'json',
-            'data' => array (
-                'values' => $statement->fetchAll(PDO::FETCH_ASSOC)
-            )
-        );
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function manyToOne ($foreignKey, $externalTable, $primary, $nameColumn, $label) {

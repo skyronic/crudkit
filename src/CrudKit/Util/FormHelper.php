@@ -9,7 +9,9 @@
 namespace CrudKit\Util;
 
 
+use CrudKit\Form\ManyToOneItem;
 use CrudKit\Form\TextFormItem;
+use utilphp\util;
 
 class FormHelper {
     protected $config = array();
@@ -32,6 +34,13 @@ class FormHelper {
         $this->params ['setValuesUrl'] = $url;
     }
 
+    public function addRelationship ($fKey) {
+        $this->params['hasRelationships'] = true;
+        $this->relationships = $fKey;
+    }
+
+    protected $relationships = array();
+
     public function render ($order) {
         $twig = new TwigUtil();
         $items = array();
@@ -41,6 +50,10 @@ class FormHelper {
         }
         $this->params['formItems'] = $items;
         $this->params['config'] = $this->config;
+
+        if(isset($this->params['hasRelationships'])) {
+            $this->params['relationships'] = $this->relationships;
+        }
         return $twig->renderTemplateToString("util/form.twig", $this->params);
     }
 
@@ -54,6 +67,9 @@ class FormHelper {
         switch($type) {
             case "string":
                 return new TextFormItem("foo", $key, $config);
+            case "foreign_manyToOne":
+                $this->addRelationship($key);
+                return new ManyToOneItem("foo", $key, $config);
             default:
                 throw new \Exception("Can't find form item type: $type");
         }

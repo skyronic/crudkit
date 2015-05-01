@@ -1,6 +1,6 @@
 {# Here be dragons. Don't ask me what this file does, I won't be able to explain it #}
 <div ng-controller="CKFormController">
-    <form class="form-horizontal" cg-busy="loadingPromise" ng-init="{% if fetchValues %}getValuesUrl='{{ getValuesUrl|raw }}{% endif %}';{% if setValues %}setValuesUrl='{{ setValuesUrl|raw }}{% endif %}'">
+    <form class="form-horizontal" cg-busy="loadingPromise" ng-init="{% if fetchValues %}getValuesUrl='{{ getValuesUrl|raw }}{% endif %}';{% if setValues %}setValuesUrl='{{ setValuesUrl|raw }}{% endif %}';{% if hasRelationships %}relationships='{{ relationships|raw }}'{% endif %}">
         {% for item in formItems %}
             {{ item.render()|raw }}
         {% endfor %}
