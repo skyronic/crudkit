@@ -149,7 +149,6 @@ app.controller("CKFormController", function ($scope, $http, ckAPI) {
     $scope.$watch('relationships', function (newVal, oldVal) {
         $scope.loadingPromise = ckAPI.page.get_foreign(window.pageId, newVal, {}).then(function (data) {
             $scope.selectValues[newVal] = data.values;
-            $scope.formItems[newVal] = "4"
         });
     });
 });
