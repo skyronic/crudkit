@@ -14,29 +14,40 @@ use CrudKit\Form\TextFormItem;
 use utilphp\util;
 
 class FormHelper {
+    protected $id = "default_form";
     protected $config = array();
     protected $items = array();
+
+    protected $jsParams = array();
 
     // Extra params to be passed to the form
     protected $params = array();
     public function __construct ($config, $items) {
         $this->config = $config;
         $this->items = $items;
+
     }
 
     public function setGetValuesUrl ($url) {
-        $this->params['fetchValues'] = true;
-        $this->params ['getValuesUrl'] = $url;
+        $this->jsParams['fetchValues'] = true;
+        $this->jsParams['getValuesUrl'] = "".$url;
     }
 
     public function setSetValuesUrl ($url) {
+        $this->jsParams['setValues'] = true;
         $this->params['setValues'] = true;
-        $this->params ['setValuesUrl'] = $url;
+        $this->jsParams['setValuesUrl'] = "".$url;
     }
 
     public function addRelationship ($fKey) {
-        $this->params['hasRelationships'] = true;
-        $this->relationships = $fKey;
+        $this->jsParams['hasRelationships'] = true;
+        if(!isset($this->jsParams['relationships'])) {
+            $this->jsParams['relationships'] = array();
+        }
+        $this->jsParams['relationships'] []= array(
+            'type' => 'manyToOne',
+            'key' => $fKey
+        );
     }
 
     protected $relationships = array();
@@ -50,10 +61,10 @@ class FormHelper {
         }
         $this->params['formItems'] = $items;
         $this->params['config'] = $this->config;
+        $this->params['id'] = $this->id;
 
-        if(isset($this->params['hasRelationships'])) {
-            $this->params['relationships'] = $this->relationships;
-        }
+        ValueBag::set($this->id, $this->jsParams);
+
         return $twig->renderTemplateToString("util/form.twig", $this->params);
     }
 

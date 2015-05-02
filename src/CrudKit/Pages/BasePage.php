@@ -23,6 +23,7 @@ abstract class BasePage {
     }
 
     public function init () {
+        
     }
 
     /**

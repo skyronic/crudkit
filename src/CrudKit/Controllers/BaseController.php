@@ -5,6 +5,7 @@ namespace CrudKit\Controllers;
 use CrudKit\CrudKitApp;
 use CrudKit\Pages\BasePage;
 use CrudKit\Util\TwigUtil;
+use CrudKit\Util\ValueBag;
 use CrudKit\Util\UrlHelper;
 use Exception;
 
@@ -77,6 +78,7 @@ class BaseController {
                     );
                 }
                 $data = array(
+                    'valueBag' => json_encode(ValueBag::getValues()),
                     'staticRoot' => $this->app->getStaticRoot(),
                     'pageMap' => $pageMap
                 );

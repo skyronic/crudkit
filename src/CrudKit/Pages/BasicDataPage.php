@@ -6,6 +6,7 @@ use CrudKit\Data\BaseDataProvider;
 use CrudKit\Util\FormHelper;
 use CrudKit\Util\RouteGenerator;
 use CrudKit\Util\TwigUtil;
+use CrudKit\Util\ValueBag;
 use CrudKit\Util\UrlHelper;
 
 class BasicDataPage extends BasePage{

@@ -126,29 +126,42 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
 app.controller("CKFormController", function ($scope, $http, ckAPI) {
     $scope.formItems = {};
     $scope.loadingPromise = null;
+    var formConfig = {};
+
     $scope.selectValues = {
     };
 
     $scope.SupportRepId = 1;
 
+    $scope.$watch('form_id', function(newVal, oldVal) {
+        formConfig = window.ckValues[newVal];
 
-    $scope.$watch('getValuesUrl', function (newVal, oldVal) {
-        $scope.loadingPromise = $http.get(newVal).success(function (result) {
-            $scope.formItems = angular.extend($scope.formItems, result.values);
-        })
+        if(formConfig.getValuesUrl) {
+            $scope.loadingPromise = $http.get(formConfig.getValuesUrl).success(function (result) {
+                $scope.formItems = angular.extend($scope.formItems, result.values);
+            })
+        }
+
+        if(formConfig.hasRelationships) {
+            for(var i = 0; i < formConfig.relationships.length; i++) {
+                var relItem = formConfig.relationships[i];
+
+                var relKey = "" + relItem.key;
+
+                // TODO: how will ckloader work with multiple loaders ?
+                // TODO: do we need to do early binding here?
+                $scope.loadingPromise = ckAPI.page.get_foreign(window.ckValues.pageId, relKey, {}).then(function (data) {
+                    $scope.selectValues[relKey] = data.values;
+                });
+            }
+        }
     });
 
     $scope.saveValues = function () {
         var vals = $scope.formItems;
-        $scope.loadingPromise = $http.post($scope.setValuesUrl, {
+        $scope.loadingPromise = $http.post(formConfig.setValuesUrl, {
             values_json: JSON.stringify(vals)
         }).success(function (result) {
         })
     };
-
-    $scope.$watch('relationships', function (newVal, oldVal) {
-        $scope.loadingPromise = ckAPI.page.get_foreign(window.pageId, newVal, {}).then(function (data) {
-            $scope.selectValues[newVal] = data.values;
-        });
-    });
 });

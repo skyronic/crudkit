@@ -1,4 +1,7 @@
 {% extends "layout.twig" %}
 {% block mainContent %}
     {{ page_content|raw }}
+    <script type="text/javascript">
+    	window.ckValues = {{ valueBag|raw }};
+    </script>
 {% endblock %}

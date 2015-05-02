@@ -22,6 +22,12 @@ abstract class BaseDataProvider {
     public function init () {
 
     }
+
+    protected $page = null;
+
+    public function setPage ($page) {
+        $this->page = $page;
+    }
     public function getRelationshipValues($foreign_key) {
         return array(
             'type' => 'json',

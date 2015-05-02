@@ -2,6 +2,7 @@
 
 namespace CrudKit\Controllers;
 
+use CrudKit\Util\ValueBag;
 
 class MainController extends BaseController {
     public function handle_default () {
@@ -12,6 +13,7 @@ class MainController extends BaseController {
         $pageId = $this->url->get('page');
         $this->page = $this->app->getPageById($pageId);
         $this->page->init();
+        ValueBag::set("pageId", $this->page->getId());
 
         return $this->page->render();
     }
@@ -20,6 +22,7 @@ class MainController extends BaseController {
         $pageId = $this->url->get('page');
         $this->page = $this->app->getPageById($pageId);
         $func = $this->url->get("func");
+        ValueBag::set("pageId", $this->page->getId());
         $this->page->init();
 
         if(method_exists($this->page, "handle_".$func))
