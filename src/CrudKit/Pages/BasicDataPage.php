@@ -58,13 +58,10 @@ class BasicDataPage extends BasePage{
 
     public function handle_edit_item () {
         $twig = new TwigUtil();
-        $form = new FormHelper(array(), $this->dataProvider->getEditFormConfig());
-        $routeGen = new RouteGenerator();
+
         $url = new UrlHelper();
         $rowId = $url->get("item_id", null);
-        $form->setGetValuesUrl($routeGen->itemFunc($this->id, $rowId , "get_form_values"));
-        $form->setSetValuesUrl($routeGen->itemFunc($this->id, $rowId , "set_form_values"));
-
+        $form = $this->dataProvider->getEditForm();
 
         $formContent = $form->render($this->dataProvider->getEditFormOrder());
         $templateData = array(
@@ -140,6 +137,7 @@ class BasicDataPage extends BasePage{
     public function setDataProvider($dataProvider)
     {
         $this->dataProvider = $dataProvider;
+        $this->dataProvider->setPage($this);
     }
 
     public function init () {

@@ -37,10 +37,29 @@ $sqliteProvider->addColumn("FirstName", "First Name");
 $sqliteProvider->addColumn("LastName", "Last Name");
 $sqliteProvider->addColumn("City", "City");
 $sqliteProvider->addColumn("Country", "Country");
+$sqliteProvider->addColumn("Email", "Email");
 $sqliteProvider->setSummaryColumns(array("FirstName", "City"));
 $sqliteProvider->manyToOne("SupportRepId", "Employee", "EmployeeId", "FirstName", "Support Rep");
-
 $page4->setDataProvider($sqliteProvider);
 $crud->addPage($page4);
+
+$page5 = new BasicDataPage('dummy5');
+$page5->setName("Employees");
+
+$empProvider = new SQLiteDataProvider("fixtures/chinook.sqlite");
+$empProvider->setTable("Employee");
+$empProvider->setPrimaryColumn("EmployeeId");
+$empProvider->addColumn("FirstName", "First Name");
+$empProvider->addColumn("LastName", "Last Name");
+$empProvider->manyToOne("ReportsTo", "Employee", "EmployeeId", "FirstName", "Reports To");
+$empProvider->oneToMany ($sqliteProvider, "SupportRepId", "EmployeeId", "Customers");
+$empProvider->setSummaryColumns(array("FirstName", "LastName"));
+
+$page5->setDataProvider($empProvider);
+$crud->addPage($page5);
+
+
+
+
 
 $crud->render();

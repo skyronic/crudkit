@@ -3,6 +3,9 @@
 namespace CrudKit\Data;
 
 
+use CrudKit\Util\FormHelper;
+use CrudKit\Util\RouteGenerator;
+use CrudKit\Util\UrlHelper;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\Column;
@@ -102,6 +105,10 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
 
     public function allColumns () {
         return array_keys($this->columns);
+    }
+
+    public function oneToMany($dataProvider, $externalKey, $localKey, $name)
+    {
     }
 
     protected function listOfPrimaryColumns () {
@@ -285,5 +292,17 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
         );
         $this->conn = DriverManager::getConnection($params);
         $this->transformColumns();
+    }
+
+    public function getEditForm()
+    {
+        $form = new FormHelper(array(), $this->getEditFormConfig());
+        $routeGen = new RouteGenerator();
+        $url = new UrlHelper();
+        $rowId = $url->get("item_id", null);
+        $form->setGetValuesUrl($routeGen->itemFunc($this->page->getId(), $rowId , "get_form_values"));
+        $form->setSetValuesUrl($routeGen->itemFunc($this->page->getId(), $rowId , "set_form_values"));
+
+        return $form;
     }
 }

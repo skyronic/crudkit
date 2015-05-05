@@ -2,6 +2,11 @@
 
 namespace CrudKit\Data;
 
+use CrudKit\Pages\BasePage;
+use CrudKit\Util\FormHelper;
+use CrudKit\Util\RouteGenerator;
+use CrudKit\Util\UrlHelper;
+
 abstract class BaseDataProvider {
     // Data modelling
     public abstract function getData ($params = array());
@@ -19,10 +24,24 @@ abstract class BaseDataProvider {
     // Editing Options
     public abstract function getEditFormConfig ();
 
+    public function getEditForm () {
+        $form = new FormHelper(array(), $this->getEditFormConfig());
+        $routeGen = new RouteGenerator();
+        $url = new UrlHelper();
+        $rowId = $url->get("item_id", null);
+        $form->setGetValuesUrl($routeGen->itemFunc($this->page->getId(), $rowId , "get_form_values"));
+        $form->setSetValuesUrl($routeGen->itemFunc($this->page->getId(), $rowId , "set_form_values"));
+
+        return $form;
+    }
+
     public function init () {
 
     }
 
+    /**
+     * @var BasePage
+     */
     protected $page = null;
 
     public function setPage ($page) {
