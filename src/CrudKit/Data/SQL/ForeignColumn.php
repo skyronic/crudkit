@@ -3,6 +3,7 @@
 namespace CrudKit\Data\SQL;
 
 
+use CrudKit\Form\ManyToOneItem;
 use CrudKit\Util\FormHelper;
 
 class ForeignColumn extends SQLColumn {
@@ -13,7 +14,13 @@ class ForeignColumn extends SQLColumn {
      */
     public function updateForm($form)
     {
-        // TODO: Implement updateForm() method.
+        if($this->options['fk_type'] === "manyToOne") {
+            $item = new ManyToOneItem('foo', $this->id, array(
+                'label' => $this->options['label']
+            ));
+            $form->addItem($item);
+            $form->addRelationship($this->id, $this->options['fk_type']);
+        }
     }
 
     public function getSchema()

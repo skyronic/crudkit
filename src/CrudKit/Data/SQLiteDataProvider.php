@@ -46,8 +46,8 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
 
     public function manyToOne ($foreignKey, $extTable, $primary, $nameColumn, $label) {
         $this->internalAddColumn(SQLColumn::CATEGORY_FOREIGN, $foreignKey, array(
-            'fr_type' => 'manyToOne',
-            'fr_table' => $extTable,
+            'fk_type' => 'manyToOne',
+            'fk_table' => $extTable,
             'fk_primary' => $primary,
             'fk_name_col' => $nameColumn,
             'expr' => $foreignKey,
@@ -309,7 +309,7 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
         $form->setPageId($this->page->getId());
         $form->setItemId($id);
 
-        $formColumns = $this->queryColumns("category", array(SQLColumn::CATEGORY_VALUE), 'object');
+        $formColumns = $this->queryColumns("category", array(SQLColumn::CATEGORY_VALUE, SQLColumn::CATEGORY_FOREIGN), 'object');
 
         /**
          * @var $col SQLColumn
@@ -319,8 +319,19 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
         }
 
         return $form;
+    }
 
+    public function getRelationshipValues ($foreign) {
 
+        $builder = $this->conn->createQueryBuilder();
+        $forColumn = $this->columns[$foreign];
+        $forOpts = $forColumn->options;
+        $statement = $builder->select(array($forOpts['fk_name_col']." AS label", $forOpts['fk_primary']." AS id"))
+            ->from($forOpts['fk_table'])
+            ->setMaxResults(100)
+            ->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**

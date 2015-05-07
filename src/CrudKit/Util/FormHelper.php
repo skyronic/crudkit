@@ -38,7 +38,7 @@ class FormHelper {
             $this->jsParams['relationships'] = array();
         }
         $this->jsParams['relationships'] []= array(
-            'type' => 'manyToOne',
+            'type' => $type,
             'key' => $fKey
         );
     }
