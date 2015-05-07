@@ -49,6 +49,12 @@ abstract class SQLColumn {
     }
 
     public function getExprAs() {
+        if(is_null($this->getExpr()))
+        {
+            // Some columns don't get expressions. In those case return null
+            return null;
+        }
+
         return $this->getExpr()." AS ".$this->id;
     }
 

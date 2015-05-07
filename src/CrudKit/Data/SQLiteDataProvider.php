@@ -259,13 +259,13 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
 
     public function oneToMany($id, $dataProvider, $externalKey, $localKey, $name)
     {
-//        $this->internalAddColumn(SQLColumn::CATEGORY_FOREIGN, "test1", array(
-//            'fk_type' => 'oneToMany',
-//            'fk_provider' => $dataProvider,
-//            'fk_extKey' => $externalKey,
-//            'fk_localKey' => $localKey,
-//            'label' => $name
-//        ));
+        $this->internalAddColumn(SQLColumn::CATEGORY_FOREIGN, $id, array(
+            'fk_type' => 'oneToMany',
+            'fk_provider' => $dataProvider,
+            'fk_extKey' => $externalKey,
+            'fk_localKey' => $localKey,
+            'label' => $name
+        ));
     }
 
     public function getSummaryColumns()

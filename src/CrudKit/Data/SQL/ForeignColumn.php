@@ -4,6 +4,7 @@ namespace CrudKit\Data\SQL;
 
 
 use CrudKit\Form\ManyToOneItem;
+use CrudKit\Form\OneToManyItem;
 use CrudKit\Util\FormHelper;
 
 class ForeignColumn extends SQLColumn {
@@ -20,6 +21,13 @@ class ForeignColumn extends SQLColumn {
             ));
             $form->addItem($item);
             $form->addRelationship($this->id, $this->options['fk_type']);
+        }
+        else if($this->options['fk_type'] === "oneToMany") {
+            $item = new OneToManyItem('foo', $this->id, array(
+                'label' => $this->options['label']
+            ));
+            $form->addItem($item);
+//            $form->addRelationship($this->id, $this->options['fk_type']);
         }
     }
 
