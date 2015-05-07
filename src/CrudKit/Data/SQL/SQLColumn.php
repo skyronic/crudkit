@@ -3,10 +3,24 @@
 namespace CrudKit\Data\SQL;
 
 
+use CrudKit\Util\FormHelper;
+use Doctrine\DBAL\Schema\Column;
+use Doctrine\DBAL\Types\Type;
+
 abstract class SQLColumn {
     public $id = null;
     public $category = null;
-    public $options = null;
+    public $options = array();
+
+    /**
+     * @var Type
+     */
+    protected $type = null;
+
+    /**
+     * @var string
+     */
+    protected $typeName = null;
 
     const CATEGORY_VALUE = "value";
     const CATEGORY_PRIMARY = "primary";
@@ -19,16 +33,32 @@ abstract class SQLColumn {
     }
 
     public function doctrineColumnLookup ($col_lookup) {
-        // Usually a child will override this
+        if(isset($col_lookup[$this->id]))
+        {
+            /**
+             * @var $col Column
+             */
+            $col = $col_lookup[$this->id];
+            $this->type = $col->getType();
+            $this->typeName = $this->type->getName();
+        }
     }
+
+    public function setOptions($values) {
+        $this->options = array_merge($this->options, $values);
+    }
+
 
     public function init () {
         // A child will override this
     }
 
-    public function getExpr () {
-        throw new \Exception("This column doesn't support expressions. this shouldn't be caled");
-        /** @noinspection PhpUnreachableStatementInspection */
-        return "";
-    }
+    /**
+     * @param $form FormHelper
+     * @return mixed
+     */
+    public abstract function updateForm ($form);
+    public abstract function getSchema ();
+    public abstract function getExpr ();
+    public abstract function getSummaryConfig ();
 }

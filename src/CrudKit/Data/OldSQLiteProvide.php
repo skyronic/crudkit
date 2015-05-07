@@ -17,6 +17,7 @@ class OldSQLiteDataProvider extends BaseSQLDataProvider{
     public function setPrimaryColumn ($expr) {
         $this->addColumn($expr, "Primary", array('primary' => true), 'primary');
     }
+
     /**
      * @param $id String A unique string id (exposed to client)
      * @param $expr String The Expression/Column Name
@@ -109,7 +110,6 @@ class OldSQLiteDataProvider extends BaseSQLDataProvider{
 
     public function oneToMany($dataProvider, $externalKey, $localKey, $name)
     {
-        $this->addColumn();
     }
 
     protected function listOfPrimaryColumns () {
