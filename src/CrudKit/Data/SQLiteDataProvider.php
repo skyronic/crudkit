@@ -309,7 +309,7 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
         $form->setPageId($this->page->getId());
         $form->setItemId($id);
 
-        $formColumns = $this->queryColumns("category", array(SQLColumn::CATEGORY_VALUE, SQLColumn::CATEGORY_PRIMARY), 'object');
+        $formColumns = $this->queryColumns("category", array(SQLColumn::CATEGORY_VALUE), 'object');
 
         /**
          * @var $col SQLColumn

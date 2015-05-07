@@ -22,7 +22,7 @@ class ValueColumn extends SQLColumn {
         switch($this->typeName) {
             case "string":
                 $item = new TextFormItem("foo", $this->id, array(
-                    'value' => ""
+                    'label' => $this->options['label']
                 ));
                 break;
         }

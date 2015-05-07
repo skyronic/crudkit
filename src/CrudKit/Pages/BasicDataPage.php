@@ -61,7 +61,7 @@ class BasicDataPage extends BasePage{
 
         $url = new UrlHelper();
         $rowId = $url->get("item_id", null);
-        $form = $this->dataProvider->getEditForm();
+        $form = $this->dataProvider->getEditForm($rowId);
 
         $formContent = $form->render($this->dataProvider->getEditFormOrder());
         $templateData = array(

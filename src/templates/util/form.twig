@@ -3,9 +3,7 @@
         {% for item in formItems %}
             {{ item.render()|raw }}
         {% endfor %}
-        {% if setValues %}
-            <a class="btn btn-primary" ng-click="saveValues()">Save</a>
-        {% endif %}
+        <a class="btn btn-primary" ng-click="saveValues()">Save</a>
     </form>
     <div class="debug">
         <h4>Output:</h4>

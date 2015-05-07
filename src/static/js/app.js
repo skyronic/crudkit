@@ -56,8 +56,20 @@ var GenerateAPIFactory = function (make_call_real) {
                 params = params ? params : {};
                 params.foreign_key = key;
                 return apis.page.func(page_id, "get_foreign", params);
-            }
+            },
+            get_form_values: function (page_id, item_id, params) {
+                params = params ? params : {};
+                params['item_id'] = item_id;
 
+                return apis.page.func(page_id, "get_form_values", params);
+            },
+            set_form_values: function (page_id, item_id, values, params) {
+                params = params ? params : {};
+                params['item_id'] = item_id;
+                params['values_json'] = JSON.stringify(values);
+
+                return apis.page.func(page_id, "set_form_values", params);
+            }
     	}
     };
 
@@ -131,16 +143,13 @@ app.controller("CKFormController", function ($scope, $http, ckAPI) {
     $scope.selectValues = {
     };
 
-    $scope.SupportRepId = 1;
-
     $scope.$watch('form_id', function(newVal, oldVal) {
         formConfig = window.ckValues[newVal];
 
-        if(formConfig.getValuesUrl) {
-            $scope.loadingPromise = $http.get(formConfig.getValuesUrl).success(function (result) {
-                $scope.formItems = angular.extend($scope.formItems, result.values);
-            })
-        }
+        $scope.loadingPromise = ckAPI.page.get_form_values(formConfig.pageId, formConfig.itemId).then(function(data) {
+            $scope.formItems = data.values;
+        });
+
 
         if(formConfig.hasRelationships) {
             for(var i = 0; i < formConfig.relationships.length; i++) {
@@ -159,9 +168,8 @@ app.controller("CKFormController", function ($scope, $http, ckAPI) {
 
     $scope.saveValues = function () {
         var vals = $scope.formItems;
-        $scope.loadingPromise = $http.post(formConfig.setValuesUrl, {
-            values_json: JSON.stringify(vals)
-        }).success(function (result) {
-        })
+        $scope.loadingPromise = ckAPI.page.set_form_values(formConfig.pageId, formConfig.itemId, vals).then(function(data) {
+            alert("Saved");
+        });
     };
 });

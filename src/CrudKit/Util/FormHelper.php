@@ -49,9 +49,8 @@ class FormHelper {
 
     public function render ($order) {
         $twig = new TwigUtil();
-        $items = array();
 
-        $this->params['formItems'] = $items;
+        $this->params['formItems'] = $this->formItems;
         $this->params['id'] = $this->id;
 
         ValueBag::set($this->id, $this->jsParams);
