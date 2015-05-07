@@ -62,11 +62,4 @@ class FormHelper {
         // TODO: Fix me
         return true;
     }
-
-    public function setValues($values)
-    {
-        foreach($values as $key => $val) {
-//            $this->items[$key]['value'] = $val;
-        }
-    }
 }

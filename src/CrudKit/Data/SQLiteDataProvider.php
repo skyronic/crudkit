@@ -21,31 +21,31 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
         $this->path = $path;
     }
 
-    public function addColumn ($expr, $label, $options = array()) {
+    public function addColumn ($id, $expr, $label, $options = array()) {
         $options['label'] = $label;
         $options['expr'] = $expr;
 
-        $this->internalAddColumn(SQLColumn::CATEGORY_VALUE, $expr, $options);
+        $this->internalAddColumn(SQLColumn::CATEGORY_VALUE, $id, $options);
     }
 
-    public function setPrimaryColumn ($expr) {
-        $this->internalAddColumn(SQLColumn::CATEGORY_PRIMARY, $expr, array(
+    public function setPrimaryColumn ($id, $expr) {
+        $this->internalAddColumn(SQLColumn::CATEGORY_PRIMARY, $id, array(
             'name' => "Primary",
             'expr' => $expr
         ));
-        $this->primary_col = $expr;
+        $this->primary_col = $id;
     }
 
     /**
-     * @return string
+     * @return SQLColumn
      */
     protected function getPrimaryColumn()
     {
-        return $this->primary_col;
+        return $this->columns[$this->primary_col];
     }
 
-    public function manyToOne ($foreignKey, $extTable, $primary, $nameColumn, $label) {
-        $this->internalAddColumn(SQLColumn::CATEGORY_FOREIGN, $foreignKey, array(
+    public function manyToOne ($id, $foreignKey, $extTable, $primary, $nameColumn, $label) {
+        $this->internalAddColumn(SQLColumn::CATEGORY_FOREIGN, $id, array(
             'fk_type' => 'manyToOne',
             'fk_table' => $extTable,
             'fk_primary' => $primary,
@@ -131,7 +131,7 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
          */
         $sumColObj = $this->columns[$this->summary_cols[0]];
         $sumColObj->setOptions(array(
-            'primaryColumn' => $this->primary_col
+            'primaryColumn' => $this->getPrimaryColumn()->id
         ));
         // TODO: Improve primary handling
     }
@@ -186,6 +186,9 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
                 case "expr":
                     $resultItem = $column->getExpr();
                     break;
+                case "exprAs":
+                    $resultItem = $column->getExprAs();
+                    break;
                 case "object":
                     $resultItem = $column;
                     break;
@@ -235,7 +238,7 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
         $take = isset($params['take']) ? $params['take'] : 10;
 
         $builder = $this->conn->createQueryBuilder();
-        $exec = $builder->select($this->queryColumns('all', array(), 'expr', false, true))
+        $exec = $builder->select($this->queryColumns('all', array(), 'exprAs', false, true))
             ->from($this->tableName)
             ->setFirstResult($skip)
             ->setMaxResults($take)
@@ -254,9 +257,15 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
         return 100;
     }
 
-    public function oneToMany($dataProvider, $externalKey, $localKey, $name)
+    public function oneToMany($id, $dataProvider, $externalKey, $localKey, $name)
     {
-
+//        $this->internalAddColumn(SQLColumn::CATEGORY_FOREIGN, "test1", array(
+//            'fk_type' => 'oneToMany',
+//            'fk_provider' => $dataProvider,
+//            'fk_extKey' => $externalKey,
+//            'fk_localKey' => $localKey,
+//            'label' => $name
+//        ));
     }
 
     public function getSummaryColumns()
@@ -273,9 +282,9 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
 
     public function getRow($id = null)
     {
-        $pk = $this->getPrimaryColumn ();
+        $pk = $this->getPrimaryColumn ()->getExpr();
         $builder = $this->conn->createQueryBuilder();
-        $exec = $builder->select($this->queryColumns('all', array(), 'expr'))
+        $exec = $builder->select($this->queryColumns('all', array(), 'exprAs', false, true))
             ->from($this->tableName)
             ->where("$pk = ".$builder->createNamedParameter($id))
             ->execute();
@@ -286,13 +295,16 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
     public function setRow($id = null, $values = array())
     {
         $builder = $this->conn->createQueryBuilder();
-        $pk = $this->primary_col;
+        $pk = $this->getPrimaryColumn()->getExpr();
         $builder->update($this->tableName);
         foreach($values as $formKey => $formValue) {
+            /** @var SQLColumn $col */
+            $col = null;
             if(!isset($this->columns[$formKey])) {
                 throw new \Exception ("Unknown column");
             }
-            $builder->set($formKey, $builder->createNamedParameter($values[$formKey]));
+            $col = $this->columns[$formKey];
+            $builder->set($col->getExpr(), $builder->createNamedParameter($values[$formKey]));
         }
         $builder->where("$pk = ".$builder->createNamedParameter($id))
             ->execute();

@@ -33,12 +33,12 @@ abstract class SQLColumn {
     }
 
     public function doctrineColumnLookup ($col_lookup) {
-        if(isset($col_lookup[$this->id]))
+        if(isset($this->options['expr']) && isset($col_lookup[$this->options['expr']]))
         {
             /**
              * @var $col Column
              */
-            $col = $col_lookup[$this->id];
+            $col = $col_lookup[$this->options['expr']];
             $this->type = $col->getType();
             $this->typeName = $this->type->getName();
         }
@@ -48,6 +48,9 @@ abstract class SQLColumn {
         $this->options = array_merge($this->options, $values);
     }
 
+    public function getExprAs() {
+        return $this->getExpr()." AS ".$this->id;
+    }
 
     public function init () {
         // A child will override this
