@@ -31,7 +31,10 @@
     "jsurl": "*",
     "angular-busy": "~4.1.3",
     "angular-filter": "~0.5.4",
-    "lodash": "~3.7.0"
+    "lodash": "~3.7.0",
+    "adminlte": "~2.0.5",
+    "lato": "~0.3.0",
+    "fontawesome": "~4.3.0"
   },
   "resolutions": {
     "angular": "1.3.15"

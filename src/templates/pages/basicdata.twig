@@ -1,16 +1,14 @@
 {% extends "pages/base.twig" %}
 
+{% block pageName %}
+{{ page.getName ()}}
+{% endblock %}
+
+{% block actionButtons %}
+<a href="{{ route.newItem(page.getId())|raw }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i> Add New</a>
+{% endblock %}
+
 {% block pageContent %}
-    <div class="row">
-        <div class="col-md-8">
-            <h3>Data:</h3>
-        </div>
-        <div class="col-md-4">
-            <div class="pull-right">
-                <a href="{{ route.newItem(page.getId())|raw }}" class="btn btn-primary">Add New</a>
-            </div>
-        </div>
-    </div>
     <div ng-controller="SummaryTableController" >
     <div cg-busy="loadingPromise" >
     {% verbatim %}

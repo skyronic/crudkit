@@ -1,5 +1,25 @@
+<section class="content-header">
+	<div class="row">
+		<div class="col-md-8">
+			<h3 style="margin-top: 5px">
+				{% block pageName %}{% endblock %}
+			</h3>
+		</div>
+		<div class="col-md-4">
+			<div class="pull-right">
+			{% block actionButtons %}{% endblock %}
+			</div>
+		</div>
+	</div>
+</section>
+<section class="content">
 <div class="row">
     <div class="col-md-12">
-        {% block pageContent %}{% endblock %}
+    	<div class="box box-primary" style='padding-top:15px'>
+    		<div class="box-body" >
+    			{% block pageContent %}{% endblock %}
+    		</div>
+    	</div> 
     </div>
 </div>
+</section>

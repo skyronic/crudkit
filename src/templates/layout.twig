@@ -1,32 +1,41 @@
 <!DOCTYPE html>
 <html ng-app="ckApp">
 <head>
-	<title>Hello CrudKit</title>
+    <title>Hello CrudKit</title>
     {% include "includes/requires.twig" %}
 </head>
-<body>
-<div class="container">
-    <div class="row">
-        <div class="col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Pages</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="nav nav-pills nav-stacked">
-                    {% for item in pageMap %}
-                    <li role="presentation"><a href="{{ route.openPage(item.id)|raw }}">{{ item.name }}</a></li>
-                    {% endfor %}
-                    </div>
-                </div>
+<body class="skin-blue">
+<div class="wrapper">
+
+    <header class="main-header">
+        <a href="/" class="logo">CrudKit</a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <div class="navbar-custom-menu">
             </div>
-        </div>
-        <div class="col-md-9">
-            <h2>Main Area</h2>
-            {% block mainContent %}{% endblock %}
-        </div>
+        </nav>
+    </header>
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="header">PAGES</li>
+                {% for item in pageMap %}
+                    <li role="presentation"><a href="{{ route.openPage(item.id)|raw }}"><i class="fa fa-book"></i> {{ item.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </section>
+    </aside>
+
+    <div class="content-wrapper">
+        {% block mainContent %}{% endblock %}
     </div>
 </div>
-
 </body>
 </html>

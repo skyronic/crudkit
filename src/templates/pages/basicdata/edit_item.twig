@@ -1,7 +1,9 @@
 {% extends "pages/base.twig" %}
 
+{% block pageName %}
+Edit Item
+{% endblock %}
 {% block pageContent %}
-    <h3>Edit Item:</h3>
     {{ editForm | raw }}
     <script type="text/javascript">
         window.pageId = "{{ page.getId() }}";

@@ -25,8 +25,7 @@ var ckUrl = {
 var app = angular.module("ckApp", [
 	'ui.bootstrap',
 	'cgBusy',
-	'angular.filter',
-    'kendo.directives'
+	'angular.filter'
 ]);
 
 var GenerateAPIFactory = function (make_call_real) {
