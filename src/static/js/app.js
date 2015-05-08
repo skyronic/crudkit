@@ -70,6 +70,12 @@ var GenerateAPIFactory = function (make_call_real) {
                 params['values_json'] = JSON.stringify(values);
 
                 return apis.page.func(page_id, "set_form_values", params);
+            },
+            create_item: function (page_id, values, params) {
+                params = params ? params : {};
+                params['values_json'] = JSON.stringify(values);
+
+                return apis.page.func(page_id, "create_item", params);
             }
     	}
     };
@@ -144,21 +150,15 @@ app.controller("CKFormController", function ($scope, $http, ckAPI) {
     $scope.selectValues = {
     };
 
-    $scope.$watch('form_id', function(newVal, oldVal) {
-        formConfig = window.ckValues[newVal];
-
-        $scope.loadingPromise = ckAPI.page.get_form_values(formConfig.pageId, formConfig.itemId).then(function(data) {
-            $scope.formItems = data.values;
-        });
-
-
+    var activate_relationships = function () {
+        var relId = formConfig.itemId ? formConfig.itemId : "new";
         if(formConfig.hasRelationships) {
             for(var i = 0; i < formConfig.relationships.length; i++) {
                 (function (relItem) {
                     var relKey = "" + relItem.key;
 
                     // TODO: how will ckloader work with multiple loaders ?
-                    $scope.loadingPromise = ckAPI.page.get_foreign(formConfig.pageId,formConfig.itemId, relKey, {}).then(function (data) {
+                    $scope.loadingPromise = ckAPI.page.get_foreign(formConfig.pageId,relId, relKey, {}).then(function (data) {
                         if(relItem.type === "manyToOne")
                             $scope.selectValues[relKey] = data.values;
                         else if(relItem.type === "oneToMany")
@@ -168,12 +168,42 @@ app.controller("CKFormController", function ($scope, $http, ckAPI) {
                 })(formConfig.relationships[i]);
             }
         }
+    };
+
+    var activate_edit = function () {
+        $scope.loadingPromise = ckAPI.page.get_form_values(formConfig.pageId, formConfig.itemId).then(function(data) {
+            $scope.formItems = data.values;
+        });
+        activate_relationships();
+    };
+
+    var activate_new = function () {
+        activate_relationships();
+    };
+
+    $scope.$watch('form_id', function(newVal, oldVal) {
+        formConfig = window.ckValues[newVal];
+
+        if(formConfig.newItem) {
+            activate_new();
+        }
+        else {
+            activate_edit();
+        }
+
     });
 
     $scope.saveValues = function () {
         var vals = $scope.formItems;
-        $scope.loadingPromise = ckAPI.page.set_form_values(formConfig.pageId, formConfig.itemId, vals).then(function(data) {
-            alert("Saved");
-        });
+        if(formConfig.newItem) {
+            $scope.loadingPromise = ckAPI.page.create_item(formConfig.pageId, vals).then(function(data) {
+                alert("Saved");
+            });
+        }
+        else {
+            $scope.loadingPromise = ckAPI.page.set_form_values(formConfig.pageId, formConfig.itemId, vals).then(function(data) {
+                alert("Saved");
+            });
+        }
     };
 });

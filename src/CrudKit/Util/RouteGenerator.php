@@ -24,4 +24,8 @@ class RouteGenerator {
         return $this->urlHelper->resetGetParams(array('page' => $pageId, 'action' => 'page_function', 'func' => $func, 'item_id' => $rowId));
     }
 
+    public function newItem ($pageId) {
+        return $this->urlHelper->resetGetParams(array('page' => $pageId, 'action' => 'page_function', 'func' => "new_item"));
+    }
+
 }

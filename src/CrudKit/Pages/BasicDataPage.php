@@ -15,6 +15,7 @@ class BasicDataPage extends BasePage{
     {
         $twig = new TwigUtil();
         return $twig->renderTemplateToString("pages/basicdata.twig", array(
+            'route' => new RouteGenerator(),
             'page' => $this,
             'name' => $this->name,
         ));
@@ -61,7 +62,9 @@ class BasicDataPage extends BasePage{
 
         $url = new UrlHelper();
         $rowId = $url->get("item_id", null);
-        $form = $this->dataProvider->getEditForm($rowId);
+        $form = $this->dataProvider->getEditForm();
+        $form->setPageId($this->getId());
+        $form->setItemId($rowId);
 
         $formContent = $form->render($this->dataProvider->getEditFormOrder());
         $templateData = array(
@@ -69,6 +72,24 @@ class BasicDataPage extends BasePage{
             'name' => $this->name,
             'editForm' => $formContent,
             'rowId' => $rowId
+        );
+
+        return $twig->renderTemplateToString("pages/basicdata/edit_item.twig", $templateData);
+    }
+
+    public function handle_new_item () {
+        $twig = new TwigUtil();
+
+        $form = $this->dataProvider->getEditForm();
+
+        $form->setPageId($this->getId());
+        $form->setNewItem();
+
+        $formContent = $form->render($this->dataProvider->getEditFormOrder());
+        $templateData = array(
+            'page' => $this,
+            'name' => $this->name,
+            'editForm' => $formContent
         );
 
         return $twig->renderTemplateToString("pages/basicdata/edit_item.twig", $templateData);
@@ -93,6 +114,22 @@ class BasicDataPage extends BasePage{
             'type' => 'json',
             'data' => array (
                 'values' => $this->dataProvider->getRelationshipValues($item_id, $foreign_key)
+            )
+        );
+    }
+
+    public function handle_create_item () {
+        $url = new UrlHelper();
+
+        // let's not worry about validation right now.
+        $values = json_decode($url->get("values_json", "{}"), true);
+
+        $new_pk = $this->dataProvider->createItem($values);
+        return array(
+            'type' => 'json',
+            'data' => array(
+                'success' => true,
+                'newItemId' => $new_pk
             )
         );
     }

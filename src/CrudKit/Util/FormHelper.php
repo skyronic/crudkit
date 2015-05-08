@@ -32,6 +32,12 @@ class FormHelper {
         $this->jsParams['itemId'] = $itemId;
     }
 
+    public function setNewItem () {
+        $this->params['newItem'] = true;
+        $this->jsParams['newItem'] = true;
+
+    }
+
     public function addRelationship ($fKey, $type) {
         $this->jsParams['hasRelationships'] = true;
         if(!isset($this->jsParams['relationships'])) {

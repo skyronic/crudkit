@@ -314,6 +314,24 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
         return true;
     }
 
+    public function createItem($values)
+    {
+        $builder = $this->conn->createQueryBuilder();
+        $builder->insert($this->tableName);
+        foreach($values as $formKey => $formValue) {
+            /** @var SQLColumn $col */
+            $col = null;
+            if(!isset($this->columns[$formKey])) {
+                throw new \Exception ("Unknown column");
+            }
+            $col = $this->columns[$formKey];
+            $builder->setValue($col->getExpr(), $builder->createNamedParameter($values[$formKey]));
+        }
+        $builder->execute();
+        return $this->conn->lastInsertId();
+
+    }
+
     public function getEditFormConfig()
     {
         return array();
@@ -321,8 +339,6 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
 
     public function getEditForm ($id = null) {
         $form = new FormHelper();
-        $form->setPageId($this->page->getId());
-        $form->setItemId($id);
 
         $formColumns = $this->queryColumns("category", array(SQLColumn::CATEGORY_VALUE, SQLColumn::CATEGORY_FOREIGN), 'object');
 

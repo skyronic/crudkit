@@ -59,4 +59,6 @@ abstract class BaseDataProvider {
             )
         );
     }
+
+    public abstract function createItem($values);
 }
