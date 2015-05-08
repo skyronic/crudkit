@@ -4,6 +4,10 @@
             {{ item.render()|raw }}
         {% endfor %}
         <a class="btn btn-primary" ng-click="saveValues()">Save</a>
+        {% if canDelete %}
+        <a class="btn btn-danger pull-right" href="{{ deleteUrl }}">Delete</a>
+        {% endif %}
+
     </form>
     <div class="debug">
         <h4>Output:</h4>

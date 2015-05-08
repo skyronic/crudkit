@@ -26,11 +26,6 @@ abstract class BaseDataProvider {
 
     public function getEditForm () {
         $form = new FormHelper(array(), $this->getEditFormConfig());
-        $routeGen = new RouteGenerator();
-        $url = new UrlHelper();
-        $rowId = $url->get("item_id", null);
-        $form->setGetValuesUrl($routeGen->itemFunc($this->page->getId(), $rowId , "get_form_values"));
-        $form->setSetValuesUrl($routeGen->itemFunc($this->page->getId(), $rowId , "set_form_values"));
 
         return $form;
     }
@@ -61,4 +56,6 @@ abstract class BaseDataProvider {
     }
 
     public abstract function createItem($values);
+
+    public abstract function deleteItem($rowId);
 }

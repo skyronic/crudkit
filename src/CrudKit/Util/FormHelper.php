@@ -35,7 +35,11 @@ class FormHelper {
     public function setNewItem () {
         $this->params['newItem'] = true;
         $this->jsParams['newItem'] = true;
+    }
 
+    public function setDeleteUrl ($url) {
+        $this->params['canDelete'] = true;
+        $this->params['deleteUrl'] = $url;
     }
 
     public function addRelationship ($fKey, $type) {

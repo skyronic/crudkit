@@ -320,6 +320,17 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
         return true;
     }
 
+    public function deleteItem($rowId)
+    {
+        $builder = $this->conn->createQueryBuilder();
+        $pk = $this->getPrimaryColumn()->getExpr();
+        $status = $builder->delete($this->tableName)
+            ->where("$pk = ".$builder->createNamedParameter($rowId))
+            ->execute();
+
+        return $status;
+    }
+
     public function createItem($values)
     {
         $builder = $this->conn->createQueryBuilder();

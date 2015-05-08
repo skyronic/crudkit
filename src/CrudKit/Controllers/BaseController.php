@@ -68,6 +68,10 @@ class BaseController {
                 $this->app->setJsonResponse(true);
                 $output = json_encode($result['data']);
                 break;
+            case "redirect":
+                header("Location: ".$result['url']);
+                exit();
+                break;
             case "transclude":
                 $pageMap = [];
                 /** @var BasePage $pageItem */
