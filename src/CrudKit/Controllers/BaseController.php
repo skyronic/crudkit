@@ -42,6 +42,15 @@ class BaseController {
 
     public function handle () {
         $action = $this->url->get("action", "default");
+
+        $whoops = new \Whoops\Run();
+        if($this->url->get("ajax", false)) {
+            $whoops->pushHandler (new \Whoops\Handler\JsonResponseHandler());
+        }
+        else {
+            $whoops->pushHandler (new \Whoops\Handler\PrettyPageHandler());
+        }
+        $whoops->register();
         $result = null;
         if(method_exists($this, "handle_".$action)) {
             $result = call_user_func(array($this, "handle_". $action));

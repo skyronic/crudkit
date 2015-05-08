@@ -30,6 +30,7 @@ var app = angular.module("ckApp", [
 
 var GenerateAPIFactory = function (make_call_real) {
     var make_call = function (url, params, urlOnly) {
+        url += "&ajax=true";
         if(urlOnly) {
             return url;
         }
