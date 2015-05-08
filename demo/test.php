@@ -52,7 +52,7 @@ $empProvider->setPrimaryColumn("b0", "EmployeeId");
 $empProvider->addColumn("b1", "FirstName", "First Name");
 $empProvider->addColumn("b2", "LastName", "Last Name");
 $empProvider->manyToOne("b3", "ReportsTo", "Employee", "EmployeeId", "FirstName", "Reports To");
-$empProvider->oneToMany ("b4", $sqliteProvider, "SupportRepId", "EmployeeId", "Customers");
+$empProvider->oneToMany ("b4", $sqliteProvider, "SupportRepId", "b0", "Customers");
 $empProvider->setSummaryColumns(array("b1", "b2"));
 
 $page5->setDataProvider($empProvider);

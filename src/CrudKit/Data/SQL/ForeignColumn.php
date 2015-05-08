@@ -28,7 +28,7 @@ class ForeignColumn extends SQLColumn {
                 'fk_provider' => $this->options['fk_provider']
             ));
             $form->addItem($item);
-//            $form->addRelationship($this->id, $this->options['fk_type']);
+            $form->addRelationship($this->id, $this->options['fk_type']);
         }
     }
 

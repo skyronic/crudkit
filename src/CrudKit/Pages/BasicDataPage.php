@@ -87,11 +87,12 @@ class BasicDataPage extends BasePage{
     public function handle_get_foreign () {
         $url = new UrlHelper();
         $foreign_key = $url->get("foreign_key", null);
+        $item_id = $url->get("item_id", null);
 
         return array(
             'type' => 'json',
             'data' => array (
-                'values' => $this->dataProvider->getRelationshipValues($foreign_key)
+                'values' => $this->dataProvider->getRelationshipValues($item_id, $foreign_key)
             )
         );
     }

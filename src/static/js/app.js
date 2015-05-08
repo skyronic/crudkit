@@ -52,9 +52,10 @@ var GenerateAPIFactory = function (make_call_real) {
             get_data: function (page_id, params) {
                 return apis.page.func(page_id, "get_data", params);
             },
-            get_foreign: function (page_id, key, params) {
+            get_foreign: function (page_id, item_id, key, params) {
                 params = params ? params : {};
                 params.foreign_key = key;
+                params['item_id'] = item_id;
                 return apis.page.func(page_id, "get_foreign", params);
             },
             get_form_values: function (page_id, item_id, params) {
@@ -157,7 +158,7 @@ app.controller("CKFormController", function ($scope, $http, ckAPI) {
                     var relKey = "" + relItem.key;
 
                     // TODO: how will ckloader work with multiple loaders ?
-                    $scope.loadingPromise = ckAPI.page.get_foreign(window.ckValues.pageId, relKey, {}).then(function (data) {
+                    $scope.loadingPromise = ckAPI.page.get_foreign(formConfig.pageId,formConfig.itemId, relKey, {}).then(function (data) {
                         if(relItem.type === "manyToOne")
                             $scope.selectValues[relKey] = data.values;
                         else if(relItem.type === "oneToMany")

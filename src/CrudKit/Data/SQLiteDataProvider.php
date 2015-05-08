@@ -336,17 +336,41 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
         return $form;
     }
 
-    public function getRelationshipValues ($foreign) {
+    public function getRelationshipValues ($id, $foreign) {
 
         $builder = $this->conn->createQueryBuilder();
         $forColumn = $this->columns[$foreign];
         $forOpts = $forColumn->options;
-        $statement = $builder->select(array($forOpts['fk_name_col']." AS label", $forOpts['fk_primary']." AS id"))
-            ->from($forOpts['fk_table'])
-            ->setMaxResults(100)
+        if($forOpts['fk_type'] === "manyToOne") {
+            $statement = $builder->select(array($forOpts['fk_name_col']." AS label", $forOpts['fk_primary']." AS id"))
+                ->from($forOpts['fk_table'])
+                ->setMaxResults(100)
+                ->execute();
+
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        }
+        else if($forOpts['fk_type'] === "oneToMany") {
+            /**
+             * @var $extProvider SQLiteDataProvider
+             */
+            $extProvider = $forOpts['fk_provider'];
+            return $extProvider->getForeignValues($forOpts['fk_extKey'], $id);
+        }
+        else {
+            throw new \Exception("Unknown relationship value");
+        }
+        return array();
+    }
+
+    public function getForeignValues ($localKey, $value) {
+        $builder = $this->conn->createQueryBuilder();
+        $exec = $builder->select($this->queryColumns('all', array(), 'exprAs', false, true))
+            ->from($this->tableName)
+            ->where("$localKey = ".$builder->createNamedParameter($value))
+            ->setMaxResults(10) // TODO fix this
             ->execute();
 
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $exec->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
