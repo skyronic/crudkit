@@ -27,6 +27,12 @@
                             <div ng-switch-when="string">
                                 {{ row[col.key] }}
                             </div>
+                            <div ng-switch-when="number">
+                                {{ row[col.key] }}
+                            </div>
+                            <div ng-switch-when="datetime">
+                                {{ row[col.key] }}
+                            </div>
                             <div ng-switch-when="primaryLink">
                                 <a ng-href="{{ itemLink(row, col) }}">{{ row[col.key] }}</a>
                             </div>

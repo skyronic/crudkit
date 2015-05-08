@@ -43,6 +43,19 @@ $page5->setDataProvider($empProvider);
 $crud->addPage($page5);
 
 
+$invProvider = new SQLiteDataProvider("fixtures/chinook.sqlite");
+$invProvider->setTable("Invoice");
+$invProvider->setPrimaryColumn("b0", "InvoiceId");
+$invProvider->addColumn("b1", "BillingCountry", "Country123");
+$invProvider->addColumn("b2", "Total", "Total123");
+$invProvider->addColumn("b3", "InvoiceDate", "InvoiceDate123");
+$invProvider->setSummaryColumns(array("b1", "b2", "b3"));
+
+$page6 = new BasicDataPage('dummy6');
+$page6->setName ("Custom Data Types");
+$page6->setDataProvider($invProvider);
+$crud->addPage($page6);
+
 
 
 

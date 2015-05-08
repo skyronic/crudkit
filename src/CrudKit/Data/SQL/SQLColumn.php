@@ -40,9 +40,30 @@ abstract class SQLColumn {
              */
             $col = $col_lookup[$this->options['expr']];
             $this->type = $col->getType();
-            $this->typeName = $this->type->getName();
+            $this->typeName = self::simplifyTypeName($this->type->getName());
         }
     }
+
+    public static function simplifyTypeName ($typeName) {
+        switch($typeName) {
+            case "integer":
+            case "float":
+            case "smallint":
+            case "bigint":
+            case "decimal":
+            case "numeric":
+            case "smallint":
+            case "bigint":
+                return "number";
+            case "string":
+            case "text":
+                return "string";
+            case "datetime":
+                return "datetime";
+            default:
+                throw new Exception("Unknown type $typeName");
+        }
+    } 
 
     public function setOptions($values) {
         $this->options = array_merge($this->options, $values);
