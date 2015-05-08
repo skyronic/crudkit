@@ -8,7 +8,7 @@ class ManyToOneItem extends HorizontalItem {
     {
         $ngModel = $this->form->getNgModel();
         return <<<COMP
-        <select ng-model="$ngModel.{$this->key}" ng-options="item.id as item.label for item in selectValues.{$this->key}" >
+        <select class="form-control" ng-model="$ngModel.{$this->key}" ng-options="item.id as item.label for item in selectValues.{$this->key}" >
         </select>
 COMP;
     }

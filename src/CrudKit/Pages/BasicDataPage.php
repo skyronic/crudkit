@@ -67,14 +67,16 @@ class BasicDataPage extends BasePage{
         $form->setItemId($rowId);
 
         $route = new RouteGenerator();
-        $form->setDeleteUrl($route->itemFunc($this->getId(), $rowId, "delete_item"));
+        $deleteUrl = ($route->itemFunc($this->getId(), $rowId, "delete_item"));
 
         $formContent = $form->render($this->dataProvider->getEditFormOrder());
         $templateData = array(
             'page' => $this,
             'name' => $this->name,
             'editForm' => $formContent,
-            'rowId' => $rowId
+            'rowId' => $rowId,
+            'canDelete' => true,
+            'deleteUrl' => $deleteUrl
         );
 
         return $twig->renderTemplateToString("pages/basicdata/edit_item.twig", $templateData);

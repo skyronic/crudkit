@@ -3,6 +3,15 @@
 {% block pageName %}
 Edit Item
 {% endblock %}
+
+
+{% block actionButtons %}
+	{% if canDelete %}
+	<a class="btn btn-danger pull-right" href="{{ deleteUrl }}"><i class="fa fa-trash"></i> Delete</a>
+	{% endif %}
+{% endblock %}
+
+
 {% block pageContent %}
     {{ editForm | raw }}
     <script type="text/javascript">

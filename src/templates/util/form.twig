@@ -1,24 +1,18 @@
 <div ng-controller="CKFormController">
-    <form class="form-horizontal" cg-busy="loadingPromise" ng-init="form_id='{{ id }}'">
+    <form class="form" cg-busy="loadingPromise" ng-init="form_id='{{ id }}'">
         {% for item in formItems %}
             {{ item.render()|raw }}
         {% endfor %}
-        <a class="btn btn-primary" ng-click="saveValues()">Save</a>
-        {% if canDelete %}
-        <a class="btn btn-danger pull-right" href="{{ deleteUrl }}">Delete</a>
-        {% endif %}
+        <a class="btn btn-primary btn-lg" ng-click="saveValues()" style="margin-top:20px"><i class="fa fa-save"></i> Save</a>
 
     </form>
+        <div class="clearfix"></div>
     <div class="debug">
         <h4>Output:</h4>
         <pre>
             {% verbatim %}
 {{ formItems | json }}
             {% endverbatim %}
-        </pre>
-        <h4>Input:</h4>
-        <pre>
-{{ formItems |json_encode(constant('JSON_PRETTY_PRINT')) }}
         </pre>
     </div>
 </div>
