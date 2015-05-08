@@ -254,7 +254,13 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
 
     public function getRowCount()
     {
-        return 100;
+        $builder = $this->conn->createQueryBuilder();
+        $exec = $builder->select(array("COUNT(".$this->getPrimaryColumn()->getExpr().") AS row_count"))
+            ->from($this->tableName)
+            ->execute();
+
+        $countResult = $exec->fetchAll(\PDO::FETCH_ASSOC);
+        return $countResult[0]['row_count'];
     }
 
     public function oneToMany($id, $dataProvider, $externalKey, $localKey, $name)
