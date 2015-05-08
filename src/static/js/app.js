@@ -172,6 +172,7 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
 app.controller("CKFormController", function ($scope, $http, ckAPI) {
     $scope.formItems = {};
     $scope.loadingPromise = null;
+    $scope.openStatus = {};
     var formConfig = {};
 
     $scope.selectValues = {

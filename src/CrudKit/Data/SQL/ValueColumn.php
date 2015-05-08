@@ -5,6 +5,7 @@ namespace CrudKit\Data\SQL;
 
 use CrudKit\Form\BaseFormItem;
 use CrudKit\Form\TextFormItem;
+use CrudKit\Form\DateTimeFormItem;
 use CrudKit\Util\FormHelper;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Types\Type;
@@ -22,6 +23,11 @@ class ValueColumn extends SQLColumn {
         switch($this->typeName) {
             case "string":
                 $item = new TextFormItem($form, $this->id, array(
+                    'label' => $this->options['label']
+                ));
+                break;
+            case "datetime":
+                $item = new DateTimeFormItem($form, $this->id, array(
                     'label' => $this->options['label']
                 ));
                 break;
