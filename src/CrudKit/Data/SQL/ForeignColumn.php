@@ -16,15 +16,16 @@ class ForeignColumn extends SQLColumn {
     public function updateForm($form)
     {
         if($this->options['fk_type'] === "manyToOne") {
-            $item = new ManyToOneItem('foo', $this->id, array(
+            $item = new ManyToOneItem($form, $this->id, array(
                 'label' => $this->options['label']
             ));
             $form->addItem($item);
             $form->addRelationship($this->id, $this->options['fk_type']);
         }
         else if($this->options['fk_type'] === "oneToMany") {
-            $item = new OneToManyItem('foo', $this->id, array(
-                'label' => $this->options['label']
+            $item = new OneToManyItem($form, $this->id, array(
+                'label' => $this->options['label'],
+                'fk_provider' => $this->options['fk_provider']
             ));
             $form->addItem($item);
 //            $form->addRelationship($this->id, $this->options['fk_type']);

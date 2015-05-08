@@ -17,5 +17,9 @@ RENDER;
 
     }
 
+    public function renderInline () {
+        return $this->render();
+    }
+
     public abstract function renderInternal ();
 }

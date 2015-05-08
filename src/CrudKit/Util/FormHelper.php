@@ -43,6 +43,8 @@ class FormHelper {
         );
     }
 
+    protected $ngModel = "formItems";
+
     protected $relationships = array();
 
     protected $formItems = array();
@@ -58,8 +60,35 @@ class FormHelper {
         return $twig->renderTemplateToString("util/form.twig", $this->params);
     }
 
+    public function renderInline () {
+        $twig = new TwigUtil();
+
+        $this->params['formItems'] = $this->formItems;
+//        $this->params['id'] = $this->id;
+
+//        ValueBag::set($this->id, $this->jsParams);
+
+        return $twig->renderTemplateToString("util/form_inline.twig", $this->params);
+    }
+
     public function validate ($values) {
         // TODO: Fix me
         return true;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNgModel()
+    {
+        return $this->ngModel;
+    }
+
+    /**
+     * @param string $ngModel
+     */
+    public function setNgModel($ngModel)
+    {
+        $this->ngModel = $ngModel;
     }
 }

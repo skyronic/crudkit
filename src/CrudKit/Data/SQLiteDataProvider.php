@@ -259,6 +259,9 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
 
     public function oneToMany($id, $dataProvider, $externalKey, $localKey, $name)
     {
+        // Make sure data provider gets inited properly
+        $this->initQueue []= $dataProvider;
+
         $this->internalAddColumn(SQLColumn::CATEGORY_FOREIGN, $id, array(
             'fk_type' => 'oneToMany',
             'fk_provider' => $dataProvider,

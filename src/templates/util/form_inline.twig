@@ -1,0 +1,5 @@
+<div class="well">
+    {% for item in formItems %}
+        {{ item.renderInline ()|raw }}
+    {% endfor %}
+</div>

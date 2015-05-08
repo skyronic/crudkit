@@ -21,7 +21,7 @@ class ValueColumn extends SQLColumn {
         $item = null;
         switch($this->typeName) {
             case "string":
-                $item = new TextFormItem("foo", $this->id, array(
+                $item = new TextFormItem($form, $this->id, array(
                     'label' => $this->options['label']
                 ));
                 break;

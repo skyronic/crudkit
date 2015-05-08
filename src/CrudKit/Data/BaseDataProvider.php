@@ -36,8 +36,12 @@ abstract class BaseDataProvider {
     }
 
     public function init () {
-
+        foreach($this->initQueue as $item) {
+            $item->init();
+        }
     }
+
+    protected $initQueue = array();
 
     /**
      * @var BasePage

@@ -153,15 +153,18 @@ app.controller("CKFormController", function ($scope, $http, ckAPI) {
 
         if(formConfig.hasRelationships) {
             for(var i = 0; i < formConfig.relationships.length; i++) {
-                var relItem = formConfig.relationships[i];
+                (function (relItem) {
+                    var relKey = "" + relItem.key;
 
-                var relKey = "" + relItem.key;
+                    // TODO: how will ckloader work with multiple loaders ?
+                    $scope.loadingPromise = ckAPI.page.get_foreign(window.ckValues.pageId, relKey, {}).then(function (data) {
+                        if(relItem.type === "manyToOne")
+                            $scope.selectValues[relKey] = data.values;
+                        else if(relItem.type === "oneToMany")
+                            $scope.formItems[relKey] = data.values;
+                    });
 
-                // TODO: how will ckloader work with multiple loaders ?
-                // TODO: do we need to do early binding here?
-                $scope.loadingPromise = ckAPI.page.get_foreign(window.ckValues.pageId, relKey, {}).then(function (data) {
-                    $scope.selectValues[relKey] = data.values;
-                });
+                })(formConfig.relationships[i]);
             }
         }
     });
