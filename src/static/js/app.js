@@ -1,3 +1,8 @@
+var ck = window.ck = {
+
+};
+
+
 var ckUrl = {
     resetGetParams: function (params) {
         var url = new Url();
@@ -83,13 +88,35 @@ var GenerateAPIFactory = function (make_call_real) {
     return apis;
 };
 
+ck.fatalError = function (title, message) {
+    BootstrapDialog.show ({
+        title: title,
+        message: message,
+        type: "type-danger",
+        buttons: [{
+            icon: "fa fa-reload",
+            label: "Reload Page",
+            action: function () {
+                window.location.reload()
+            }
+        }],
+        closable: false
+    })
+};
+
 app.factory ("ckAPI", function ($http, $q) {
     var make_call_real = function (url, params) {
         var deferred = $q.defer();
 
         $http.post(url, params).error(function (data) {
-            console.error("XHR Failed!!");
+            console.error("XHR Failed!!", data);
             deferred.reject($q.reject(data));
+            if(data.error) {
+                ck.fatalError("Error", "<p>There was an error in the server.</p><p><b>" + data.error.type + "</b></p><p>" + data.error.message + "</p>");
+            }
+            else {
+                ck.fatalError("Error", "There was an unknown error in the server");
+            }
         }).success(function (data) {
             if(data.success === false) {
                 deferred.reject("Unknown error. Conflicting success codes");
