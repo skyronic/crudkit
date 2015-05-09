@@ -313,6 +313,7 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
                 throw new \Exception ("Unknown column");
             }
             $col = $this->columns[$formKey];
+            $val = $col->cleanValue ($values[$formKey]);
             $builder->set($col->getExpr(), $builder->createNamedParameter($values[$formKey]));
         }
         $builder->where("$pk = ".$builder->createNamedParameter($id))

@@ -44,6 +44,22 @@ abstract class SQLColumn {
         }
     }
 
+    public function cleanValue ($value) {
+        switch($this->typeName) {
+            case "number":
+                return floatval($value);
+            break;
+            case "string":
+                return "".$value;
+            break;
+            case "datetime":
+                return new \DateTime ($value);
+            break;
+            default:
+                throw new \Exception("Unknown type {$this->typeName}");
+        }
+    }
+
     public static function simplifyTypeName ($typeName) {
         switch($typeName) {
             case "integer":

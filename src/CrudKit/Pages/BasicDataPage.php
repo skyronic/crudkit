@@ -119,6 +119,7 @@ class BasicDataPage extends BasePage{
         return array(
             'type' => 'json',
             'data' => array (
+                'schema' => $this->dataProvider->getSchema(),
                 'values' => $this->dataProvider->getRow($url->get("item_id", null))
             )
         );

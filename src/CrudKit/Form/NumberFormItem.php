@@ -2,7 +2,7 @@
 
 namespace CrudKit\Form;
 
-class DateTimeFormItem extends HorizontalItem{
+class NumberFormItem extends HorizontalItem{
 
     public function renderInternal()
     {
@@ -11,7 +11,7 @@ class DateTimeFormItem extends HorizontalItem{
 
         return <<<COMP
         <div class="input-group">
-        <input type="date" class="form-control" ng-model="$ngModel.{$this->key}" />
+        <input type="number" class="form-control" ng-model="$ngModel.{$this->key}" />
         </div>
 COMP;
     }

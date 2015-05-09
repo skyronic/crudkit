@@ -104,6 +104,70 @@ ck.fatalError = function (title, message) {
     })
 };
 
+ck.converters = {
+    standard_to_js: function (schema, object) {
+        var resultObject = {};
+        for(var key in schema) {
+            if(!object.hasOwnProperty(key)) {
+                continue;
+            }
+            var type = schema[key].type;
+            var input = object[key];
+            var result = null;
+
+            switch(type) {
+                case "string":
+                    result = input;
+                break;
+                case "number":
+                    result = parseFloat(input);
+                break;
+                case "datetime":
+                    result = new Date(input);
+                break;
+            }
+
+            resultObject[key] = result;
+        }
+
+        return resultObject;
+    },
+    js_to_standard: function (schema, object) {
+        var resultObject = {};
+        for(var key in schema) {
+            if(!object.hasOwnProperty(key)) {
+                continue;
+            }
+            var type = schema[key].type;
+            var input = object[key];
+            var result = null;
+
+            switch(type) {
+                case "string":
+                    result = input.toString();
+                break;
+                case "number":
+                    result = input.toString();
+                break;
+                case "datetime":
+                    result = input.toISOString().toString();
+                break;
+            }
+            resultObject[key] = result;
+        }
+
+        return resultObject;
+    },
+    standard_to_js_table: function (schema, data) {
+        var len = data.length;
+        var processed = [];
+        for(var i = 0; i < len; i ++) {
+            processed.push(ck.converters.standard_to_js(schema, data[i]));
+        }
+        return processed;
+    }
+}
+
 app.factory ("ckAPI", function ($http, $q) {
     var make_call_real = function (url, params) {
         var deferred = $q.defer();
@@ -173,6 +237,7 @@ app.controller("CKFormController", function ($scope, $http, ckAPI) {
     $scope.formItems = {};
     $scope.loadingPromise = null;
     $scope.openStatus = {};
+    $scope.schema = {};
     var formConfig = {};
 
     $scope.selectValues = {
@@ -200,7 +265,8 @@ app.controller("CKFormController", function ($scope, $http, ckAPI) {
 
     var activate_edit = function () {
         $scope.loadingPromise = ckAPI.page.get_form_values(formConfig.pageId, formConfig.itemId).then(function(data) {
-            $scope.formItems = data.values;
+            $scope.schema = data.schema;
+            $scope.formItems = ck.converters.standard_to_js(data.schema, data.values);
         });
         activate_relationships();
     };
@@ -222,7 +288,7 @@ app.controller("CKFormController", function ($scope, $http, ckAPI) {
     });
 
     $scope.saveValues = function () {
-        var vals = $scope.formItems;
+        var vals = ck.converters.js_to_standard($scope.schema, $scope.formItems);
         if(formConfig.newItem) {
             $scope.loadingPromise = ckAPI.page.create_item(formConfig.pageId, vals).then(function(data) {
                 alert("Saved");
