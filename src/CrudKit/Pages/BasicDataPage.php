@@ -26,10 +26,17 @@ class BasicDataPage extends BasePage{
      * @return array
      */
     public function handle_get_colSpec () {
+        $url = new UrlHelper ();
+        $filters = $url->get("filters_json", "[]");
+
+        $params = array(
+            'filters_json' => $filters
+        );
+
         return array(
             'type' => 'json',
             'data' => array (
-                'count' => $this->dataProvider->getRowCount(),
+                'count' => $this->dataProvider->getRowCount($params),
                 'schema' => $this->dataProvider->getSchema(),
                 'columns' => $this->dataProvider->getSummaryColumns()
             )
@@ -44,10 +51,12 @@ class BasicDataPage extends BasePage{
         $url = new UrlHelper ();
         $pageNumber = $url->get('pageNumber', 1);
         $perPage = $url->get('perPage', 10);
+        $filters = $url->get("filters_json", "[]");
 
         $params = array(
             'skip' => ($pageNumber - 1) * $perPage,
-            'perPage' => ($pageNumber) * $perPage
+            'perPage' => ($pageNumber) * $perPage,
+            'filters_json' => $filters
         );
         return array(
             'type' => 'json',

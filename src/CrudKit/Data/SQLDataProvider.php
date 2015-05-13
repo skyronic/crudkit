@@ -12,6 +12,7 @@ use CrudKit\Util\RouteGenerator;
 use CrudKit\Util\UrlHelper;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Schema\Column;
 use PDO;
 use utilphp\util;
@@ -232,13 +233,53 @@ class SQLDataProvider extends BaseSQLDataProvider{
         $take = isset($params['take']) ? $params['take'] : 10;
 
         $builder = $this->conn->createQueryBuilder();
-        $exec = $builder->select($this->queryColumns('all', array(), 'exprAs', false, true))
+        $builder->select($this->queryColumns('all', array(), 'exprAs', false, true))
             ->from($this->tableName)
             ->setFirstResult($skip)
-            ->setMaxResults($take)
-            ->execute();
+            ->setMaxResults($take);
+
+        if(isset($params['filters_json'])) {
+            $filters = json_decode($params['filters_json'], true);
+            if(count($filters) > 0) {
+                $this->addConditionsToBuilder($builder, $filters);
+            }
+        }
+
+        $exec = $builder->execute();
 
         return $exec->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @param $builder QueryBuilder
+     * @param $filters
+     */
+    protected function addConditionsToBuilder ($builder, $filters) {
+        foreach($filters as $filterItem) {
+            $target_cols = array();
+            $id = $filterItem['id'];
+            if($id === "_ck_all_summary") {
+                $target_cols = $this->summary_cols;
+            }
+            else {
+                if(isset($this->columns[$id])) {
+                    $target_cols = array($id);
+                }
+            }
+
+            $exprList = array();
+            foreach($target_cols as $colKey) {
+                /**
+                 * @var $col SQLColumn
+                 */
+                $col = $this->columns[$colKey];
+                $exprString = $col->addFilterToBuilder ($builder, $builder->expr(), $filterItem['type'], $filterItem['value']);
+                $exprList []= $exprString;
+                $builder->orWhere($exprString);
+            }
+
+//            $builder->andWhere($builder->expr()->orX($exprList));
+        }
     }
 
     public function getSchema()
@@ -249,9 +290,17 @@ class SQLDataProvider extends BaseSQLDataProvider{
     public function getRowCount()
     {
         $builder = $this->conn->createQueryBuilder();
-        $exec = $builder->select(array("COUNT(".$this->getPrimaryColumn()->getExpr().") AS row_count"))
-            ->from($this->tableName)
-            ->execute();
+        $builder->select(array("COUNT(".$this->getPrimaryColumn()->getExpr().") AS row_count"))
+            ->from($this->tableName);
+
+        if(isset($params['filters_json'])) {
+            $filters = json_decode($params['filters_json'], true);
+            if(count($filters) > 0) {
+                $this->addConditionsToBuilder($builder, $filters);
+            }
+        }
+        
+        $exec = $builder->execute();
 
         $countResult = $exec->fetchAll(\PDO::FETCH_ASSOC);
         return $countResult[0]['row_count'];

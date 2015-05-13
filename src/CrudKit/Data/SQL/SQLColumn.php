@@ -4,6 +4,9 @@ namespace CrudKit\Data\SQL;
 
 
 use CrudKit\Util\FormHelper;
+use Doctrine\Common\Collections\Expr\Expression;
+use Doctrine\DBAL\Query\Expression\ExpressionBuilder;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Types\Type;
 
@@ -25,6 +28,10 @@ abstract class SQLColumn {
     const CATEGORY_VALUE = "value";
     const CATEGORY_PRIMARY = "primary";
     const CATEGORY_FOREIGN = "foreign";
+
+    const TYPE_STRING = "string";
+    const TYPE_NUMBER = "number";
+    const TYPE_DATETIME = "datetime";
 
     public function __construct ($id, $category, $options) {
         $this->id = $id;
@@ -60,6 +67,28 @@ abstract class SQLColumn {
         }
     }
 
+    /**
+     * @param $builder QueryBuilder
+     * @param $expr ExpressionBuilder
+     * @param $type string
+     * @param $value
+     * @param bool $orFlag
+     * @throws \Exception
+     */
+    public function addFilterToBuilder($builder, $expr, $type, $value, $orFlag = false)
+    {
+        switch ($type){
+            case "like":
+                if($this->typeName === self::TYPE_STRING){
+                    return $expr->like($this->getExpr(), $builder->createNamedParameter("%".$value."%"));
+                }
+                break;
+            default:
+                throw new \Exception("Unkown filter type $type");
+        }
+        return "";
+    }
+
     public static function simplifyTypeName ($typeName) {
         switch($typeName) {
             case "integer":
@@ -70,12 +99,12 @@ abstract class SQLColumn {
             case "numeric":
             case "smallint":
             case "bigint":
-                return "number";
+                return self::TYPE_NUMBER;
             case "string":
             case "text":
-                return "string";
+                return self::TYPE_STRING;
             case "datetime":
-                return "datetime";
+                return self::TYPE_DATETIME;
             default:
                 throw new Exception("Unknown type $typeName");
         }
@@ -107,4 +136,5 @@ abstract class SQLColumn {
     public abstract function getSchema ();
     public abstract function getExpr ();
     public abstract function getSummaryConfig ();
+
 }

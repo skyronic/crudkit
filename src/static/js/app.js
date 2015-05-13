@@ -228,8 +228,8 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
             return [
             {
                 id: "_ck_all_summary",
-                cmp: "like",
-                val: $scope.searchTerm
+                type: "like",
+                value: $scope.searchTerm
             }
             ];
         }
