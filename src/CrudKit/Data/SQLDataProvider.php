@@ -256,29 +256,23 @@ class SQLDataProvider extends BaseSQLDataProvider{
      */
     protected function addConditionsToBuilder ($builder, $filters) {
         foreach($filters as $filterItem) {
-            $target_cols = array();
             $id = $filterItem['id'];
             if($id === "_ck_all_summary") {
+                $target_cols = array();
                 $target_cols = $this->summary_cols;
-            }
-            else {
-                if(isset($this->columns[$id])) {
-                    $target_cols = array($id);
+
+                $exprList = array();
+                foreach($target_cols as $colKey) {
+                    /**
+                     * @var $col SQLColumn
+                     */
+                    $col = $this->columns[$colKey];
+                    $exprString = $col->addFilterToBuilder ($builder, $builder->expr(), $filterItem['type'], $filterItem['value']);
+                    $exprList []= $exprString;
+                    $composite = call_user_func_array(array($builder->expr(), "orX"), $exprList);
+                    $builder->andWhere($composite);
                 }
             }
-
-            $exprList = array();
-            foreach($target_cols as $colKey) {
-                /**
-                 * @var $col SQLColumn
-                 */
-                $col = $this->columns[$colKey];
-                $exprString = $col->addFilterToBuilder ($builder, $builder->expr(), $filterItem['type'], $filterItem['value']);
-                $exprList []= $exprString;
-                $builder->orWhere($exprString);
-            }
-
-//            $builder->andWhere($builder->expr()->orX($exprList));
         }
     }
 
