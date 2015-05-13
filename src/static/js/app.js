@@ -51,8 +51,9 @@ var GenerateAPIFactory = function (make_call_real) {
     				action: "page_function"
     			}), params);
     		},
-    		get_colSpec: function (page_id) {
-    			return apis.page.func(page_id, "get_colSpec", {});
+    		get_colSpec: function (page_id, params) {
+                params = params ? params : {};
+    			return apis.page.func(page_id, "get_colSpec", params);
     		},
             get_data: function (page_id, params) {
                 return apis.page.func(page_id, "get_data", params);
@@ -198,11 +199,14 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
 	$scope.pageId = window.pageId;
 	$scope.perPage = 10;
 	$scope.currentPage = 1;
+    $scope.advancedSearchHidden = true;
+    $scope.searchTerm = "";
 
 	var update_data = function (params) {
 		params = params ? params : {};
 		params['pageNumber'] = $scope.currentPage;
 		params['perPage'] = $scope.perPage;
+        params['filters_json'] = JSON.stringify(getFilters());
         $scope.loadingPromise = ckAPI.page.get_data($scope.pageId, params).then(function (data) {
             $scope.rows = data.rows;
         });
@@ -218,6 +222,28 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
 
         update_data ();
     });
+
+    var getFilters = function () {
+        if($scope.searchTerm !== "") {
+            return [
+            {
+                id: "_ck_all_summary",
+                cmp: "like",
+                val: $scope.searchTerm
+            }
+            ];
+        }
+    };
+
+    $scope.filterColumns = function () {
+        var params = {
+            filters_json: JSON.stringify(getFilters())
+        };
+        $scope.loadingPromise = ckAPI.page.get_colSpec($scope.pageId, params).then(function (colSpec) {
+            $scope.rowCount = colSpec.count;
+            update_data ();
+        });
+    };
 
 	$scope.pageChanged = function () {
 		update_data ();
