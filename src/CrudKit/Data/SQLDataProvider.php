@@ -287,7 +287,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
         return $this->queryColumns("category", array(SQLColumn::CATEGORY_VALUE, SQLColumn::CATEGORY_PRIMARY), "schema", true);
     }
 
-    public function getRowCount()
+    public function getRowCount($params = array())
     {
         $builder = $this->conn->createQueryBuilder();
         $builder->select(array("COUNT(".$this->getPrimaryColumn()->getExpr().") AS row_count"))
@@ -299,7 +299,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
                 $this->addConditionsToBuilder($builder, $filters);
             }
         }
-        
+
         $exec = $builder->execute();
 
         $countResult = $exec->fetchAll(\PDO::FETCH_ASSOC);

@@ -11,7 +11,7 @@ abstract class BaseDataProvider {
     // Data modelling
     public abstract function getData ($params = array());
     public abstract function getSchema ();
-    public abstract function getRowCount ();
+    public abstract function getRowCount ($params = array());
 
     // Ordering
     public abstract function getSummaryColumns ();
