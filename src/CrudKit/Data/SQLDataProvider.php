@@ -243,6 +243,9 @@ class SQLDataProvider extends BaseSQLDataProvider{
             if(count($filters) > 0) {
                 $this->addConditionsToBuilder($builder, $filters);
             }
+
+            // Comment this to debug. Ugh
+//            die($builder->getSQL());
         }
 
         $exec = $builder->execute();
@@ -258,7 +261,6 @@ class SQLDataProvider extends BaseSQLDataProvider{
         foreach($filters as $filterItem) {
             $id = $filterItem['id'];
             if($id === "_ck_all_summary") {
-                $target_cols = array();
                 $target_cols = $this->summary_cols;
 
                 $exprList = array();
@@ -267,11 +269,21 @@ class SQLDataProvider extends BaseSQLDataProvider{
                      * @var $col SQLColumn
                      */
                     $col = $this->columns[$colKey];
-                    $exprString = $col->addFilterToBuilder ($builder, $builder->expr(), $filterItem['type'], $filterItem['value']);
+                    $val = $col->cleanValue($filterItem['value']);
+                    $exprString = $col->addFilterToBuilder ($builder, $builder->expr(), $filterItem['type'], $val);
                     $exprList []= $exprString;
                     $composite = call_user_func_array(array($builder->expr(), "orX"), $exprList);
                     $builder->andWhere($composite);
                 }
+            }
+            if(isset($this->columns[$id])) {
+                /**
+                 * @var $col SQLColumn
+                 */
+                $col = $this->columns[$id];
+                $val = $col->cleanValue($filterItem['value']);
+                $exprString = $col->addFilterToBuilder ($builder, $builder->expr(), $filterItem['type'], $val);
+                $builder->andWhere($exprString);
             }
         }
     }

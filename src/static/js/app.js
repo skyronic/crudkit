@@ -201,6 +201,9 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
 	$scope.currentPage = 1;
     $scope.advancedSearchHidden = true;
     $scope.searchTerm = "";
+    $scope.advFilterItems = [];
+    $scope.schema = [];
+    $scope.advFilterOptions = [];
 
 	var update_data = function (params) {
 		params = params ? params : {};
@@ -212,6 +215,14 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
         });
 	};
 
+    $scope.startAdvancedSearch = function() {
+        if($scope.advancedSearchHidden) {
+            $scope.addConditionButtonClicked ();
+            $scope.advancedSearchHidden = false;
+        }
+    }
+
+    // First load
     $scope.loadingPromise = ckAPI.page.get_colSpec($scope.pageId).then(function (colSpec) {
         $scope.rowCount = colSpec.count;
 
@@ -219,20 +230,75 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
             return _.extend(val, colSpec.schema[val.key]);
         });
 
+        $scope.schema = colSpec.schema;
+        $scope.advFilterOptions = _.map(colSpec.schema, function (val, key) {
+            return _.extend(val, {id: key});
+        });
+        console.log($scope.advFilterOptions);
 
         update_data ();
     });
 
+
+    $scope.filterColumnSelected = function (item) {
+        var id = item.id;
+        var type = $scope.schema[id].type;
+
+        var availableCmp = [];
+        var defCmpType; // default comparison type
+
+        if(type === "string") {
+            availableCmp = [
+                {id:"eq", label:"Equals", inputType: "string"},
+                {id:"sw", label:"Starts With", inputType: "string"},
+                {id:"ew", label:"Ends With", inputType: "string"},
+                {id:"contains", label:"Contains", inputType: "string"}
+            ];
+            defCmpType = availableCmp[0];
+        }
+        else if(type === "number") {
+            availableCmp = [
+                {id:"eq", label:"Equals", inputType: "number"},
+                {id:"gt", label:">", inputType: "number"},
+                {id:"gte", label:">=",inputType: "number"},
+                {id:"lt", label:"<", inputType: "number"},
+                {id:"lte", label:"<=", inputType: "number"}
+            ];
+            defCmpType = availableCmp[0];
+        }
+
+        item.availableCmp = availableCmp;
+        item.cmp = defCmpType;
+    };
+
     var getFilters = function () {
+        var filters = [];
+
         if($scope.searchTerm !== "") {
-            return [
-            {
+            filters.push({
                 id: "_ck_all_summary",
                 type: "like",
                 value: $scope.searchTerm
-            }
-            ];
+            })
         }
+        for(var i = 0; i < $scope.advFilterItems.length; i ++) {
+            var filterItem = $scope.advFilterItems[i];
+            filters.push({
+                id: filterItem.id,
+                type: filterItem.cmp.id,
+                value: filterItem.value
+            })
+        }
+
+        return filters;
+    };
+
+    $scope.addConditionButtonClicked = function () {
+        $scope.advFilterItems.push ({
+            id: 'null',
+            type: 'null',
+            value: ''
+        });
     };
 
     $scope.filterColumns = function () {
@@ -267,6 +333,7 @@ app.controller("CKFormController", function ($scope, $http, ckAPI) {
     var formConfig = {};
 
     $scope.selectValues = {
+
     };
 
     var activate_relationships = function () {

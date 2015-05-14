@@ -44,7 +44,8 @@ class ValueColumn extends SQLColumn {
     public function getSchema()
     {
         return array(
-            'type' => $this->typeName
+            'type' => $this->typeName,
+            'label' => $this->options['label']
         );
     }
 

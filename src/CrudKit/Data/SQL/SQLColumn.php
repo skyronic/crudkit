@@ -73,20 +73,32 @@ abstract class SQLColumn {
      * @param $type string
      * @param $value
      * @param bool $orFlag
+     * @return string
      * @throws \Exception
      */
     public function addFilterToBuilder($builder, $expr, $type, $value, $orFlag = false)
     {
         switch ($type){
+            case "contains":
             case "like":
-                if($this->typeName === self::TYPE_STRING){
-                    return $expr->like($this->getExpr(), $builder->createNamedParameter("%".$value."%"));
-                }
-                break;
+                return $expr->like($this->getExpr(), $builder->createNamedParameter("%".$value."%"));
+            case "sw": // starts with
+                return $expr->like($this->getExpr(), $builder->createNamedParameter($value."%"));
+            case "ew": // starts with
+                return $expr->like($this->getExpr(), $builder->createNamedParameter("%".$value));
+            case "eq":
+                return $expr->eq($this->getExpr(), $builder->createNamedParameter($value));
+            case "gt":
+                return $expr->gt ($this->getExpr(), $builder->createNamedParameter($value));
+            case "gte":
+                return $expr->gte ($this->getExpr(), $builder->createNamedParameter($value));
+            case "lt":
+                return $expr->gt ($this->getExpr(), $builder->createNamedParameter($value));
+            case "lte":
+                return $expr->gte ($this->getExpr(), $builder->createNamedParameter($value));
             default:
                 throw new \Exception("Unkown filter type $type");
         }
-        return "";
     }
 
     public static function simplifyTypeName ($typeName) {

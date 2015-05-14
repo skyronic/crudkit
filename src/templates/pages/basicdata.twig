@@ -12,17 +12,43 @@
     {% verbatim %}
     <div ng-controller="SummaryTableController" >
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-9">
             <div class="input-group col-md-5">
             <input type="text" class="form-control" placeholder="" ng-model="searchTerm"/>
               <span class="input-group-btn">
                 <button class="btn btn-default" type="button" ng-click="filterColumns()" ng-disabled="searchTerm == ''">Search</button>
             </span>
+            </div>
+            <div ng-hide="advancedSearchHidden">
+                <h4>Advanced Search</h4>
+                <div class="row" ng-repeat="item in advFilterItems" style="margin-top: 8px;">
+                    <div class="col-md-4">
+                        <select class="form-control" ng-model="item.id"  ng-options="sel.id as sel.label for sel in advFilterOptions" ng-change="filterColumnSelected(item)"></select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-control" ng-model="item.cmp"  ng-options="sel.label for sel in item.availableCmp"></select>
+                    </div>
+                    <div class="col-md-4">
+                        <div ng-switch on="item.cmp.inputType" style="">
+                            <div ng-switch-when="string">
+                                <input type="text" class="form-control" ng-model="item.value" />
+                            </div>
+                            <div ng-switch-when="number">
+                                <input type="number" class="form-control" ng-model="item.value" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top:10px; margin-bottom: 10px">
+                <a class="btn btn-primary" ng-click="addConditionButtonClicked ()">Add Condition</a>
+                <span style="margin-left: 10px; margin-right: 10px;">or</span>
+                <a class="btn btn-success" ng-click="filterColumns ()">Start Search</a>
+                </div>
+            </div>
         </div><!-- /input-group -->
-    </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="pull-right">
-                <p><a href="#" class="btn btn-sm btn-success" ng-click="advancedSearchHidden = !advancedSearchHidden">Advanced Search</a></p>
+                <p><a href="#" class="btn btn-sm btn-success" ng-click="startAdvancedSearch ()">Advanced Search</a></p>
             </div>
         </div>
     </div>
