@@ -28,7 +28,6 @@ var ckUrl = {
 };
 
 var app = angular.module("ckApp", [
-	'ui.bootstrap',
 	'cgBusy',
 	'angular.filter'
 ]);
@@ -199,6 +198,7 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
 	$scope.pageId = window.pageId;
 	$scope.perPage = 10;
 	$scope.currentPage = 1;
+    $scope.pageCount = 1;
     $scope.advancedSearchHidden = true;
     $scope.searchTerm = "";
     $scope.advFilterItems = [];
@@ -225,6 +225,7 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
     // First load
     $scope.loadingPromise = ckAPI.page.get_colSpec($scope.pageId).then(function (colSpec) {
         $scope.rowCount = colSpec.count;
+        $scope.pageCount = colSpec/$scope.perPage;
 
         $scope.columns = _.map(colSpec.columns, function (val) {
             return _.extend(val, colSpec.schema[val.key]);
@@ -307,6 +308,7 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
         };
         $scope.loadingPromise = ckAPI.page.get_colSpec($scope.pageId, params).then(function (colSpec) {
             $scope.rowCount = colSpec.count;
+            $scope.pageCount = colSpec/$scope.perPage;
             update_data ();
         });
     };
@@ -314,6 +316,15 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
 	$scope.pageChanged = function () {
 		update_data ();
 	};
+
+    $scope.prevPage = function () {
+        $scope.currentPage --;
+        $scope.pageChanged ();
+    };
+    $scope.nextPage = function () {
+        $scope.currentPage ++;
+        $scope.pageChanged ();
+    };
 
 	$scope.itemLink = function (row, col) {
 		return ckUrl.resetGetParams ({
@@ -354,6 +365,14 @@ app.controller("CKFormController", function ($scope, $http, ckAPI) {
                 })(formConfig.relationships[i]);
             }
         }
+    };
+
+    $scope.changedValues = {};
+    $scope.extraClasses = {};
+    $scope.registerChange = function (key) {
+        console.log("Registering change for ", key);
+        $scope.changedValues[key] = $scope.formItems[key];
+        $scope.extraClasses[key] = "has-change";
     };
 
     var activate_edit = function () {

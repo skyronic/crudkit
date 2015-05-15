@@ -112,6 +112,7 @@ class BaseController {
                     $data['currentId'] = -1;
                 }
                 $data['page_content'] = $result['content'];
+                $data['dev'] = false; // change to true to load unminified js
 
                 $output = $this->twig->renderTemplateToString("main_page.twig", $data);
                 break;

@@ -7,7 +7,7 @@ abstract class HorizontalItem extends BaseFormItem{
         $label = $this->config['label'];
         $content = $this->renderInternal();
         return  <<<RENDER
-        <div class="form-group">
+        <div class="form-group" ng-class="extraClasses.{$this->key}">
                 <label for="{$this->id}">$label</label>
                 <div>
                 $content
@@ -15,6 +15,11 @@ abstract class HorizontalItem extends BaseFormItem{
             </div>
 RENDER;
 
+    }
+
+    public function getAngularDirectives () {
+        $ngModel = $this->form->getNgModel();
+        return "ng-change=\"{$this->changeFunc}('{$this->key}')\" ng-model=\"$ngModel.{$this->key}\"";
     }
 
     public function renderInline () {

@@ -8,6 +8,8 @@ abstract class BaseFormItem {
     protected $config = array();
     protected $key = "";
     protected $id = "";
+
+    protected $changeFunc = "registerChange";
     /**
      * @var FormHelper
      */
