@@ -48,7 +48,7 @@
         </div><!-- /input-group -->
         <div class="col-md-3">
             <div class="pull-right">
-                <p><a href="#" class="btn btn-sm btn-success" ng-click="startAdvancedSearch ()">Advanced Search</a></p>
+                <p><a  class="btn btn-sm btn-success" ng-click="startAdvancedSearch ()">Advanced Search</a></p>
             </div>
         </div>
     </div>
@@ -82,7 +82,13 @@
     			</tr>
     		</tbody>
     	</table>
-    	<pagination total-items="rowCount" ng-model="currentPage" items-per-page=10  ng-change="pageChanged()"></pagination>
+    <nav>
+          <ul class="pager" >
+            <li class="previous" ng-class="{'disabled':currentPage <= 1}"><a ng-click="prevPage()" ><span aria-hidden="true">&larr;</span> Previous</a></li>
+            <li class="next" ng-class="{'disabled':currentPage >= pageCount}"><a ng-click="nextPage()" >Next<span aria-hidden="true">&rarr;</span></a></li>
+        </ul>
+    </nav>
+
     {% endverbatim %}
     </div>
     </div>
