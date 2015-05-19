@@ -2,11 +2,13 @@
 
 namespace CrudKit\Controllers;
 
+use CrudKit\Util\FlashBag;
 use CrudKit\Util\ValueBag;
 
 class MainController extends BaseController {
     public function handle_default () {
         $firstPage = $this->app->getDefaultPage ();
+        FlashBag::add("alert", "Redirected to default page", "success");
         if($firstPage !== null) {
             return array(
                 'type' => 'redirect',
@@ -19,6 +21,7 @@ class MainController extends BaseController {
     }
     public function handle_view_page () {
         // Handle the view page action
+        FlashBag::add("alert", "Generated the page", "success");
         $pageId = $this->url->get('page');
         $this->page = $this->app->getPageById($pageId);
         $this->page->init();

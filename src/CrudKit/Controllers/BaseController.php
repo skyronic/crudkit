@@ -4,6 +4,7 @@ namespace CrudKit\Controllers;
 
 use CrudKit\CrudKitApp;
 use CrudKit\Pages\BasePage;
+use CrudKit\Util\FlashBag;
 use CrudKit\Util\TwigUtil;
 use CrudKit\Util\ValueBag;
 use CrudKit\Util\RouteGenerator;
@@ -83,10 +84,13 @@ class BaseController {
                 break;
             case "json":
                 $this->app->setJsonResponse(true);
+                $data = $result['data'];
+                $data['flashBag'] = FlashBag::getFlashes();
                 $output = json_encode($result['data']);
                 break;
             case "redirect":
                 header("Location: ".$result['url']);
+                session_write_close();
                 exit();
                 break;
             case "transclude":
@@ -98,6 +102,7 @@ class BaseController {
                         'name' => $pageItem->getName()
                     );
                 }
+                ValueBag::set("flashBag", FlashBag::getFlashes());
                 $data = array(
                     'valueBag' => json_encode(ValueBag::getValues()),
                     'staticRoot' => $this->app->getStaticRoot(),

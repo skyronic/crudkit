@@ -32,6 +32,30 @@ var app = angular.module("ckApp", [
 	'angular.filter'
 ]);
 
+ck.flashbag = {
+    subscribers: {},
+    add: function (items) {
+        for(var category in items) {
+            if(!items.hasOwnProperty(category))
+                continue;
+            var catItems = items[category];
+            if(ck.flashbag.subscribers.hasOwnProperty(category)) {
+                var subs = ck.flashbag.subscribers.hasOwnProperty[category];
+                for(var i = 0; i < subs.length; i++) {
+                    subs (catItems);
+                }
+            }
+        }
+    },
+    subscribe: function (category, callback) {
+        if(!ck.flashbag.subscribers.hasOwnProperty(category)) {
+            ck.flashbag.subscribers[category] = [];
+        }
+
+        ck.flashbag.subscribers[category].push (callback);
+    }
+}
+
 var GenerateAPIFactory = function (make_call_real) {
     var make_call = function (url, params, urlOnly) {
         url += "&ajax=true";
@@ -235,7 +259,6 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
         $scope.advFilterOptions = _.map(colSpec.schema, function (val, key) {
             return _.extend(val, {id: key});
         });
-        console.log($scope.advFilterOptions);
 
         update_data ();
     });
@@ -413,3 +436,19 @@ app.controller("CKFormController", function ($scope, $http, ckAPI) {
         }
     };
 });
+
+
+app.controller("AlertController", function ($scope) {
+    $scope.alertItems = [];
+    ck.flashbag.subscribe('alerts', function() {
+        $scope.$apply(function () {
+        });
+    })
+
+});
+
+$(function () {
+    _.delay(function () {
+
+    }, 100);
+})
