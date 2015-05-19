@@ -8,6 +8,7 @@ use CrudKit\Data\SQL\PrimaryColumn;
 use CrudKit\Data\SQL\SQLColumn;
 use CrudKit\Data\SQL\ValueColumn;
 use CrudKit\Util\FormHelper;
+use CrudKit\Util\LoggingHelper;
 use CrudKit\Util\RouteGenerator;
 use CrudKit\Util\UrlHelper;
 use Doctrine\DBAL\Connection;
@@ -247,7 +248,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
             // Comment this to debug. Ugh
 //            die($builder->getSQL());
         }
-
+        LoggingHelper::logBuilder($builder);
         $exec = $builder->execute();
 
         return $exec->fetchAll(\PDO::FETCH_ASSOC);
@@ -306,6 +307,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
             }
         }
 
+        LoggingHelper::logBuilder($builder);
         $exec = $builder->execute();
 
         $countResult = $exec->fetchAll(\PDO::FETCH_ASSOC);
@@ -347,6 +349,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
             ->where("$pk = ".$builder->createNamedParameter($id))
             ->execute();
 
+        LoggingHelper::logBuilder($builder);
         return $exec->fetch(PDO::FETCH_ASSOC);
     }
 
@@ -365,6 +368,8 @@ class SQLDataProvider extends BaseSQLDataProvider{
             $val = $col->cleanValue ($values[$formKey]);
             $builder->set($col->getExpr(), $builder->createNamedParameter($values[$formKey]));
         }
+
+        LoggingHelper::logBuilder($builder);
         $builder->where("$pk = ".$builder->createNamedParameter($id))
             ->execute();
         return true;
@@ -394,6 +399,8 @@ class SQLDataProvider extends BaseSQLDataProvider{
             $col = $this->columns[$formKey];
             $builder->setValue($col->getExpr(), $builder->createNamedParameter($values[$formKey]));
         }
+
+        LoggingHelper::logBuilder($builder);
         $builder->execute();
         return $this->conn->lastInsertId();
 

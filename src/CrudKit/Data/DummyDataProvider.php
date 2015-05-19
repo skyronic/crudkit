@@ -93,7 +93,6 @@ class DummyDataProvider extends BaseDataProvider {
     public function setRow($id = null, $values = array())
     {
         $log = new LoggingHelper();
-        $log->log("Going to log  for $id");
         $log->vardump($values);
     }
 }

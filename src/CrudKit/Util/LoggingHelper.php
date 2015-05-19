@@ -2,15 +2,26 @@
 namespace CrudKit\Util;
 
 
+use Doctrine\DBAL\Query\QueryBuilder;
+
 class LoggingHelper {
-    public function log($string) {
-        // TODO: make this nicer
-        $out = fopen("php://stderr", "w");
-        fputs($out, $string."\n");
-        fclose($out);
+    public static function log($string) {
+        // Push to flashbag
+        FlashBag::add("log", $string);
     }
 
-    public function vardump ($obj) {
-        $this->log(print_r($obj, true));
+    public static function logObject ($object) {
+        FlashBag::add("log", json_encode($object), "json");
+    }
+
+    /**
+     * @param QueryBuilder $builder
+     */
+    public static function logBuilder ($builder) {
+        $sql = $builder->getSQL();
+        $params = $builder->getParameters();
+
+        self::log("Running Query: ".$sql. " with params:");
+        self::logObject($params);
     }
 }

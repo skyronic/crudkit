@@ -425,7 +425,6 @@ app.controller("CKFormController", function ($scope, ckAPI) {
         else {
             activate_edit();
         }
-
     });
 
     $scope.saveValues = function () {
@@ -457,6 +456,18 @@ $(function () {
                 text: item.message
             }));
             alertContainer.append($alert);
+        })
+    });
+
+    ck.flashbag.subscribe("log", function(items) {
+        items.forEach(function (item) {
+            if(item.extra === "json") {
+                var obj = JSON.parse(item.message);
+                console.log("[SERVER] ", obj);
+            }
+            else {
+                console.log("[SERVER] " + item.message);
+            }
         })
     });
 
