@@ -1,10 +1,11 @@
 <?php
 
 namespace CrudKit\Util;
+use utilphp\util;
 
 class FlashBag /* not to be mistaken with flashbang */ {
     public static function add ($category, $message, $extra = "") {
-        if(isset($_SESSION['_ck_flash'])) {
+        if(!isset($_SESSION['_ck_flash'])) {
             $_SESSION['_ck_flash'] = array();
         }
 
