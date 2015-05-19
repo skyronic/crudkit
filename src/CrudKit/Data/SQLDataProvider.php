@@ -244,9 +244,6 @@ class SQLDataProvider extends BaseSQLDataProvider{
             if(count($filters) > 0) {
                 $this->addConditionsToBuilder($builder, $filters);
             }
-
-            // Comment this to debug. Ugh
-//            die($builder->getSQL());
         }
         LoggingHelper::logBuilder($builder);
         $exec = $builder->execute();
