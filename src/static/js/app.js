@@ -396,7 +396,6 @@ app.controller("CKFormController", function ($scope, ckAPI) {
     $scope.changedValues = {};
     $scope.extraClasses = {};
     $scope.registerChange = function (key) {
-        console.log("Registering change for ", key);
         $scope.changedValues[key] = $scope.formItems[key];
         $scope.extraClasses[key] = "has-change";
     };
@@ -410,6 +409,10 @@ app.controller("CKFormController", function ($scope, ckAPI) {
     };
 
     var activate_new = function () {
+        $scope.loadingPromise = ckAPI.page.get_form_values(formConfig.pageId, "_ck_new").then(function(data) {
+            $scope.schema = data.schema;
+            $scope.formItems = ck.converters.standard_to_js(data.schema, data.values);
+        });
         activate_relationships();
     };
 
@@ -426,15 +429,13 @@ app.controller("CKFormController", function ($scope, ckAPI) {
     });
 
     $scope.saveValues = function () {
-        var vals = ck.converters.js_to_standard($scope.schema, $scope.formItems);
+        var vals = ck.converters.js_to_standard($scope.schema, $scope.changedValues);
         if(formConfig.newItem) {
             $scope.loadingPromise = ckAPI.page.create_item(formConfig.pageId, vals).then(function(data) {
-                alert("Saved");
             });
         }
         else {
             $scope.loadingPromise = ckAPI.page.set_form_values(formConfig.pageId, formConfig.itemId, vals).then(function(data) {
-                alert("Saved");
             });
         }
     };

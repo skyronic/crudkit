@@ -98,6 +98,7 @@ class BasicDataPage extends BasePage{
         $route = new RouteGenerator();
 
         $status = $this->dataProvider->deleteItem ($rowId);
+        FlashBag::add("alert", "Item has been deleted", "success");
 
         // Redirect back to the pageme
         return array(
@@ -126,11 +127,21 @@ class BasicDataPage extends BasePage{
 
     public function handle_get_form_values () {
         $url = new UrlHelper ();
+        $item_id = $url->get("item_id", null);
+        if($item_id === "_ck_new"){
+            return array(
+                'type' => 'json',
+                'data' => array (
+                    'schema' => $this->dataProvider->getSchema(),
+                    'values' => array()
+                    )
+                );
+        }
         return array(
             'type' => 'json',
             'data' => array (
                 'schema' => $this->dataProvider->getSchema(),
-                'values' => $this->dataProvider->getRow($url->get("item_id", null))
+                'values' => $this->dataProvider->getRow($item_id)
             )
         );
     }
@@ -155,6 +166,7 @@ class BasicDataPage extends BasePage{
         $values = json_decode($url->get("values_json", "{}"), true);
 
         $new_pk = $this->dataProvider->createItem($values);
+        FlashBag::add("alert", "Item has been created", "success");
         return array(
             'type' => 'json',
             'data' => array(
@@ -173,6 +185,7 @@ class BasicDataPage extends BasePage{
 
         if($form->validate($values)) {
             $this->dataProvider->setRow($url->get("item_id", null), $values);
+            FlashBag::add("alert", "Item has been updated", "success");
             return array(
                 'type' => 'json',
                 'data' => array(
