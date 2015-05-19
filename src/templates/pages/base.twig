@@ -12,13 +12,9 @@
 		</div>
 	</div>
 </section>
-	<div class="col-md-12" ng-controller="AlertController">
-	{% verbatim %}
-		<div ng-repeat="alertItem in alerts" class="alert alert-dismissable alert-{{ level }}" ng-class="">
-			<button type="button" class="close" aria-hidden="true" ng-click="dismissAlert(alertItem)">×</button>
-			{{ alertItem.message }}
+	<div class="col-md-12">
+		<div id="alertTarget">
 		</div>
-	{% endverbatim %}
 	</div>
 <section class="content">
 <div class="row">

@@ -40,9 +40,9 @@ ck.flashbag = {
                 continue;
             var catItems = items[category];
             if(ck.flashbag.subscribers.hasOwnProperty(category)) {
-                var subs = ck.flashbag.subscribers.hasOwnProperty[category];
+                var subs = ck.flashbag.subscribers[category];
                 for(var i = 0; i < subs.length; i++) {
-                    subs (catItems);
+                    subs[i] (catItems);
                 }
             }
         }
@@ -437,18 +437,24 @@ app.controller("CKFormController", function ($scope, $http, ckAPI) {
     };
 });
 
-
-app.controller("AlertController", function ($scope) {
-    $scope.alertItems = [];
-    ck.flashbag.subscribe('alerts', function() {
-        $scope.$apply(function () {
-        });
-    })
-
-});
-
 $(function () {
-    _.delay(function () {
+    // subscribe to push alerts
+    ck.flashbag.subscribe("alert", function(items) {
+        var alertContainer = $("#alertTarget");
+        items.forEach(function (item) {
+            // ugh this is disgusting. I know. Sorry.
+            var $alert = $("<div/>", {'class':"alert alert-dismissable alert-" + item.extra});
+            $alert.append($("<button/>", {
+                'class': 'close',
+                'text': '×'
+            }).attr({
+                'data-role': 'close'
+            })).append($("<div/>", {
+                text: item.message
+            }));
+            alertContainer.append($alert);
+        })
+    });
 
-    }, 100);
+    ck.flashbag.add(window.ckValues.flashBag);
 })
