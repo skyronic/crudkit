@@ -206,6 +206,9 @@ app.factory ("ckAPI", function ($http, $q) {
                 ck.fatalError("Error", "There was an unknown error in the server");
             }
         }).success(function (data) {
+            if(data.flashbag) {
+                ck.flashbag.add(data.flashbag);
+            }
             if(data.success === false) {
                 deferred.reject("Unknown error. Conflicting success codes");
                 return;
@@ -359,7 +362,7 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
 	};
 });
 
-app.controller("CKFormController", function ($scope, $http, ckAPI) {
+app.controller("CKFormController", function ($scope, ckAPI) {
     $scope.formItems = {};
     $scope.loadingPromise = null;
     $scope.openStatus = {};
@@ -456,5 +459,5 @@ $(function () {
         })
     });
 
-    ck.flashbag.add(window.ckValues.flashBag);
+    ck.flashbag.add(window.ckValues.flashbag);
 })

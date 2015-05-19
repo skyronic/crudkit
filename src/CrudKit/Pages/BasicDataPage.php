@@ -8,6 +8,7 @@ use CrudKit\Util\RouteGenerator;
 use CrudKit\Util\TwigUtil;
 use CrudKit\Util\ValueBag;
 use CrudKit\Util\UrlHelper;
+use CrudKit\Util\FlashBag;
 
 class BasicDataPage extends BasePage{
 

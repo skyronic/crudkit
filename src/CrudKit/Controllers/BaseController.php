@@ -85,8 +85,8 @@ class BaseController {
             case "json":
                 $this->app->setJsonResponse(true);
                 $data = $result['data'];
-                $data['flashBag'] = FlashBag::getFlashes();
-                $output = json_encode($result['data']);
+                $data['flashbag'] = FlashBag::getFlashes();
+                $output = json_encode($data);
                 break;
             case "redirect":
                 header("Location: ".$result['url']);
@@ -102,7 +102,7 @@ class BaseController {
                         'name' => $pageItem->getName()
                     );
                 }
-                ValueBag::set("flashBag", FlashBag::getFlashes());
+                ValueBag::set("flashbag", FlashBag::getFlashes());
                 $data = array(
                     'valueBag' => json_encode(ValueBag::getValues()),
                     'staticRoot' => $this->app->getStaticRoot(),
