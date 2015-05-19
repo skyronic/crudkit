@@ -61,6 +61,18 @@ module.exports = function(grunt) {
     },
     clean: {
 
+    },
+    replace: {
+      sourceMaps: {
+        src: ["src/static/build/js/crudkit-libs.min.js"],
+        overwrite: true,
+        replacements: [
+          {
+            from: "sourceMappingURL",
+            to: ""
+          }
+        ]
+      }
     }
   });
 
@@ -69,7 +81,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-text-replace');
 
+  grunt.registerTask('buildStatic', ['concat', 'replace'])
   grunt.registerTask('default', ['']);
 
 };
