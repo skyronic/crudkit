@@ -147,7 +147,8 @@ ck.converters = {
                     result = parseFloat(input);
                 break;
                 case "datetime":
-                    result = new Date(input);
+                    // Server sends a timestamp in UTC. We use that in UTC and convert to JS date
+                    result = moment.unix(parseInt(input)).tz("UTC").toDate();
                 break;
             }
 
@@ -174,7 +175,7 @@ ck.converters = {
                     result = input.toString();
                 break;
                 case "datetime":
-                    result = input.toISOString().toString();
+                    result = moment(input).tz("UTC").unix();
                 break;
             }
             resultObject[key] = result;

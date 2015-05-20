@@ -221,6 +221,19 @@ class SQLDataProvider extends BaseSQLDataProvider{
         );
     }
 
+    protected function prepareObjectForClient ($object) {
+        $result = array();
+        foreach($object as $key => $value) {
+            /**
+             * @var $col SQLColumn
+             */
+            $col = $this->columns[$key];
+            $result[$key] = $col->prepareForClient($value);
+        }
+
+        return $result;
+    }
+
     /**
      * @param $table string
      */
@@ -232,7 +245,6 @@ class SQLDataProvider extends BaseSQLDataProvider{
     {
         $skip = isset($params['skip']) ? $params['skip'] : 0;
         $take = isset($params['take']) ? $params['take'] : 10;
-
         $builder = $this->conn->createQueryBuilder();
         $builder->select($this->queryColumns('all', array(), 'exprAs', false, true))
             ->from($this->tableName)
@@ -347,7 +359,8 @@ class SQLDataProvider extends BaseSQLDataProvider{
             ->execute();
 
         LoggingHelper::logBuilder($builder);
-        return $exec->fetch(PDO::FETCH_ASSOC);
+        $values = $exec->fetch(PDO::FETCH_ASSOC);
+        return $this->prepareObjectForClient($values);
     }
 
     public function setRow($id = null, $values = array())
@@ -363,7 +376,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
             }
             $col = $this->columns[$formKey];
             $val = $col->cleanValue ($values[$formKey]);
-            $builder->set($col->getExpr(), $builder->createNamedParameter($values[$formKey]));
+            $builder->set($col->getExpr(), $builder->createNamedParameter($val));
         }
 
         LoggingHelper::logBuilder($builder);

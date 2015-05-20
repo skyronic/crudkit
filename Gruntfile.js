@@ -53,8 +53,9 @@ module.exports = function(grunt) {
           vendorRoot + "angular-filter/dist/angular-filter.min.js",
           vendorRoot + "bootstrap3-dialog/dist/js/bootstrap-dialog.min.js",
           vendorRoot + "jsurl/url.min.js",
-          vendorRoot + "vendor/moment/min/moment.min.js",
-          vendorRoot + "vendor/adminlte/dist/js/app.min.js",
+          vendorRoot + "moment/min/moment.min.js",
+          vendorRoot + "moment-timezone/builds/moment-timezone-with-data.min.js",
+          vendorRoot + "adminlte/dist/js/app.min.js",
           ]
         }
       }

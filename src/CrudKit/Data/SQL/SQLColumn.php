@@ -3,12 +3,14 @@
 namespace CrudKit\Data\SQL;
 
 
+use Carbon\Carbon;
 use CrudKit\Util\FormHelper;
 use Doctrine\Common\Collections\Expr\Expression;
 use Doctrine\DBAL\Query\Expression\ExpressionBuilder;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Types\Type;
+use utilphp\util;
 
 abstract class SQLColumn {
     public $id = null;
@@ -32,6 +34,7 @@ abstract class SQLColumn {
     const TYPE_STRING = "string";
     const TYPE_NUMBER = "number";
     const TYPE_DATETIME = "datetime";
+    const TYPE_DATE = "date";
 
     public function __construct ($id, $category, $options) {
         $this->id = $id;
@@ -60,8 +63,34 @@ abstract class SQLColumn {
                 return "".$value;
             break;
             case "datetime":
-                return new \DateTime ($value);
+                $timezone = isset($this->options['timezone']) ? $this->options['timezone'] : "UTC";
+                // Assuming that the value that client has given is in UTC
+                $timeObject = Carbon::createFromTimestamp(intval($value), "UTC");
+
+                // Now convert this into the target timezone
+                $timeObject->setTimezone($timezone);
+                return $timeObject;
             break;
+            default:
+                throw new \Exception("Unknown type {$this->typeName}");
+        }
+    }
+
+    public function prepareForClient ($value) {
+        switch($this->typeName) {
+            case "number":
+                return "".floatval($value);
+                break;
+            case "string":
+                return "".$value;
+                break;
+            case "datetime":
+                $timezone = isset($this->options['timezone']) ? $this->options['timezone'] : "UTC";
+                $timeObject = Carbon::parse($value, $timezone);
+                // Convert that into UTC
+                $timeObject->setTimezone("UTC");
+                return $timeObject->getTimestamp();
+                break;
             default:
                 throw new \Exception("Unknown type {$this->typeName}");
         }
@@ -117,6 +146,8 @@ abstract class SQLColumn {
                 return self::TYPE_STRING;
             case "datetime":
                 return self::TYPE_DATETIME;
+            case "date":
+                return self::TYPE_DATE;
             default:
                 throw new Exception("Unknown type $typeName");
         }
