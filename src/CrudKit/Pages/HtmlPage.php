@@ -18,6 +18,11 @@ class HtmlPage extends BasePage {
         ));
     }
 
+    public function __construct ($id) {
+        $this->setId($id);
+        return $this;
+    }
+
 
     /**
      * @param string $content

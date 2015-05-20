@@ -29,7 +29,8 @@ var ckUrl = {
 
 var app = angular.module("ckApp", [
 	'cgBusy',
-	'angular.filter'
+	'angular.filter',
+    'ui.bootstrap'
 ]);
 
 ck.flashbag = {
@@ -343,15 +344,6 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
 	$scope.pageChanged = function () {
 		update_data ();
 	};
-
-    $scope.prevPage = function () {
-        $scope.currentPage --;
-        $scope.pageChanged ();
-    };
-    $scope.nextPage = function () {
-        $scope.currentPage ++;
-        $scope.pageChanged ();
-    };
 
 	$scope.itemLink = function (row, col) {
 		return ckUrl.resetGetParams ({

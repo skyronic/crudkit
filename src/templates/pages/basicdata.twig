@@ -82,12 +82,7 @@
     			</tr>
     		</tbody>
     	</table>
-    <nav>
-          <ul class="pager" >
-            <li class="previous" ng-class="{'disabled':currentPage <= 1}"><a ng-click="prevPage()" ><span aria-hidden="true">&larr;</span> Previous</a></li>
-            <li class="next" ng-class="{'disabled':currentPage >= pageCount}"><a ng-click="nextPage()" >Next<span aria-hidden="true">&rarr;</span></a></li>
-        </ul>
-    </nav>
+        <pagination total-items="rowCount" ng-model="currentPage" items-per-page=10 max-size=10 rotate="false" boundary-links="false" ng-change="pageChanged()"></pagination>
 
     {% endverbatim %}
     </div>
