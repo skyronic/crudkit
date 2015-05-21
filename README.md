@@ -26,5 +26,5 @@ Demos are listed in `demo/`. Inorder to see the demos in action follow the steps
 
 - Create a symlink of `crudkit` using: `$ ln -s /home/<username>/path/to/crudkit demo/crudkit`
 - Build static files: `$ grunt buildStatic`
-- Start the server by running at `$ php -S 0.0.0.0:8080` the root of your project
+- Start the server by running `$ php -S 0.0.0.0:8080` from the root of the project
 - Navigate to http://localhost:8080/demo/sql_basic.php
