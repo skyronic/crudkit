@@ -224,6 +224,8 @@ app.factory ("ckAPI", function ($http, $q) {
 });
 
 app.controller("SummaryTableController", function ($scope, ckAPI) {
+	var forceDataRefresh = false; // Flag to indicate whether we want to refresh the whole table data(advance filter dependency)
+
 	$scope.pageId = window.pageId;
 	$scope.perPage = 10;
 	$scope.currentPage = 1;
@@ -314,7 +316,7 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
             var filterItem = $scope.advFilterItems[i];
             filters.push({
                 id: filterItem.id,
-                type: filterItem.cmp.id,
+                type: typeof filterItem.cmp === 'undefined' ? 'null' : filterItem.cmp.id,
                 value: filterItem.value
             })
         }
@@ -322,12 +324,35 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
         return filters;
     };
 
+    // Empty the advance filter items array
+    var clearAdvFilterItems = function() {
+      $scope.advFilterItems = [];
+    };
+
+    // Initial state for the advace filter
+    var initAdvFilterState = function() {
+      $scope.advFilterItems.push ({
+          id: 'null',
+          type: 'null',
+          value: ''
+      });
+    };
+
+    // Clear the search term input
+    var clearSearchTerm = function() {
+      $scope.searchTerm = "";
+    };
+
+    // Check if entire table refres is needed.
+    var needsDataRefresh = function() {
+      // Returns true if:
+      // `advFilterItems` is the default input box and if the comparator param is `null`
+      // OR `searchTerm` is non-empty 
+      return !($scope.advFilterItems.length === 1 && $scope.advFilterItems[0]['id'] === 'null') || $scope.searchTerm !== '';
+    }
+
     $scope.addConditionButtonClicked = function () {
-        $scope.advFilterItems.push ({
-            id: 'null',
-            type: 'null',
-            value: ''
-        });
+      initAdvFilterState();
     };
 
     $scope.filterColumns = function () {
@@ -338,6 +363,8 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
             $scope.rowCount = colSpec.count;
             $scope.pageCount = colSpec/$scope.perPage;
             update_data ();
+
+            forceDataRefresh = needsDataRefresh();
         });
     };
 
@@ -353,6 +380,18 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
 			page: $scope.pageId
 		})
 	};
+
+	// Reset advanced search filter and search term.
+  $scope.resetAdvSearch = function() {
+    clearAdvFilterItems();
+    initAdvFilterState();
+    clearSearchTerm();
+    
+    // Reload the whole table data
+    if(forceDataRefresh) {
+      $scope.filterColumns();
+    }
+  }
 });
 
 app.controller("CKFormController", function ($scope, ckAPI) {
