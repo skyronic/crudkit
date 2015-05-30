@@ -322,12 +322,25 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
         return filters;
     };
 
+    var clearAdvFilterItems = function() {
+      $scope.advFilterItems = [];
+    };
+
+    // Initial state for the advace filter
+    var initAdvFilterState = function() {
+      $scope.advFilterItems.push ({
+          id: 'null',
+          type: 'null',
+          value: ''
+      });
+    };
+
+    var clearSearchTerm = function() {
+      $scope.searchTerm = "";
+    };
+
     $scope.addConditionButtonClicked = function () {
-        $scope.advFilterItems.push ({
-            id: 'null',
-            type: 'null',
-            value: ''
-        });
+      initAdvFilterState();
     };
 
     $scope.filterColumns = function () {
@@ -353,6 +366,13 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
 			page: $scope.pageId
 		})
 	};
+
+	// Reset advanced search filter and search term.
+  $scope.resetAdvSearch = function() {
+    clearAdvFilterItems();
+    initAdvFilterState();
+    clearSearchTerm();
+  }
 });
 
 app.controller("CKFormController", function ($scope, ckAPI) {

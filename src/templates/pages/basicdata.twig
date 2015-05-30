@@ -20,7 +20,7 @@
             </span>
             </div>
             <div ng-hide="advancedSearchHidden">
-                <h4>Advanced Search</h4>
+                <h4>Advanced Search <small><a href ng-click="resetAdvSearch()">(reset)</a></small></h4>
                 <div class="row" ng-repeat="item in advFilterItems" style="margin-top: 8px;">
                     <div class="col-md-4">
                         <select class="form-control" ng-model="item.id"  ng-options="sel.id as sel.label for sel in advFilterOptions" ng-change="filterColumnSelected(item)"></select>
