@@ -83,7 +83,7 @@ class FormHelper {
 
     public function validate ($values) {
         // TODO: Fix me
-        return true;
+        return false;
     }
 
     /**

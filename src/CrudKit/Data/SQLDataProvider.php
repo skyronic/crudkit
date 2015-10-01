@@ -416,6 +416,25 @@ class SQLDataProvider extends BaseSQLDataProvider{
 
     }
 
+    public function validateRow($values = array()) {
+        $failed = array();
+        foreach($values as $formKey => $formValue) {
+            $col = null;
+            if(!isset($this->columns[$formKey])) {
+                throw new \Exception ("Unknown column");
+            }
+            $col = $this->columns[$formKey];
+            //check if validator available
+            if(isset($col->options["validator"]) && is_callable($col->options["validator"])){
+                if(!$col->options["validator"]($col->cleanValue($formValue))){
+                    $failed[$formKey] = $formValue;
+                }
+            }
+
+        }
+        return $failed;
+    }
+
     public function getEditFormConfig()
     {
         return array();

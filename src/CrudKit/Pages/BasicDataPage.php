@@ -183,7 +183,7 @@ class BasicDataPage extends BasePage{
         // let's not worry about validation right now.
         $values = json_decode($url->get("values_json", "{}"), true);
 
-        if($form->validate($values)) {
+        if(empty($this->dataProvider->validateRow($values))) {
             $this->dataProvider->setRow($url->get("item_id", null), $values);
             FlashBag::add("alert", "Item has been updated", "success");
             return array(
