@@ -162,40 +162,70 @@ class BasicDataPage extends BasePage{
     public function handle_create_item () {
         $url = new UrlHelper();
 
-        // let's not worry about validation right now.
         $values = json_decode($url->get("values_json", "{}"), true);
 
-        $new_pk = $this->dataProvider->createItem($values);
-        FlashBag::add("alert", "Item has been created", "success");
-        return array(
-            'type' => 'json',
-            'data' => array(
-                'success' => true,
-                'newItemId' => $new_pk
-            )
-        );
+        //We have to check that all required fields are in request AND all provided data meet requirements
+        $failedValues = array_merge(
+            $this->dataProvider->validateRow($values), 
+            $this->dataProvider->validateRequiredRow($values));
+        if(empty($failedValues)){
+            $new_pk = $this->dataProvider->createItem($values);
+            FlashBag::add("alert", "Item has been created", "success");
+            return array(
+                'type' => 'json',
+                'data' => array(
+                   'success' => true,
+                  'newItemId' => $new_pk
+                )
+            );
+        }
+        else {
+            FlashBag::add("alert", "Could not set certain fields", "error");
+
+            return array(
+                'type' => 'json',
+                'data' => array(
+                    'success' => true,
+                    'dataValid' => false,
+                    'failedValues' => $failedValues
+                )
+            );
+            //throw new \Exception("Cannot validate values");
+        }
+       
     }
 
     public function handle_set_form_values () {
         $form = new FormHelper(array(), $this->dataProvider->getEditFormConfig());
         $url = new UrlHelper();
 
-        // let's not worry about validation right now.
         $values = json_decode($url->get("values_json", "{}"), true);
 
-        if(empty($this->dataProvider->validateRow($values))) {
+        //validate
+        $failedValues = $this->dataProvider->validateRow($values);
+        if(empty($failedValues)) {
             $this->dataProvider->setRow($url->get("item_id", null), $values);
             FlashBag::add("alert", "Item has been updated", "success");
             return array(
                 'type' => 'json',
                 'data' => array(
-                    'success' => true
+                    'success' => true,
+                    'dataValid' => true
                 )
             );
         }
         else {
-            // TODO show errors on validation fail
-            throw new \Exception("Cannot validate values");
+            FlashBag::add("alert", "Could not update certain fields", "error");
+
+            return array(
+                'type' => 'json',
+                'data' => array(
+                    'success' => true,
+                    'dataValid' => false,
+                    'failedValues' => $failedValues
+                )
+            );
+            //throw new \Exception("Cannot validate values");
         }
     }
 

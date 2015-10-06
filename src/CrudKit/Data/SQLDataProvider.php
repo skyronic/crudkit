@@ -416,6 +416,18 @@ class SQLDataProvider extends BaseSQLDataProvider{
 
     }
 
+    public function validateRequiredRow($values = array()) {
+        $failed = array();
+        foreach($this->columns as $columnKey => $col) {
+            if(isset($col->options["required"]) && $col->options["required"]) {
+                if(!isset($values[$columnKey]) || empty($values[$columnKey])) {
+                    $failed[$columnKey] = "missing";
+                }
+            }
+        }
+        return $failed;
+    }
+
     public function validateRow($values = array()) {
         $failed = array();
         foreach($values as $formKey => $formValue) {
@@ -428,6 +440,11 @@ class SQLDataProvider extends BaseSQLDataProvider{
             if(isset($col->options["validator"]) && is_callable($col->options["validator"])){
                 if(!$col->options["validator"]($col->cleanValue($formValue))){
                     $failed[$formKey] = $formValue;
+                }
+            }
+            if(isset($col->options["required"]) && $col->options["required"]) {
+                if(empty($values[$formKey])) {
+                    $failed[$formKey] = "missing";
                 }
             }
 

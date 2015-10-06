@@ -459,14 +459,22 @@ app.controller("CKFormController", function ($scope, ckAPI) {
         }
     });
 
+
     $scope.saveValues = function () {
         var vals = ck.converters.js_to_standard($scope.schema, $scope.changedValues);
         if(formConfig.newItem) {
             $scope.loadingPromise = ckAPI.page.create_item(formConfig.pageId, vals).then(function(data) {
+                if(!data.dataValid) {
+                    $scope.failedValues = data.failedValues;
+                }
             });
         }
         else {
             $scope.loadingPromise = ckAPI.page.set_form_values(formConfig.pageId, formConfig.itemId, vals).then(function(data) {
+                if(!data.dataValid) {
+                    $scope.failedValues = data.failedValues;
+                }
+                console.log($scope.failedValues)
             });
         }
     };

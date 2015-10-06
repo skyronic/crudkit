@@ -60,5 +60,6 @@ abstract class BaseDataProvider {
     public abstract function deleteItem($rowId);
 
     //validation
+    public abstract function validateRequiredRow ($values = array());
     public abstract function validateRow ($values = array());
 }

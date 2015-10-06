@@ -81,11 +81,6 @@ class FormHelper {
         return $twig->renderTemplateToString("util/form_inline.twig", $this->params);
     }
 
-    public function validate ($values) {
-        // TODO: Fix me
-        return false;
-    }
-
     /**
      * @return string
      */
