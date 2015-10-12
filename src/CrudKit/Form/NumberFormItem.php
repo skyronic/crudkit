@@ -6,6 +6,7 @@ class NumberFormItem extends HorizontalItem{
 
     public function renderInternal()
     {
+    	$directives = $this->getAngularDirectives ();
         $ngModel = $this->form->getNgModel();
         $value = isset($this->config['value']) ? $this->config['value'] : "";
 
