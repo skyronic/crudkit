@@ -11,7 +11,7 @@ class NumberFormItem extends HorizontalItem{
 
         return <<<COMP
         <div class="input-group">
-        <input type="number" class="form-control" ng-model="$ngModel.{$this->key}" />
+        <input type="number" class="form-control" ng-model="$ngModel.{$this->key}" $directives />
         </div>
 COMP;
     }
