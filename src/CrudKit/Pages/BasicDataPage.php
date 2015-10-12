@@ -200,6 +200,14 @@ class BasicDataPage extends BasePage{
         $url = new UrlHelper();
 
         $values = json_decode($url->get("values_json", "{}"), true);
+        if(empty($values)) {
+            return array(
+                'type' => 'json',
+                'data' => array(
+                    'success' => true
+                )
+            );
+        }
 
         //validate
         $failedValues = $this->dataProvider->validateRow($values);
