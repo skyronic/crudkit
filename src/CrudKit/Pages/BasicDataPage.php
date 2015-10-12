@@ -182,6 +182,14 @@ class BasicDataPage extends BasePage{
 
         // let's not worry about validation right now.
         $values = json_decode($url->get("values_json", "{}"), true);
+        if(empty($values)) {
+            return array(
+                'type' => 'json',
+                'data' => array(
+                    'success' => true
+                )
+            );
+        }
 
         if($form->validate($values)) {
             $this->dataProvider->setRow($url->get("item_id", null), $values);
