@@ -204,6 +204,7 @@ class BasicDataPage extends BasePage{
             return array(
                 'type' => 'json',
                 'data' => array(
+                    'dataValid' => true,
                     'success' => true
                 )
             );
