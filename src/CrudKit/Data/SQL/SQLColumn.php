@@ -149,7 +149,7 @@ abstract class SQLColumn {
             case "date":
                 return self::TYPE_DATE;
             default:
-                throw new Exception("Unknown type $typeName");
+                throw new \Exception("Unknown type $typeName");
         }
     } 
 

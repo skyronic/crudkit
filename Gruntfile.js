@@ -56,8 +56,8 @@ module.exports = function(grunt) {
           vendorRoot + "moment/min/moment.min.js",
           vendorRoot + "moment-timezone/builds/moment-timezone-with-data.min.js",
           vendorRoot + "adminlte/dist/js/app.min.js",
-          "src/static/extra/ui-bootstrap-custom-0.13.0.min.js",
-          "src/static/extra/ui-bootstrap-custom-tpls-0.13.0.min.js"
+          vendorRoot + "angular-bootstrap/ui-bootstrap.min.js",
+          vendorRoot + "angular-bootstrap/ui-bootstrap-tpls.min.js",
           ]
         }
       }
