@@ -52,17 +52,28 @@
             </div>
         </div>
     </div>
+    <div class="row" ng-show="selectedCount > 0">
+        <div class="col-md-12">
+            With {{ selectedCount }} Rows: <confirm-button label="Delete" activate="deleteRows ()" ck-class="btn-danger"/>
+        </div>
+    </div>
     <div cg-busy="loadingPromise" >
     	<table class="table">
     		<thead>
     		<tr>
+                <th style="width: 30px">
+                    <input type='checkbox' ng-change="selectAll ()" ng-model="allSelectedFlag" class="table-checkbox" />
+                </th>
     			<th ng-repeat="col in columns">
     				{{ col.name }}
     			</th>
     		</tr>
     		</thead>
     		<tbody>
-    			<tr ng-repeat="row in rows">
+    			<tr ng-repeat="row in rows" ng-class="{'info': row.selectedFlag}">
+                    <td>
+                        <input ng-model="row.selectedFlag" type="checkbox" class="table-checkbox" ng-change="updateSelectedCount ()"/>
+                    </td>
     				<td ng-repeat="col in columns">
                         <div ng-switch on="col.renderType">
                             <div ng-switch-when="string">

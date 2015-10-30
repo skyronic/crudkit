@@ -416,6 +416,20 @@ class SQLDataProvider extends BaseSQLDataProvider{
 
     }
 
+    public function deleteMultipleItems($ids)
+    {
+        $builder = $this->conn->createQueryBuilder();
+        $pk = $this->getPrimaryColumn()->getExpr();
+        $expr = $builder->expr();
+
+        $builder->delete($this->tableName)
+            ->where($expr->in($pk, $ids));
+        LoggingHelper::logBuilder($builder);
+        $status = $builder->execute();
+
+        return $status;
+    }
+
     public function getEditFormConfig()
     {
         return array();

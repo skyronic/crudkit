@@ -30,7 +30,7 @@ class UrlHelper {
     }
 
     public function get ($key, $default = null) {
-        $postdata = file_get_contents("php://input");
+        $postdata = file_get_contents("php://input", 'rb');
         $json_post = array();
 
         try {

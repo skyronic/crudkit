@@ -4,6 +4,7 @@ namespace CrudKit\Pages;
 
 use CrudKit\Data\BaseDataProvider;
 use CrudKit\Util\FormHelper;
+use CrudKit\Util\LoggingHelper;
 use CrudKit\Util\RouteGenerator;
 use CrudKit\Util\TwigUtil;
 use CrudKit\Util\ValueBag;
@@ -63,6 +64,19 @@ class BasicDataPage extends BasePage{
             'type' => 'json',
             'data' => array (
                 'rows' => $this->dataProvider->getData($params)
+            )
+        );
+    }
+
+    public function handle_delete_items () {
+        $url = new UrlHelper ();
+        $delete_ids = json_decode($url->get('delete_ids', "[]"), true);
+        $this->dataProvider->deleteMultipleItems($delete_ids);
+
+        return array (
+            'type' => 'json',
+            'data' => array (
+                'success' => true
             )
         );
     }

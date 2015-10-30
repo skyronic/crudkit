@@ -24,6 +24,8 @@ abstract class BaseDataProvider {
     // Editing Options
     public abstract function getEditFormConfig ();
 
+    public abstract function deleteMultipleItems ($ids);
+
     public function getEditForm () {
         $form = new FormHelper(array(), $this->getEditFormConfig());
 

@@ -106,6 +106,12 @@ var GenerateAPIFactory = function (make_call_real) {
                 params['values_json'] = JSON.stringify(values);
 
                 return apis.page.func(page_id, "create_item", params);
+            },
+            delete_items: function (page_id, ids, params) {
+                params = params ? params : {};
+                params['delete_ids'] = JSON.stringify(ids);
+
+                return apis.page.func(page_id, "delete_items", params);
             }
     	}
     };
@@ -223,7 +229,7 @@ app.factory ("ckAPI", function ($http, $q) {
     return GenerateAPIFactory(make_call_real);
 });
 
-app.controller("SummaryTableController", function ($scope, ckAPI) {
+app.controller("SummaryTableController", function ($scope, ckAPI, $q, $timeout) {
 	var forceDataRefresh = false; // Flag to indicate whether we want to refresh the whole table data(advance filter dependency)
 
 	$scope.pageId = window.pageId;
@@ -235,6 +241,10 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
     $scope.advFilterItems = [];
     $scope.schema = [];
     $scope.advFilterOptions = [];
+    $scope.allSelectedFlag = false;
+    $scope.primaryCol = '';
+    $scope.selectedCount = 0;
+    $scope.rows = [];
 
 	var update_data = function (params) {
 		params = params ? params : {};
@@ -243,6 +253,7 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
         params['filters_json'] = JSON.stringify(getFilters());
         $scope.loadingPromise = ckAPI.page.get_data($scope.pageId, params).then(function (data) {
             $scope.rows = data.rows;
+            $scope.forceDeselect();
         });
 	};
 
@@ -251,7 +262,7 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
             $scope.addConditionButtonClicked ();
             $scope.advancedSearchHidden = false;
         }
-    }
+    };
 
     // First load
     $scope.loadingPromise = ckAPI.page.get_colSpec($scope.pageId).then(function (colSpec) {
@@ -262,6 +273,8 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
             return _.extend(val, colSpec.schema[val.key]);
         });
 
+        $scope.primaryCol = _.find (colSpec.schema, 'primaryFlag', true).key;
+
         $scope.schema = colSpec.schema;
         $scope.advFilterOptions = _.map(colSpec.schema, function (val, key) {
             return _.extend(val, {id: key});
@@ -269,6 +282,36 @@ app.controller("SummaryTableController", function ($scope, ckAPI) {
 
         update_data ();
     });
+
+    $scope.deleteRows = function () {
+        var selected_ids = _.chain($scope.rows).filter ('selectedFlag', true).pluck ($scope.primaryCol).map(function (val) {
+            return parseInt(val);
+        }).value ();
+        return ckAPI.page.delete_items($scope.pageId, selected_ids).then (function () {
+            update_data ();
+            return $q.when (true);
+        })
+    };
+
+    $scope.updateSelectedCount = function () {
+        $scope.selectedCount = _.filter ($scope.rows, 'selectedFlag', true).length;
+    };
+
+    $scope.forceDeselect = function () {
+        $scope.allSelectedFlag = false;
+        // Use selectAll to manually copy the allSelectedFlag
+        $scope.selectAll ();
+    };
+
+    $scope.selectAll = function () {
+        _.each($scope.rows, function (val) {
+            val.selectedFlag = $scope.allSelectedFlag;
+        });
+        $scope.updateSelectedCount();
+    };
+
+
+
 
 
     $scope.filterColumnSelected = function (item) {

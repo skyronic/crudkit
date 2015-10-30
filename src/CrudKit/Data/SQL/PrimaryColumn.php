@@ -20,7 +20,9 @@ class PrimaryColumn extends SQLColumn {
     {
         return array(
             'type' => $this->typeName,
-            'label' => "Primary"
+            'label' => "Primary",
+            'primaryFlag' => true,
+            'key' => $this->id
         );
     }
 
