@@ -11,9 +11,13 @@ $page = new SQLiteTablePage ("sqlite2", "fixtures/chinook.sqlite");
 $page->setName("Customer Management")
     ->setTableName("Customer")
     ->setPrimaryColumn("CustomerId")
-    ->addColumn("FirstName", "First Name")
+    ->addColumn("FirstName", "First Name", array(
+        'required' => true
+    ))
     ->addColumn("LastName", "Last Name")
-    ->addColumn("City", "City")
+    ->addColumn("City", "City", array(
+        'required' => true
+    ))
     ->addColumn("Country", "Country")
     ->addColumn("Email", "E-mail")
     ->setSummaryColumns(array("FirstName", "Country"));
