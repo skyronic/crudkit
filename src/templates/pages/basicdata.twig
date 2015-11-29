@@ -42,7 +42,7 @@
                 <div style="margin-top:10px; margin-bottom: 10px">
                 <a class="btn btn-primary" ng-click="addConditionButtonClicked ()">Add Condition</a>
                 <span style="margin-left: 10px; margin-right: 10px;">or</span>
-                <a class="btn btn-success" ng-click="filterColumns ()">Start Search</a>
+                <a class="btn btn-success" ng-click="filterColumns ()" ng-disabled="isAdvancedSearchBtnDisabled()">Start Search</a>
                 </div>
             </div>
         </div><!-- /input-group -->

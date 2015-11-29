@@ -411,6 +411,26 @@ app.controller("SummaryTableController", function ($scope, ckAPI, $q, $timeout) 
         });
     };
 
+    // Disable the advanced search button
+    // if either the filter key / condition is not selected
+    // the value param here is not considered
+    $scope.isAdvancedSearchBtnDisabled = function() {
+      var filters = getFilters();
+
+      var needsToBeDisabled = function(filter) {
+        return ( filter.id === 'null' || filter.type === 'null' );
+      };
+
+      for(var i=0, length=filters.length; i<length; i++) {
+        if(needsToBeDisabled(filters[i])) { 
+          return true;
+        }
+      }
+
+      return false;
+    };
+
+
 	$scope.pageChanged = function () {
 		update_data ();
 	};
