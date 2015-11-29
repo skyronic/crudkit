@@ -7,7 +7,7 @@ abstract class HorizontalItem extends BaseFormItem{
         $label = $this->config['label'];
         $content = $this->renderInternal();
         return  <<<RENDER
-        <div class="form-group" ng-class="extraClasses.{$this->key}">
+        <div class="form-group" class="{{extraClasses.{$this->key}}}" ng-class="{'has-error' : failedValues.{$this->key}!=undefined}">
                 <label for="{$this->id}">$label</label>
                 <div>
                 $content
