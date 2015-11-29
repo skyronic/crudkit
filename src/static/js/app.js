@@ -442,6 +442,7 @@ app.controller("CKFormController", function ($scope, ckAPI) {
     $scope.loadingPromise = null;
     $scope.openStatus = {};
     $scope.schema = {};
+    $scope.dirtyFlag = false;
     var formConfig = {};
 
     $scope.selectValues = {
@@ -473,6 +474,7 @@ app.controller("CKFormController", function ($scope, ckAPI) {
     $scope.registerChange = function (key) {
         $scope.changedValues[key] = $scope.formItems[key];
         $scope.extraClasses[key] = "has-change";
+        $scope.dirtyFlag = true;
     };
 
     var activate_edit = function () {
@@ -503,6 +505,8 @@ app.controller("CKFormController", function ($scope, ckAPI) {
     });
 
     $scope.saveValues = function () {
+        if (!$scope.dirtyFlag)
+            return;
         var vals = ck.converters.js_to_standard($scope.schema, $scope.changedValues);
         if(formConfig.newItem) {
             $scope.loadingPromise = ckAPI.page.create_item(formConfig.pageId, vals).then(function(data) {

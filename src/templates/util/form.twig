@@ -3,7 +3,7 @@
         {% for item in formItems %}
             {{ item.render()|raw }}
         {% endfor %}
-        <a class="btn btn-primary btn-lg" ng-click="saveValues()" style="margin-top:20px"><i class="fa fa-save"></i> Save</a>
+        <a class="btn btn-primary btn-lg" ng-click="saveValues()" style="margin-top:20px" ng-disabled='!dirtyFlag'><i class="fa fa-save"></i> Save</a>
 
     </form>
         <div class="clearfix"></div>
