@@ -35,5 +35,4 @@ abstract class BasePage {
     protected function setId ($id) {
         $this->id = $id;
     }
-
 }

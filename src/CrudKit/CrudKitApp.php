@@ -22,6 +22,8 @@ class CrudKitApp {
      */
     protected $pageById = array();
 
+    protected $title = "CrudKit";
+
     /**
      * Set a static root which contains the "crudkit/" directory of css and JS
      * @param $staticRoot
@@ -37,6 +39,14 @@ class CrudKitApp {
     public function addPage ($page) {
         $this->pages []= $page;
         $this->pageById[$page->getId()] = $page;
+    }
+
+    public function setAppTitle ($title) {
+        $this->title = $title;
+    }
+
+    public function getAppTitle () {
+        return $this->title;
     }
 
     public function getPages () {

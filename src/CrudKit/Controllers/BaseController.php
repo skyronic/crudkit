@@ -107,11 +107,14 @@ class BaseController {
                     'valueBag' => json_encode(ValueBag::getValues()),
                     'staticRoot' => $this->app->getStaticRoot(),
                     'pageMap' => $pageMap,
-                    'defaultUrl' => $this->routeGen->defaultRoute()
+                    'defaultUrl' => $this->routeGen->defaultRoute(),
+                    'title' => $this->app->getAppTitle (),
+                    'pageTitle' => ''
                 );
                 if($this->page !== null) {
                     $data['page'] = $this->page;
                     $data['currentId'] = $this->page->getId();
+                    $data['pageTitle'] = $this->page->getName();
                 }
                 else {
                     $data['currentId'] = -1;
