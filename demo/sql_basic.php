@@ -6,6 +6,7 @@ use CrudKit\Pages\SQLiteTablePage;
 
 // Create a new CrudKitApp object
 $app = new CrudKitApp ();
+$app->setAppName ("Admin Panel");
 
 $page = new SQLiteTablePage ("sqlite2", "fixtures/chinook.sqlite");
 $page->setName("Customer Management")

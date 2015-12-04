@@ -108,7 +108,7 @@ class BaseController {
                     'staticRoot' => $this->app->getStaticRoot(),
                     'pageMap' => $pageMap,
                     'defaultUrl' => $this->routeGen->defaultRoute(),
-                    'title' => $this->app->getAppTitle (),
+                    'title' => $this->app->getAppName (),
                     'pageTitle' => ''
                 );
                 if($this->page !== null) {

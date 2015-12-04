@@ -41,11 +41,11 @@ class CrudKitApp {
         $this->pageById[$page->getId()] = $page;
     }
 
-    public function setAppTitle ($title) {
+    public function setAppName ($title) {
         $this->title = $title;
     }
 
-    public function getAppTitle () {
+    public function getAppName () {
         return $this->title;
     }
 
