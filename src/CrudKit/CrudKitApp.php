@@ -34,8 +34,10 @@ class CrudKitApp {
     }
 
     public function useLogin ($login) {
-        $this->addPage ($login);
-        $this->render ();
+        if (!$login->check ()) {
+            $this->addPage ($login);
+            $this->render ();
+        }
     }
 
     /**

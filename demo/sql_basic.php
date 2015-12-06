@@ -10,12 +10,15 @@ $app = new CrudKitApp ();
 $app->setAppName ("Admin Panel");
 
 $login = new BasicLoginPage ();
-if ($login->hasInput ()) {
+if ($login->userTriedLogin ()) {
     $username = $login->getUserName ();
     $password = $login->getPassword ();
 
     if ($username === 'admin' && $password === 'demo') {
         $login->success ();
+    }
+    else {
+        $login->fail ("Please check your password");
     }
 }
 $app->useLogin ($login);
@@ -53,5 +56,3 @@ $app->addPage($invoice);
 
 // Render the app. This will display the HTML
 $app->render ();
-
-?>

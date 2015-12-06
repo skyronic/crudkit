@@ -29,6 +29,10 @@ class UrlHelper {
         return self::$url->setQuery($params);
     }
 
+    public function has ($key) {
+        return $this->get ($key, '__ck_undefined') !== "__ck_undefined";
+    }
+
     public function get ($key, $default = null) {
         $postdata = file_get_contents("php://input", 'rb');
         $json_post = array();
