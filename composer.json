@@ -13,12 +13,11 @@
             "CrudKit\\": "src/CrudKit/"
         }
     },
-    "minimum-stability": "beta",
+    "minimum-stability": "dev",
     "require": {
         "doctrine/dbal": "2.5.1",
         "twig/twig": "1.18.0",
         "brandonwamboldt/utilphp": "1.1.*",
-      "jwage/purl": "dev-master",
       "league/url": "3.3.1",
         "filp/whoops": "~1.1",
         "nesbot/carbon": "~1.19"
