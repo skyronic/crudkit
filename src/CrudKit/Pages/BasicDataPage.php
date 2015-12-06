@@ -101,7 +101,7 @@ class BasicDataPage extends BasePage{
         $editUrl = ($route->itemFunc($this->getId(), $rowId, "edit_item"));
         $writable = !$this->app->isReadOnly ();
 
-        $summaryKey = $this->dataProvider->getSummaryColumns()[0]['key']
+        $summaryKey = $this->dataProvider->getSummaryColumns()[0]['key'];
         $rowData = $this->dataProvider->getRow ($rowId);
         $rowName = $rowData[$summaryKey];
 
@@ -109,9 +109,9 @@ class BasicDataPage extends BasePage{
             'page' => $this,
             'name' => $this->name,
             'rowId' => $rowId,
-            'writable' => true,
+            'writable' => $writable,
             'deleteUrl' => $deleteUrl,
-            'editUrl' => $deleteUrl,
+            'editUrl' => $editUrl,
             'schema' => $this->dataProvider->getSchema (),
             'rowName' => $rowName,
             'row' => $rowData,

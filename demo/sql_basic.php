@@ -14,7 +14,12 @@ if ($login->userTriedLogin ()) {
     $username = $login->getUserName ();
     $password = $login->getPassword ();
 
+    // TODO: you should use a better way to validate the password
     if ($username === 'admin' && $password === 'demo') {
+        $login->success ();
+    }
+    else if ($username === 'user' && $password === 'demo') {
+        $app->setReadOnly (true);
         $login->success ();
     }
     else {

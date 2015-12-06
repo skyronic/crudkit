@@ -1,13 +1,13 @@
 {% extends "pages/base.twig" %}
 
 {% block pageName %}
-View
+{{ rowName }}
 {% endblock %}
 
 
 {% block actionButtons %}
 	{% if writable %}
-	<a class="btn btn-primary pull-right" href="{{ deleteUrl }}" style="margin-left: 10px;"><i class="fa fa-pencil"></i> Edit</a>
+	<a class="btn btn-primary pull-right" href="{{ editUrl }}" style="margin-left: 10px;"><i class="fa fa-pencil"></i> Edit</a>
 	<a class="btn btn-danger pull-right" href="{{ deleteUrl }}"><i class="fa fa-trash"></i> Delete</a>
 	{% endif %}
 {% endblock %}

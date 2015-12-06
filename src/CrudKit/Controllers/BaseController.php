@@ -109,6 +109,7 @@ class BaseController {
                     'pageMap' => $pageMap,
                     'defaultUrl' => $this->routeGen->defaultRoute(),
                     'title' => $this->app->getAppName (),
+                    'userParams' => $this->app->getUserParams (),
                     'pageTitle' => ''
                 );
                 if($this->page !== null) {

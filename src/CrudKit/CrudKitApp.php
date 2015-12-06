@@ -33,7 +33,22 @@ class CrudKitApp {
         $this->staticRoot = $staticRoot;
     }
 
+    public function getUserParams () {
+        if ($this->login !== null) {
+            return [
+                'username' => $this->login->getLoggedInUser(),
+                'logout_link' => $this->login->createLogoutLink ()
+            ];
+        }
+        else {
+            return $this->login ();
+        }
+    }
+    
+    protected $login = null;
     public function useLogin ($login) {
+        $this->login = $login;
+        $login->preprocess ();
         if (!$login->check ()) {
             $this->addPage ($login);
             $this->render ();

@@ -24,6 +24,10 @@
                 {% for item in pageMap %}
                     <li role="presentation" {% if item.id == currentId %}class="active"{% endif %}><a href="{{ route.openPage(item.id)|raw }}"><i class="fa fa-book"></i> {{ item.name }}</a></li>
                 {% endfor %}
+                {% if userParams != null %}
+                <li class="header">EXTRA</li>
+                    <li role="presentation"><a href="{{ userParams.logout_link|raw }}"><i class="fa fa-sign-out"></i>Log out {{ userParams.username }}</a></li>
+                {% endif %}
             </ul>
         </section>
     </aside>

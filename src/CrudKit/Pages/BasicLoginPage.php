@@ -32,10 +32,15 @@ class BasicLoginPage extends BasePage {
 		return isset($_SESSION['__ck_logged_in']) && $_SESSION['__ck_logged_in'] == true;
 	}
 
-	public function doLogin ($username = null) {
+	public function doLogin () {
 		$_SESSION['__ck_logged_in'] = true;
-		$_SESSION['__ck_username'] = $username;
 	}
+
+	public function doLogout ($username = null) {
+		unset($_SESSION['__ck_logged_in']);
+		unset($_SESSION['__ck_username']);
+	}
+
 
 	protected $loginQueued = false;
 
@@ -48,6 +53,21 @@ class BasicLoginPage extends BasePage {
 		// since we might be on a different page id than expected,
 		// we need to do a clean redirect
 		$this->queueLogin ();
+		$_SESSION['__ck_username'] = $this->getUserName ();
+	}
+
+	public function getLoggedInUser () {
+		return $_SESSION['__ck_username'];
+	}
+
+	public function createLogoutLink () {
+		return $this->url->resetGetParams (array('__ckLogout' => true));
+	}
+
+	public function preprocess ($app) {
+		if ($this->url->get ('__ckLogout', false) !== false) {
+			$this->doLogout ();
+		}
 	}
 
 	protected $error = null;
