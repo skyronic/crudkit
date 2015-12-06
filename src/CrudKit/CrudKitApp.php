@@ -41,7 +41,7 @@ class CrudKitApp {
             ];
         }
         else {
-            return $this->login ();
+            return null;
         }
     }
     
