@@ -310,6 +310,10 @@ app.controller("SummaryTableController", function ($scope, ckAPI, $q, $timeout) 
         $scope.updateSelectedCount();
     };
 
+    $scope.isWritable = function () {
+        return !!window.ckValues.writable;
+    }
+
 
 
 

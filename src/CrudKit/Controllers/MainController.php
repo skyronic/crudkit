@@ -31,7 +31,6 @@ class MainController extends BaseController {
     public function handle_page_function () {
         $pageId = $this->url->get('page');
         $this->page = $this->app->getPageById($pageId);
-        echo "Handling page func";
         $this->page->init($this->app);
         $func = $this->url->get("func");
         ValueBag::set("pageId", $this->page->getId());

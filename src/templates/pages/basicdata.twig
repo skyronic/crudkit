@@ -5,7 +5,9 @@
 {% endblock %}
 
 {% block actionButtons %}
+{% if writable %}
 <a href="{{ route.newItem(page.getId())|raw }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i> Add New</a>
+{% endif %}
 {% endblock %}
 
 {% block pageContent %}
@@ -52,7 +54,7 @@
             </div>
         </div>
     </div>
-    <div class="row" ng-show="selectedCount > 0">
+    <div class="row" ng-show="selectedCount > 0 && isWritable ()">
         <div class="col-md-12">
             With {{ selectedCount }} Rows: <confirm-button label="Delete" activate="deleteRows ()" ck-class="btn-danger"/>
         </div>

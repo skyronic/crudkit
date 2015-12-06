@@ -18,9 +18,12 @@ class BasicDataPage extends BasePage{
     function render()
     {
         $twig = new TwigUtil();
+        $writableFlag = !$this->app->isReadOnly ();
+        ValueBag::set ("writable", $writableFlag);
         return $twig->renderTemplateToString("pages/basicdata.twig", array(
             'route' => new RouteGenerator(),
             'page' => $this,
+            'writable' => $writableFlag,
             'name' => $this->name,
         ));
     }
