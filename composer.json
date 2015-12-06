@@ -1,5 +1,5 @@
 {
-    "name": "crudkit/crudkit",
+    "name": "skyronic/crudkit",
     "description": "Toolkit to quickly build powerful mobile-friendly CRUD (create/read/update/delete) interfaces for PHP, Laravel, and Codeigniter apps. Works with MySQL and other databases.",
     "license": "MIT",
     "authors": [
