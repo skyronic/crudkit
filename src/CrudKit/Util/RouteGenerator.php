@@ -28,6 +28,10 @@ class RouteGenerator {
         return $this->urlHelper->resetGetParams(array('page' => $pageId, 'action' => 'page_function', 'func' => "new_item"));
     }
 
+    public function root () {
+        return $this->urlHelper->resetGetParams();
+    }
+
     public function defaultRoute () {
         return $this->urlHelper->resetGetParams(array());
     }

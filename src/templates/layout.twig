@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html ng-app="ckApp">
-<head>
-    <title>{{ pageTitle }} | {{ title }}</title>
-    {% if dev %}
-    {% include "includes/requires.twig" %}
-    {% else %}
-    {% include "includes/requires_prod.twig" %}
-    {% endif %}
-</head>
-<body class="skin-blue">
+{% extends "core.twig" %}
+{% block core_body %}
 <div class="wrapper">
 
     <header class="main-header">
@@ -47,5 +38,4 @@
       <strong>Powered by <a href="http://crudkit.com">CrudKit</a>.</strong>
   </footer>
 </div>
-</body>
-</html>
+{% endblock %}

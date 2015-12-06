@@ -33,6 +33,11 @@ class CrudKitApp {
         $this->staticRoot = $staticRoot;
     }
 
+    public function useLogin ($login) {
+        $this->addPage ($login);
+        $this->render ();
+    }
+
     /**
      * @param $page BasePage
      */
@@ -111,6 +116,7 @@ class CrudKitApp {
 
 
         echo $content;
+        exit ();
     }
 
     protected $jsonResponse = false;

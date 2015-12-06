@@ -3,11 +3,24 @@
 require "crudkit/crudkit.php";
 use CrudKit\CrudKitApp;
 use CrudKit\Pages\SQLiteTablePage;
+use CrudKit\Pages\BasicLoginPage;
 
 // Create a new CrudKitApp object
 $app = new CrudKitApp ();
 $app->setAppName ("Admin Panel");
-$app->setReadOnly (true);
+
+$login = new BasicLoginPage ();
+if ($login->hasInput ()) {
+    $username = $login->getUserName ();
+    $password = $login->getPassword ();
+
+    if ($username === 'admin' && $password === 'demo') {
+        $login->success ();
+    }
+}
+$app->useLogin ($login);
+
+// Important: Keep all the other stuff above
 
 $page = new SQLiteTablePage ("sqlite2", "fixtures/chinook.sqlite");
 $page->setName("Customer Management")

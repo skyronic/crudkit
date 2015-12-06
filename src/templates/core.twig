@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html ng-app="ckApp">
+<head>
+    <title>{{ pageTitle }} | {{ title }}</title>
+    {% if dev %}
+    {% include "includes/requires.twig" %}
+    {% else %}
+    {% include "includes/requires_prod.twig" %}
+    {% endif %}
+</head>
+<body class="skin-blue {% if bodyclass %} {{ bodyclass }} {% endif %}">
+{% block core_body %}{% endblock %}
+</body>
+</html>
