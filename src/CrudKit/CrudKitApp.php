@@ -64,6 +64,15 @@ class CrudKitApp {
             return null;
     }
 
+    protected $readOnly = false;
+    public function setReadOnly ($readOnlyFlag) {
+        $this->readOnly = $readOnlyFlag;
+    }
+
+    public function isReadOnly () {
+        return $this->readOnly;
+    }
+
 
     /**
      * Render your CrudKit app and return it as a string

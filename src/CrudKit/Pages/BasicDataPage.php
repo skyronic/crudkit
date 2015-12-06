@@ -11,6 +11,8 @@ use CrudKit\Util\ValueBag;
 use CrudKit\Util\UrlHelper;
 use CrudKit\Util\FlashBag;
 
+use \Exception;
+
 class BasicDataPage extends BasePage{
 
     function render()
@@ -69,6 +71,9 @@ class BasicDataPage extends BasePage{
     }
 
     public function handle_delete_items () {
+        if ($this->app->isReadOnly ()) {
+            throw new Exception ("Read Only");
+        }
         $url = new UrlHelper ();
         $delete_ids = json_decode($url->get('delete_ids', "[]"), true);
         $this->dataProvider->deleteMultipleItems($delete_ids);
@@ -82,6 +87,9 @@ class BasicDataPage extends BasePage{
     }
 
     public function handle_edit_item () {
+        if ($this->app->isReadOnly ()) {
+            throw new Exception ("Read Only");
+        }
         $twig = new TwigUtil();
 
         $url = new UrlHelper();
@@ -107,6 +115,9 @@ class BasicDataPage extends BasePage{
     }
 
     public function handle_delete_item () {
+        if ($this->app->isReadOnly ()) {
+            throw new Exception ("Read Only");
+        }
         $url = new UrlHelper();
         $rowId = $url->get("item_id", null);
         $route = new RouteGenerator();
@@ -122,6 +133,9 @@ class BasicDataPage extends BasePage{
     }
 
     public function handle_new_item () {
+        if ($this->app->isReadOnly ()) {
+            throw new Exception ("Read Only");
+        }
         $twig = new TwigUtil();
 
         $form = $this->dataProvider->getEditForm();
@@ -174,6 +188,9 @@ class BasicDataPage extends BasePage{
     }
 
     public function handle_create_item () {
+        if ($this->app->isReadOnly ()) {
+            throw new Exception ("Read Only");
+        }
         $url = new UrlHelper();
 
         $values = json_decode($url->get("values_json", "{}"), true);
@@ -210,6 +227,9 @@ class BasicDataPage extends BasePage{
     }
 
     public function handle_set_form_values () {
+        if ($this->app->isReadOnly ()) {
+            throw new Exception ("Read Only");
+        }
         $form = new FormHelper(array(), $this->dataProvider->getEditFormConfig());
         $url = new UrlHelper();
 
@@ -273,8 +293,8 @@ class BasicDataPage extends BasePage{
         $this->dataProvider->setPage($this);
     }
 
-    public function init () {
-        parent::init();
+    public function init ($app) {
+        parent::init($app);
         $this->dataProvider->init();
     }
 

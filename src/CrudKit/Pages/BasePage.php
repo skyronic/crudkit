@@ -20,8 +20,12 @@ abstract class BasePage {
         return $this->name;
     }
 
-    public function init () {
-        
+    protected $app = null;
+    public function init ($app = null) {
+        if ($app == null) {
+            die ("app is null");
+        }
+        $this->app = $app;
     }
 
     /**

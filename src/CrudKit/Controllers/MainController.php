@@ -22,7 +22,7 @@ class MainController extends BaseController {
         // Handle the view page action
         $pageId = $this->url->get('page');
         $this->page = $this->app->getPageById($pageId);
-        $this->page->init();
+        $this->page->init($this->app);
         ValueBag::set("pageId", $this->page->getId());
 
         return $this->page->render();
@@ -31,9 +31,10 @@ class MainController extends BaseController {
     public function handle_page_function () {
         $pageId = $this->url->get('page');
         $this->page = $this->app->getPageById($pageId);
+        echo "Handling page func";
+        $this->page->init($this->app);
         $func = $this->url->get("func");
         ValueBag::set("pageId", $this->page->getId());
-        $this->page->init();
 
         if(method_exists($this->page, "handle_".$func))
         {
