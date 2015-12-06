@@ -12,6 +12,7 @@ $app->setReadOnly (true);
 $page = new SQLiteTablePage ("sqlite2", "fixtures/chinook.sqlite");
 $page->setName("Customer Management")
     ->setTableName("Customer")
+    ->setRowsPerPage (20)
     ->setPrimaryColumn("CustomerId")
     ->addColumn("FirstName", "First Name", array(
         'required' => true

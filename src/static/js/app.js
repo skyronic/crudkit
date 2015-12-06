@@ -233,7 +233,7 @@ app.controller("SummaryTableController", function ($scope, ckAPI, $q, $timeout) 
 	var forceDataRefresh = false; // Flag to indicate whether we want to refresh the whole table data(advance filter dependency)
 
 	$scope.pageId = window.pageId;
-	$scope.perPage = 10;
+	$scope.perPage = window.ckValues.rowsPerPage;
 	$scope.currentPage = 1;
     $scope.pageCount = 1;
     $scope.advancedSearchHidden = true;

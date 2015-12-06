@@ -20,11 +20,12 @@ class BasicDataPage extends BasePage{
         $twig = new TwigUtil();
         $writableFlag = !$this->app->isReadOnly ();
         ValueBag::set ("writable", $writableFlag);
+        ValueBag::set ("rowsPerPage", $this->rowsPerPage);
         return $twig->renderTemplateToString("pages/basicdata.twig", array(
             'route' => new RouteGenerator(),
             'page' => $this,
             'writable' => $writableFlag,
-            'name' => $this->name,
+            'name' => $this->name
         ));
     }
 
@@ -62,7 +63,7 @@ class BasicDataPage extends BasePage{
 
         $params = array(
             'skip' => ($pageNumber - 1) * $perPage,
-            'perPage' => ($pageNumber) * $perPage,
+            'take' => $perPage,
             'filters_json' => $filters
         );
         return array(
@@ -272,6 +273,13 @@ class BasicDataPage extends BasePage{
             );
             //throw new \Exception("Cannot validate values");
         }
+    }
+
+    // TODO: start organizing parameters 
+    protected $rowsPerPage = 10;
+    public function setRowsPerPage ($rows = 10) {
+        $this->rowsPerPage = $rows;
+        return $this;
     }
 
     /**
