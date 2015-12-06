@@ -1,0 +1,29 @@
+{% extends "pages/base.twig" %}
+
+{% block pageName %}
+View
+{% endblock %}
+
+
+{% block actionButtons %}
+	{% if writable %}
+	<a class="btn btn-primary pull-right" href="{{ deleteUrl }}" style="margin-left: 10px;"><i class="fa fa-pencil"></i> Edit</a>
+	<a class="btn btn-danger pull-right" href="{{ deleteUrl }}"><i class="fa fa-trash"></i> Delete</a>
+	{% endif %}
+{% endblock %}
+
+
+{% block pageContent %}
+	<div>
+	<dl class="dl-horizontal">
+		{% for key, col in schema %}
+		<dt style={% if not loop.first %}"margin-top: 15px"{% endif %}>{{ col['label'] }}</dt>
+		<dd style="margin-top: 15px">{{ row[key] }} </dd>
+		{% endfor %}
+	</dl>
+	</div>
+    <script type="text/javascript">
+        window.pageId = "{{ page.getId() }}";
+        window.rowId = "{{ rowId }}";
+    </script>
+{% endblock %}

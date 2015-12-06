@@ -90,6 +90,36 @@ class BasicDataPage extends BasePage{
         );
     }
 
+    public function handle_view_item () {
+        $twig = new TwigUtil();
+
+        $url = new UrlHelper();
+        $rowId = $url->get("item_id", null);
+
+        $route = new RouteGenerator();
+        $deleteUrl = ($route->itemFunc($this->getId(), $rowId, "delete_item"));
+        $editUrl = ($route->itemFunc($this->getId(), $rowId, "edit_item"));
+        $writable = !$this->app->isReadOnly ();
+
+        $summaryKey = $this->dataProvider->getSummaryColumns()[0]['key']
+        $rowData = $this->dataProvider->getRow ($rowId);
+        $rowName = $rowData[$summaryKey];
+
+        $templateData = array(
+            'page' => $this,
+            'name' => $this->name,
+            'rowId' => $rowId,
+            'writable' => true,
+            'deleteUrl' => $deleteUrl,
+            'editUrl' => $deleteUrl,
+            'schema' => $this->dataProvider->getSchema (),
+            'rowName' => $rowName,
+            'row' => $rowData,
+        );
+
+        return $twig->renderTemplateToString("pages/basicdata/view_item.twig", $templateData);
+    }
+
     public function handle_edit_item () {
         if ($this->app->isReadOnly ()) {
             throw new Exception ("Read Only");

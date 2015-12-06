@@ -442,7 +442,7 @@ app.controller("SummaryTableController", function ($scope, ckAPI, $q, $timeout) 
 	$scope.itemLink = function (row, col) {
 		return ckUrl.resetGetParams ({
 			action: "page_function",
-			func: "edit_item",
+			func: "view_item",
 			item_id: row[col.primaryColumn],
 			page: $scope.pageId
 		})
