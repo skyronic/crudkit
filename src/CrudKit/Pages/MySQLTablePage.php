@@ -3,6 +3,7 @@
 namespace CrudKit\Pages;
 
 
+use CrudKit\Pages\BaseSQLDataPage;
 use Doctrine\DBAL\DriverManager;
 
 class MySQLTablePage extends BaseSQLDataPage {

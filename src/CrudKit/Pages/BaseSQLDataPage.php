@@ -87,7 +87,7 @@ abstract class BaseSQLDataPage extends BasicDataPage {
         return $this;
     }
 
-	public function init ($app) {
+	public function init ($app = null) {
         $this->setDataProvider($this->sqlProvider);
 		parent::init ($app);
 	}
