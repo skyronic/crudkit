@@ -126,6 +126,13 @@ class CrudKitApp {
     public function render () {
         $content = $this->renderToString();
 
+        if ($this->redirect !== null) {
+            header("Location: ".$this->redirect);
+            session_write_close();
+            exit();
+            return;
+        }
+
         // Headers are also calculated in render to string
         if($this->isJsonResponse()) {
             header("Content-type: application/json;");
@@ -144,6 +151,12 @@ class CrudKitApp {
     public function isJsonResponse()
     {
         return $this->jsonResponse;
+    }
+
+    protected $redirect = null;
+
+    public function _requestRedirect ($url) {
+        $this->redirect = $url;
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php 
 
 namespace CrudKit\Laravel;
+use Illuminate\Support\ServiceProvider;
 
 class CrudKitServiceProvider extends ServiceProvider {
 
@@ -9,7 +10,7 @@ class CrudKitServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->publishes([
-			__DIR__.'/../../static/build/' => public_path('vendor/crudkit/'),
+			__DIR__.'/../../static/' => public_path('vendor/crudkit/'),
 		], 'public');
 	}
 

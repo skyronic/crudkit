@@ -89,9 +89,8 @@ class BaseController {
                 $output = json_encode($data);
                 break;
             case "redirect":
-                header("Location: ".$result['url']);
-                session_write_close();
-                exit();
+                $this->app->_requestRedirect ($result['url']);
+                return;
                 break;
             case "transclude":
                 $pageMap = [];
