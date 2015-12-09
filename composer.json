@@ -1,19 +1,33 @@
 {
     "name": "skyronic/crudkit",
-    "description": "Toolkit to quickly build powerful mobile-friendly CRUD (create/read/update/delete) interfaces for PHP, Laravel, and Codeigniter apps. Works with MySQL and other databases.",
+    "description": "Toolkit to quickly build powerful, mobile-friendly CRUD (create/read/update/delete) and admin interfaces. Integrates with Laravel and has support for other MVC Frameworks. Works with MySQL and other databases.",
     "license": "MIT",
+    "version": "0.3-beta",
+    "homepage": "http://www.crudkit.com/",
     "authors": [
         {
             "name": "Anirudh Sanjeev",
-            "email": "skyronic@gmail.com"
+            "email": "skyronic@gmail.com",
+            "homepage": "http://www.skyronic.com/"
         }
     ],
+    "support": {
+        "docs": "http://www.crudkit.com/docs/"
+    },
     "autoload": {
         "psr-4": {
             "CrudKit\\": "src/CrudKit/"
         }
     },
-    "minimum-stability": "dev",
+    "keywords": [
+        "crud",
+        "database",
+        "gui",
+        "admin",
+        "laravel",
+        "backend"
+    ],
+    "minimum-stability": "beta",
     "require": {
         "doctrine/dbal": "2.5.1",
         "twig/twig": "1.18.0",
