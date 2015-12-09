@@ -16,7 +16,6 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Schema\Column;
 use PDO;
-use utilphp\util;
 
 class SQLDataProvider extends BaseSQLDataProvider{
     public function setConn ($conn) {

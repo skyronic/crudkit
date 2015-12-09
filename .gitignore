@@ -29,7 +29,7 @@ node_modules
 /vendor/
 
 .idea
-build
+temp
 bower_components
 vendor
 .idea/*
@@ -38,3 +38,4 @@ composer.lock
 adminer.php
 
 demo/crudkit
+demo/

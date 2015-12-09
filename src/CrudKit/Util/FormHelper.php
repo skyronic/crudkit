@@ -5,7 +5,6 @@ namespace CrudKit\Util;
 
 use CrudKit\Form\ManyToOneItem;
 use CrudKit\Form\TextFormItem;
-use utilphp\util;
 
 class FormHelper {
     protected $id = "default_form";

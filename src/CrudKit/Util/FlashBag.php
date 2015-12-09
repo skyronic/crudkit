@@ -1,7 +1,6 @@
 <?php
 
 namespace CrudKit\Util;
-use utilphp\util;
 
 class FlashBag /* not to be mistaken with flashbang */ {
     public static function add ($category, $message, $extra = "") {
