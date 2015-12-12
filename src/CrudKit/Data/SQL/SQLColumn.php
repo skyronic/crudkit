@@ -29,6 +29,7 @@ abstract class SQLColumn {
     const CATEGORY_VALUE = "value";
     const CATEGORY_PRIMARY = "primary";
     const CATEGORY_FOREIGN = "foreign";
+    const CATEGORY_EXTERNAL = "external";
 
     const TYPE_STRING = "string";
     const TYPE_NUMBER = "number";

@@ -5,6 +5,7 @@ namespace CrudKit\Data;
 
 use CrudKit\Data\SQL\ForeignColumn;
 use CrudKit\Data\SQL\PrimaryColumn;
+use CrudKit\Data\SQL\ExternalColumn;
 use CrudKit\Data\SQL\SQLColumn;
 use CrudKit\Data\SQL\ValueColumn;
 use CrudKit\Util\FormHelper;
@@ -27,6 +28,16 @@ class SQLDataProvider extends BaseSQLDataProvider{
         $options['expr'] = $expr;
 
         $this->internalAddColumn(SQLColumn::CATEGORY_VALUE, $id, $options);
+    }
+
+    public function hasMany ($id, $label, $page, $options) {
+        $this->internalAddColumn(SQLColumn::CATEGORY_EXTERNAL, $id, array(
+            'page_id' => $page->getId (),
+            'label' => $label,
+            'type' => ExternalColumn::HAS_MANY,
+            'foreign_key' => $options['foreign_key'],
+            'local_key' => $options['local_key']
+        ));
     }
 
     public function setPrimaryColumn ($id, $expr) {
@@ -99,14 +110,17 @@ class SQLDataProvider extends BaseSQLDataProvider{
             $target = null;
 
             switch($category) {
-                case "value":
+                case SQLColumn::CATEGORY_VALUE:
                     $target = new ValueColumn($id, $category, $opts);
                     break;
-                case "foreign":
-                    $target = new ForeignColumn($id, $category, $opts);
-                    break;
-                case "primary":
+                // case "foreign":
+                //     $target = new ForeignColumn($id, $category, $opts);
+                //     break;
+                case SQLColumn::CATEGORY_PRIMARY:
                     $target = new PrimaryColumn($id, $category, $opts);
+                    break;
+                case SQLColumn::CATEGORY_EXTERNAL:
+                    $target = new ExternalColumn ($id, $category, $opts);
                     break;
                 default:
                     throw new \Exception("Unknown category for column $category");
@@ -473,7 +487,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
     public function getEditForm ($id = null) {
         $form = new FormHelper();
 
-        $formColumns = $this->queryColumns("category", array(SQLColumn::CATEGORY_VALUE, SQLColumn::CATEGORY_FOREIGN), 'object');
+        $formColumns = $this->queryColumns("category", array(SQLColumn::CATEGORY_VALUE, SQLColumn::CATEGORY_EXTERNAL), 'object');
 
         /**
          * @var $col SQLColumn

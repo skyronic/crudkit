@@ -42,6 +42,11 @@ abstract class BaseSQLDataPage extends BasicDataPage {
         return $this;
     }
 
+    public function hasMany ($id, $name, $columns) {
+        $this->sqlProvider->hasMany($id, $name, $columns);
+        return $this;
+    }
+
     /**
      * Add a column to edit with a unique ID
      *
