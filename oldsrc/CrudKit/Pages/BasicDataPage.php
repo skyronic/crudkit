@@ -21,8 +21,8 @@ class BasicDataPage extends BasePage{
         $writableFlag = !$this->app->isReadOnly ();
         ValueBag::set ("writable", $writableFlag);
         ValueBag::set ("rowsPerPage", $this->rowsPerPage);
-        return $twig->renderTemplateToString("pages/basicdata.twig", array(
-            'route' => new RouteGenerator(),
+        return $twig->renderTemplateToString ("pages/basicdata.twig", array(
+            'route' => new RouteGenerator (),
             'page' => $this,
             'writable' => $writableFlag,
             'name' => $this->name
@@ -44,9 +44,9 @@ class BasicDataPage extends BasePage{
         return array(
             'type' => 'json',
             'data' => array (
-                'count' => $this->dataProvider->getRowCount($params),
-                'schema' => $this->dataProvider->getSchema(),
-                'columns' => $this->dataProvider->getSummaryColumns()
+                'count' => $this->dataProvider->getRowCount ($params),
+                'schema' => $this->dataProvider->getSchema (),
+                'columns' => $this->dataProvider->getSummaryColumns ()
             )
         );
     }

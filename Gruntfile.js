@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
 
-  var vendorRoot = "src/static/vendor/";
+  var vendorRoot = "node_modules/";
   var buildRoot = "src/static/build/";
   var tempRoot = "src/static/temp/";
   grunt.initConfig({
@@ -19,7 +19,7 @@ module.exports = function(grunt) {
           dest: buildRoot
         }, {
           expand: true,
-          cwd: vendorRoot + 'adminlte/dist/',
+          cwd: vendorRoot + 'admin-lte/dist/',
           src: [
             "img/boxed-bg.png",
               "img/boxed-bg.jpg",
@@ -29,7 +29,7 @@ module.exports = function(grunt) {
           dest: buildRoot
         }, {
           expand: true,
-          cwd: vendorRoot + 'fontawesome/',
+          cwd: vendorRoot + 'font-awesome/',
           src: ["fonts/*"],
           dest: buildRoot
         }, ]
@@ -42,12 +42,12 @@ module.exports = function(grunt) {
           dest: tempRoot
         }, {
           expand: true,
-          cwd: vendorRoot + 'adminlte/dist/',
+          cwd: vendorRoot + 'admin-lte/dist/',
           src: ["img/*"],
           dest: tempRoot
         }, {
           expand: true,
-          cwd: vendorRoot + 'fontawesome/',
+          cwd: vendorRoot + 'font-awesome/',
           src: ["fonts/*"],
           dest: tempRoot
         }]
@@ -69,59 +69,26 @@ module.exports = function(grunt) {
           ]
         }
       },
-      build_js: {
-        options: {
-          separator: ";\n"
-        },
-        files: {
-          "src/static/build/js/crudkit.min.js": [
-            "src/static/temp/js/crudkit-libs.min.js",
-            "src/static/js/app.js"
-          ]
-        }
-      },
       css: {
+        options: {
+          separator: "\n\n"
+        },
         files: {
           "src/static/temp/css/crudkit-libs.min.css": [
             vendorRoot + "bootstrap/dist/css/bootstrap.min.css",
-            vendorRoot + "angular-busy/dist/angular-busy.min.css",
-            vendorRoot + "adminlte/dist/css/AdminLTE.min.css",
-            vendorRoot + "adminlte/dist/css/skins/skin-blue.css",
-            vendorRoot + "fontawesome/css/font-awesome.min.css",
-            vendorRoot + "bootstrap3-dialog/dist/css/bootstrap-dialog.min.css"
+            vendorRoot + "admin-lte/dist/css/AdminLTE.min.css",
+            vendorRoot + "admin-lte/dist/css/skins/skin-blue.css",
+            vendorRoot + "font-awesome/css/font-awesome.min.css"
           ]
         }
       },
-      js: {
-        options: {
-          separator: ";\n"
-        },
-        files: {
-          "src/static/temp/js/crudkit-libs.min.js": [
-            vendorRoot + "jquery/dist/jquery.min.js",
-            vendorRoot + "bootstrap/dist/js/bootstrap.min.js",
-            vendorRoot + "lodash/lodash.min.js",
-            vendorRoot + "angularjs/angular.min.js",
-            vendorRoot + "angular-animate/angular-animate.min.js",
-            vendorRoot + "angular-busy/dist/angular-busy.min.js",
-            vendorRoot + "angular-filter/dist/angular-filter.min.js",
-            vendorRoot + "bootstrap3-dialog/dist/js/bootstrap-dialog.min.js",
-            vendorRoot + "jsurl/url.min.js",
-            vendorRoot + "moment/min/moment.min.js",
-            vendorRoot + "moment-timezone/builds/moment-timezone-with-data.min.js",
-            vendorRoot + "adminlte/dist/js/app.min.js",
-            "src/static/extra/ui-bootstrap-custom-0.13.0.min.js",
-            "src/static/extra/ui-bootstrap-custom-tpls-0.13.0.min.js"
-          ]
-        }
-      }
     },
     clean: {
 
     },
     replace: {
       sourceMaps: {
-        src: ["src/static/temp/js/crudkit-libs.min.js", "src/static/temp/css/crudkit-libs.min.css"],
+        src: ["src/static/temp/css/crudkit-libs.min.css"],
         overwrite: true,
         replacements: [{
           from: "sourceMappingURL",
@@ -138,7 +105,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-text-replace');
 
-  grunt.registerTask('build', ['less', 'concat:js', 'concat:css', 'replace', 'copy:temp']);
+  grunt.registerTask('build', ['less', 'concat:css', 'replace', 'copy:temp']);
    grunt.registerTask('release', ['build', 'concat:build_css', 'concat:build_js', 'copy:build']);
 
 };

@@ -2,9 +2,7 @@
   "name": "crudkit",
   "version": "1.0.0",
   "description": "PHP library to generate crud interfaces. ",
-  "directories": {
-    "test": "test"
-  },
+  "directories": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,14 +17,37 @@
   },
   "homepage": "https://github.com/crudkit/crudkit",
   "dependencies": {
-    "bower": "^1.4.1",
+    "admin-lte": "^2.3.2",
+    "bootstrap": "^3.3.6",
+    "font-awesome": "*",
+    "jquery": "^2.1.4",
+    "superagent": "^1.5.0",
+    "vue": "^1.0.11"
+  },
+  "devDependencies": {
+    "babel-core": "^6.1.2",
+    "babel-loader": "^6.1.0",
+    "babel-plugin-transform-runtime": "^6.1.2",
+    "babel-preset-es2015": "^6.1.2",
+    "babel-preset-stage-0": "^6.1.2",
+    "babel-runtime": "^5.8.0",
+    "cross-env": "^1.0.5",
+    "css-loader": "^0.23.0",
+    "file-loader": "^0.8.4",
+    "jade": "^1.11.0",
+    "style-loader": "^0.13.0",
+    "stylus-loader": "^1.4.0",
+    "template-html-loader": "0.0.3",
+    "vue-hot-reload-api": "^1.2.0",
+    "vue-html-loader": "^1.0.0",
+    "vue-loader": "^7.2.0",
     "grunt": "^0.4.5",
-    "grunt-bower-requirejs": "^2.0.0",
-    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-clean": "^0.7.0",
     "grunt-contrib-concat": "^0.5.1",
-    "grunt-contrib-copy": "^0.8.0",
-    "grunt-contrib-less": "^1.0.1",
+    "grunt-contrib-copy": "^0.8.2",
+    "grunt-contrib-less": "^1.1.0",
     "grunt-contrib-watch": "^0.6.1",
-    "grunt-text-replace": "^0.4.0"
+    "grunt-text-replace": "^0.4.0",
+    "webpack": "^1.12.2"
   }
 }
