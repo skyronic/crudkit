@@ -75,6 +75,11 @@ class BasicLoginPage extends BasePage {
 		$this->error = $error;
 	}
 
+	protected $welcomeMessage = "Please Log In";
+	public function setWelcomeMessage ($message) {
+		$this->welcomeMessage = $message;
+	}
+
     function render()
     {
     	if ($this->loginQueued) {
@@ -92,6 +97,7 @@ class BasicLoginPage extends BasePage {
         	'data' => [
 	        	'staticRoot' => $this->app->getStaticRoot(),
 	        	'title' => $this->app->getAppName (),
+	        	'welcomeMessage' => $this->welcomeMessage,
 	        	'endpoint' => $this->route->root (),
 	        	'valueBag' => json_encode(ValueBag::getValues()),
 	        	'bodyclass' => 'login-page',

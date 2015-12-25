@@ -167,4 +167,8 @@ class CrudKitApp {
         $this->jsonResponse = $jsonResponse;
     }
 
+    public function __construct () {
+        session_start();
+    }
+
 }
