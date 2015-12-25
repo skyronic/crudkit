@@ -33,7 +33,7 @@ class Installer {
 		$ds = DIRECTORY_SEPARATOR;
 
 		$src = $vendorPath.$ds."skyronic".$ds."crudkit".$ds."src".$ds."static".$ds."build".$ds;
-		$dest = $root.$ds."public".$ds."static".$ds."crudkit";
+		$dest = $root.$ds."static".$ds."crudkit";
 
 		echo "Copying crudkit static files... \n\n";
 		self::recursiveCopy ($src, $dest);
