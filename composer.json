@@ -2,7 +2,7 @@
     "name": "skyronic/crudkit",
     "description": "Toolkit to quickly build powerful, mobile-friendly CRUD (create/read/update/delete) and admin interfaces. Integrates with Laravel and has support for other MVC Frameworks. Works with MySQL and other databases.",
     "license": "MIT",
-    "version": "0.3-beta",
+    "version": "0.3.1-beta",
     "homepage": "http://www.crudkit.com/",
     "authors": [
         {
