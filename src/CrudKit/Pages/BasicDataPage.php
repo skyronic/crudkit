@@ -3,6 +3,7 @@
 namespace CrudKit\Pages;
 
 use CrudKit\Data\BaseDataProvider;
+use CrudKit\Data\DataProvider;
 use CrudKit\Util\FormHelper;
 use CrudKit\Util\LoggingHelper;
 use CrudKit\Util\RouteGenerator;
@@ -313,12 +314,12 @@ class BasicDataPage extends BasePage{
     }
 
     /**
-     * @var BaseDataProvider
+     * @var DataProvider
      */
     protected $dataProvider = null;
 
     /**
-     * @return BaseDataProvider
+     * @return DataProvider
      */
     public function getDataProvider()
     {
@@ -326,7 +327,7 @@ class BasicDataPage extends BasePage{
     }
 
     /**
-     * @param BaseDataProvider $dataProvider
+     * @param DataProvider $dataProvider
      */
     public function setDataProvider($dataProvider)
     {

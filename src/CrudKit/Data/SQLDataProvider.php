@@ -254,7 +254,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
         $this->tableName = $table;
     }
 
-    public function getData($params = array())
+    public function getData(array $params = array())
     {
         $skip = isset($params['skip']) ? $params['skip'] : 0;
         $take = isset($params['take']) ? $params['take'] : 10;
@@ -316,7 +316,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
         return $this->queryColumns("category", array(SQLColumn::CATEGORY_VALUE, SQLColumn::CATEGORY_PRIMARY), "schema", true);
     }
 
-    public function getRowCount($params = array())
+    public function getRowCount(array $params = [])
     {
         $builder = $this->conn->createQueryBuilder();
         $builder->select(array("COUNT(".$this->getPrimaryColumn()->getExpr().") AS row_count"))
@@ -376,7 +376,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
         return $this->prepareObjectForClient($values);
     }
 
-    public function setRow($id = null, $values = array())
+    public function setRow($id = null, array $values = [])
     {
         $builder = $this->conn->createQueryBuilder();
         $pk = $this->getPrimaryColumn()->getExpr();
@@ -409,7 +409,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
         return $status;
     }
 
-    public function createItem($values)
+    public function createItem(array $values)
     {
         $builder = $this->conn->createQueryBuilder();
         $builder->insert($this->tableName);
@@ -443,7 +443,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
         return $status;
     }
 
-    public function validateRequiredRow($values = array()) {
+    public function validateRequiredRow(array $values = array()) {
         $failed = array();
         foreach($this->columns as $columnKey => $col) {
             if(isset($col->options["required"]) && $col->options["required"]) {
@@ -455,7 +455,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
         return $failed;
     }
 
-    public function validateRow($values = array()) {
+    public function validateRow(array $values = array()) {
         $failed = array();
         foreach($values as $formKey => $formValue) {
             $col = null;
