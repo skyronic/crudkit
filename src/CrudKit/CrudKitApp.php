@@ -3,7 +3,7 @@
 namespace CrudKit;
 
 use CrudKit\Controllers\MainController;
-use CrudKit\Pages\BasePage;
+use CrudKit\Pages\Page;
 use CrudKit\Util\TwigUtil;
 use Twig_Autoloader;
 use Twig_Environment;
@@ -56,7 +56,7 @@ class CrudKitApp {
     }
 
     /**
-     * @param $page BasePage
+     * @param $page Page
      */
     public function addPage ($page) {
         $this->pages []= $page;
@@ -110,7 +110,7 @@ class CrudKitApp {
 
     /**
      * @param $id
-     * @return BasePage
+     * @return Page
      */
     public function getPageById ($id) {
         if(isset($this->pageById[$id])) {

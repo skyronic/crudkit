@@ -3,7 +3,7 @@
 namespace CrudKit\Controllers;
 
 use CrudKit\CrudKitApp;
-use CrudKit\Pages\BasePage;
+use CrudKit\Pages\Page;
 use CrudKit\Util\FlashBag;
 use CrudKit\Util\TwigUtil;
 use CrudKit\Util\ValueBag;
@@ -29,7 +29,7 @@ class BaseController {
     protected $twig = null;
 
     /**
-     * @var BasePage
+     * @var Page
      */
     protected $page = null;
 
@@ -94,7 +94,7 @@ class BaseController {
                 break;
             case "transclude":
                 $pageMap = [];
-                /** @var BasePage $pageItem */
+                /** @var Page $pageItem */
                 foreach($this->app->getPages() as $pageItem) {
                     $pageMap []= array(
                         'id' => $pageItem->getId(),
