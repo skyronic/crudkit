@@ -2,9 +2,8 @@
 
 namespace CrudKit\Pages;
 
-abstract class BasePage {
-    abstract function render ();
-
+abstract class BasePage implements Page
+{
     protected $name = "";
     protected $id = null;
 

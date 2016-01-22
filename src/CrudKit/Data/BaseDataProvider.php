@@ -2,7 +2,7 @@
 
 namespace CrudKit\Data;
 
-use CrudKit\Pages\BasePage;
+use CrudKit\Pages\Page;
 use CrudKit\Util\FormHelper;
 use CrudKit\Util\RouteGenerator;
 use CrudKit\Util\UrlHelper;
@@ -12,13 +12,10 @@ abstract class BaseDataProvider implements DataProvider
     protected $initQueue = array();
 
     /**
-     * @var BasePage
+     * @var Page
      */
     protected $page = null;
 
-    public function setPage ($page) {
-        $this->page = $page;
-    }
     public function init ()
     {
         foreach($this->initQueue as $item) {
@@ -31,4 +28,8 @@ abstract class BaseDataProvider implements DataProvider
         return new FormHelper([], $this->getEditFormConfig());
     }
 
+    public function setPage(Page $page)
+    {
+        $this->page = $page;
+    }
 }

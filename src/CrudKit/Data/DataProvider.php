@@ -1,7 +1,7 @@
 <?php
 namespace CrudKit\Data;
 
-use CrudKit\Pages\BasePage;
+use CrudKit\Pages\Page;
 use CrudKit\Util\FormHelper;
 
 //TODO: Write Proper API Documentation
@@ -79,9 +79,9 @@ interface DataProvider
     public function getEditForm();
 
     /**
-     * @param BasePage $page
+     * @param Page $page
      */
-    public function setPage(BasePage $page);
+    public function setPage(Page $page);
 
     /**
      * @param $id
