@@ -4,9 +4,10 @@ namespace CrudKit\Data;
 
 use CrudKit\Util\LoggingHelper;
 
-class DummyDataProvider extends BaseDataProvider {
+class DummyDataProvider extends BaseDataProvider
+{
 
-    public function getData($params = array())
+    public function getData(array $params = array())
     {
         $skip = isset($params['skip']) ? $params['skip'] : 0;
         $take = isset($params['take']) ? $params['take'] : 10;
@@ -55,7 +56,7 @@ class DummyDataProvider extends BaseDataProvider {
         );
     }
 
-    public function getRowCount()
+    public function getRowCount(array $params = [])
     {
         return 100;
     }
@@ -90,9 +91,69 @@ class DummyDataProvider extends BaseDataProvider {
         );
     }
 
-    public function setRow($id = null, $values = array())
+    public function setRow($id = null, array $values = [])
     {
         $log = new LoggingHelper();
         $log->vardump($values);
+    }
+
+    /**
+     * @param array $values
+     * @return int
+     */
+    public function createItem(array $values)
+    {
+        throw new \Exception('This Data Provider does not support creating additional data.');
+    }
+
+    /**
+     * @param mixed $rowId
+     * @return bool
+     */
+    public function deleteItem($rowId)
+    {
+        return true;
+    }
+
+    /**
+     * @param array $ids
+     * @return bool
+     */
+    public function deleteMultipleItems($ids)
+    {
+        return true;
+    }
+
+    /**
+     * @param $id
+     * @param $foreign_key
+     * @return array
+     */
+    public function getRelationshipValues($id, $foreign_key)
+    {
+        return [
+            'type' => 'json',
+            'data' => [
+                'values' => []
+            ]
+        ];
+    }
+
+    /**
+     * @param array $values
+     * @return array
+     */
+    public function validateRequiredRow(array $values = [])
+    {
+        return [];
+    }
+
+    /**
+     * @param array $values
+     * @return array
+     */
+    public function validateRow(array $values = [])
+    {
+        return [];
     }
 }

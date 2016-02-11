@@ -3,6 +3,7 @@
 namespace CrudKit\Form;
 
 use CrudKit\Data\BaseDataProvider;
+use CrudKit\Data\DataProvider;
 
 class OneToManyItem extends BaseFormItem {
 
@@ -12,7 +13,7 @@ class OneToManyItem extends BaseFormItem {
         $label = $this->config['label'];
 
         /**
-         * @var $provider BaseDataProvider
+         * @var $provider DataProvider
          */
         $provider = $this->config['fk_provider'];
         $providerForm = $provider->getEditForm();
