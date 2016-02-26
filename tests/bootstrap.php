@@ -9,3 +9,8 @@ $ php composer.phar install
 EOT
     );
 }
+
+function validate_email($formValue)
+{
+    return filter_var($formValue, FILTER_VALIDATE_EMAIL);
+}
