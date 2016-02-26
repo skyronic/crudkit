@@ -499,45 +499,29 @@ class SQLDataProvider extends BaseSQLDataProvider
         return $status;
     }
 
-    public function validateRequiredRow(array $values = array()) {
-        $failed = array();
-        foreach($this->columns as $columnKey => $col) {
-            if(isset($col->options["required"]) && $col->options["required"]) {
-                if(!isset($values[$columnKey]) || empty($values[$columnKey])) {
-                    $failed[$columnKey] = "missing";
-                }
-            }
-        }
-        return $failed;
-    }
-
-    public function validateRow(array $values = array()) {
-        $failed = array();
-        foreach($values as $formKey => $formValue) {
-            $col = null;
-            if(!isset($this->columns[$formKey])) {
-                throw new \Exception ("Unknown column");
-            }
-            $col = $this->columns[$formKey];
-            //check if validator available
-            if(isset($col->options["validator"]) && is_callable($col->options["validator"])){
-                if(!$col->options["validator"]($col->cleanValue($formValue))){
-                    $failed[$formKey] = $formValue;
-                }
-            }
-            if(isset($col->options["required"]) && $col->options["required"]) {
-                if(empty($values[$formKey])) {
-                    $failed[$formKey] = "missing";
-                }
-            }
-
-        }
-        return $failed;
-    }
-
-    public function getEditFormConfig()
+    protected function isFieldInSchema($formKey)
     {
-        return array();
+        return isset($this->columns[$formKey]);
+    }
+
+    protected function getValidatorForField($formKey)
+    {
+        $options = $this->columns[$formKey]->options;
+        if(isset($options['validator']) && is_callable($options["validator"])) {
+            return $options['validator'];
+        }
+        return null;
+    }
+
+    protected function getRequiredFields()
+    {
+        $required = [];
+        foreach($this->columns as $key => $column) {
+            if(isset($column->options['required']) && $column->options['required']) {
+                $required[] = $key;
+            }
+        }
+        return $required;
     }
 
     public function getEditForm ($id = null) {
