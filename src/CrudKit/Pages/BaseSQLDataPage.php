@@ -42,7 +42,7 @@ abstract class BaseSQLDataPage extends BasicDataPage {
     }
 
     public function hasMany ($id, $name, $columns) {
-        $this->sqlProvider->hasMany($id, $name, $columns);
+        $this->sqlProvider->hasMany($id, $name, $columns, []);
         return $this;
     }
 
