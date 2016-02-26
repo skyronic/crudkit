@@ -5,7 +5,6 @@ use CrudKit\Form\DateTimeFormItem;
 use CrudKit\Form\NumberFormItem;
 use CrudKit\Form\TextFormItem;
 use CrudKit\Util\FormHelper;
-use CrudKit\Util\LoggingHelper;
 
 class ArrayDataProvider extends BaseDataProvider
 {

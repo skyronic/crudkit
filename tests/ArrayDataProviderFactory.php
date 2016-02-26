@@ -68,5 +68,4 @@ class ArrayDataProviderFactory
         }
         return $data;
     }
-
 }
