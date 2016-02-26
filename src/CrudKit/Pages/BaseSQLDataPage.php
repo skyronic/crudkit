@@ -13,8 +13,7 @@ abstract class BaseSQLDataPage extends BasicDataPage {
 
     protected function preInit ($id, $conn) {
         $this->setId($id);
-        $this->sqlProvider = new SQLDataProvider();
-        $this->sqlProvider->setConn($conn);
+        $this->sqlProvider = new SQLDataProvider($conn);
     }
 
 
