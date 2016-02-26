@@ -13,8 +13,7 @@ abstract class BaseSQLDataPage extends BasicDataPage {
 
     protected function preInit ($id, $conn) {
         $this->setId($id);
-        $this->sqlProvider = new SQLDataProvider();
-        $this->sqlProvider->setConn($conn);
+        $this->sqlProvider = new SQLDataProvider($conn);
     }
 
 
@@ -43,7 +42,7 @@ abstract class BaseSQLDataPage extends BasicDataPage {
     }
 
     public function hasMany ($id, $name, $columns) {
-        $this->sqlProvider->hasMany($id, $name, $columns);
+        $this->sqlProvider->hasMany($id, $name, $columns, []);
         return $this;
     }
 

@@ -18,9 +18,65 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Schema\Column;
 use PDO;
 
-class SQLDataProvider extends BaseSQLDataProvider{
-    public function setConn ($conn) {
-        $this->conn = $conn;
+class SQLDataProvider extends BaseSQLDataProvider
+{
+    /**
+     * @var Connection
+     */
+    protected $conn;
+
+    /**
+     * Column definitions which are raw arrays and haven't been cast into
+     * the appropriate SQLColumn
+     *
+     * @var array
+     */
+    protected $colDefs = [];
+
+    /**
+     * An array of SQL Columns
+     *
+     * @var SQLColumn[]
+     */
+    protected $columns = [];
+
+    /**
+     * Name of the table
+     *
+     * @var string
+     */
+    protected $tableName = null;
+
+    /**
+     * A list of summary columns
+     *
+     * @var string[]
+     */
+    protected $summary_cols = [];
+
+    /**
+     * @var string
+     */
+    protected $primary_col = null;
+
+    public function __construct(Connection $connection, $table = null, $primaryColumn = null, array $summaryCols = [])
+    {
+        $this->setConn($connection);
+        //TODO: Make these fields required (after refactoring Page classes) since init() fails without them
+        if($table) {
+            $this->setTable($table);
+        }
+        if($primaryColumn) {
+            $this->setPrimaryColumn($primaryColumn, $primaryColumn);
+        }
+        if(!empty($summaryCols)) {
+            $this->setSummaryColumns($summaryCols);
+        }
+    }
+
+    public function setConn(Connection $connection)
+    {
+        $this->conn = $connection;
     }
 
     public function addColumn ($id, $expr, $label, $options = array()) {
@@ -123,6 +179,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
                     $target = new ExternalColumn ($id, $category, $opts);
                     break;
                 default:
+                    //TODO: Throw library-specific exceptions
                     throw new \Exception("Unknown category for column $category");
             }
 
@@ -208,6 +265,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
                     $resultItem = $column->getSummaryConfig();
                     break;
                 default:
+                    //TODO: Throw library-specific exceptions
                     throw new \Exception("Unknown value type $valueType");
             }
 
@@ -385,6 +443,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
             /** @var SQLColumn $col */
             $col = null;
             if(!isset($this->columns[$formKey])) {
+                //TODO: Throw library-specific exceptions
                 throw new \Exception ("Unknown column");
             }
             $col = $this->columns[$formKey];
@@ -417,6 +476,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
             /** @var SQLColumn $col */
             $col = null;
             if(!isset($this->columns[$formKey])) {
+                //TODO: Throw library-specific exceptions
                 throw new \Exception ("Unknown column");
             }
             $col = $this->columns[$formKey];
@@ -429,7 +489,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
 
     }
 
-    public function deleteMultipleItems($ids)
+    public function deleteMultipleItems(array $ids)
     {
         $builder = $this->conn->createQueryBuilder();
         $pk = $this->getPrimaryColumn()->getExpr();
@@ -443,45 +503,29 @@ class SQLDataProvider extends BaseSQLDataProvider{
         return $status;
     }
 
-    public function validateRequiredRow(array $values = array()) {
-        $failed = array();
-        foreach($this->columns as $columnKey => $col) {
-            if(isset($col->options["required"]) && $col->options["required"]) {
-                if(!isset($values[$columnKey]) || empty($values[$columnKey])) {
-                    $failed[$columnKey] = "missing";
-                }
-            }
-        }
-        return $failed;
-    }
-
-    public function validateRow(array $values = array()) {
-        $failed = array();
-        foreach($values as $formKey => $formValue) {
-            $col = null;
-            if(!isset($this->columns[$formKey])) {
-                throw new \Exception ("Unknown column");
-            }
-            $col = $this->columns[$formKey];
-            //check if validator available
-            if(isset($col->options["validator"]) && is_callable($col->options["validator"])){
-                if(!$col->options["validator"]($col->cleanValue($formValue))){
-                    $failed[$formKey] = $formValue;
-                }
-            }
-            if(isset($col->options["required"]) && $col->options["required"]) {
-                if(empty($values[$formKey])) {
-                    $failed[$formKey] = "missing";
-                }
-            }
-
-        }
-        return $failed;
-    }
-
-    public function getEditFormConfig()
+    protected function isFieldInSchema($formKey)
     {
-        return array();
+        return isset($this->columns[$formKey]);
+    }
+
+    protected function getValidatorForField($formKey)
+    {
+        $options = $this->columns[$formKey]->options;
+        if(isset($options['validator']) && is_callable($options["validator"])) {
+            return $options['validator'];
+        }
+        return null;
+    }
+
+    protected function getRequiredFields()
+    {
+        $required = [];
+        foreach($this->columns as $key => $column) {
+            if(isset($column->options['required']) && $column->options['required']) {
+                $required[] = $key;
+            }
+        }
+        return $required;
     }
 
     public function getEditForm ($id = null) {
@@ -520,6 +564,7 @@ class SQLDataProvider extends BaseSQLDataProvider{
             return $extProvider->getForeignValues($forOpts['fk_extKey'], $id);
         }
         else {
+            //TODO: Throw library-specific exceptions
             throw new \Exception("Unknown relationship value");
         }
         return array();
@@ -535,46 +580,4 @@ class SQLDataProvider extends BaseSQLDataProvider{
 
         return $exec->fetchAll(\PDO::FETCH_ASSOC);
     }
-
-    /**
-     * Column definitions which are raw arrays and havne't been cast into
-     * the appropriate SQLColumn
-     *
-     * @var array
-     */
-    protected $colDefs = array();
-
-    /**
-     * An array of SQL Columns
-     *
-     * @var array[SQLColumn]
-     */
-    protected $columns = array();
-
-
-    /** @var Connection */
-    protected $conn = null;
-
-    /**
-     * The path of the sqlite file to open.
-     * @var string
-     */
-    protected $path = null;
-
-    /**
-     * Name of the table
-     *
-     * @var string
-     */
-    protected $tableName = null;
-
-    /**
-     * A list of summary columns
-     *
-     * @var array
-     */
-    protected $summary_cols = array();
-
-    protected $primary_col = null;
-
 }

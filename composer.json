@@ -19,6 +19,11 @@
             "CrudKit\\": "src/CrudKit/"
         }
     },
+    "autoload-dev": {
+        "psr-4" : {
+            "CrudKitTests\\": "tests"
+        }
+    },
     "keywords": [
         "crud",
         "database",

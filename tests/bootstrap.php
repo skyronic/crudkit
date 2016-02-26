@@ -9,4 +9,8 @@ $ php composer.phar install
 EOT
     );
 }
-$loader->setPsr4('CrudKitTests\\', __DIR__);
+
+function validate_email($formValue)
+{
+    return filter_var($formValue, FILTER_VALIDATE_EMAIL);
+}
