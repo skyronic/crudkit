@@ -8,10 +8,19 @@ use CrudKit\Util\FormHelper;
 
 class ArrayDataProvider extends BaseDataProvider
 {
+    /**
+     * @var array[]
+     */
     protected $schema = [];
 
+    /**
+     * @var string
+     */
     protected $summaryColumns = [];
 
+    /**
+     * @var array[]
+     */
     protected $data = [];
 
     public function __construct(array $schema, array $summaryCols, array $data = [])
@@ -41,7 +50,6 @@ class ArrayDataProvider extends BaseDataProvider
         }
         return $summaryCols;
     }
-
 
     public function getRowCount(array $params = [])
     {
@@ -136,6 +144,7 @@ class ArrayDataProvider extends BaseDataProvider
      */
     public function deleteItem($rowId)
     {
+        $rowId = (int) $rowId;
         if(isset($this->data[$rowId])) {
             unset($this->data[$rowId]);
             return true;
