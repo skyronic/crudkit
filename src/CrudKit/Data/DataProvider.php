@@ -61,7 +61,7 @@ interface DataProvider
      * @param array $ids
      * @return bool
      */
-    public function deleteMultipleItems($ids);
+    public function deleteMultipleItems(array $ids);
 
     /**
      * @return array

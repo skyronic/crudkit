@@ -489,7 +489,7 @@ class SQLDataProvider extends BaseSQLDataProvider
 
     }
 
-    public function deleteMultipleItems($ids)
+    public function deleteMultipleItems(array $ids)
     {
         $builder = $this->conn->createQueryBuilder();
         $pk = $this->getPrimaryColumn()->getExpr();
