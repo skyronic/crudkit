@@ -179,6 +179,7 @@ class SQLDataProvider extends BaseSQLDataProvider
                     $target = new ExternalColumn ($id, $category, $opts);
                     break;
                 default:
+                    //TODO: Throw library-specific exceptions
                     throw new \Exception("Unknown category for column $category");
             }
 
@@ -264,6 +265,7 @@ class SQLDataProvider extends BaseSQLDataProvider
                     $resultItem = $column->getSummaryConfig();
                     break;
                 default:
+                    //TODO: Throw library-specific exceptions
                     throw new \Exception("Unknown value type $valueType");
             }
 
@@ -441,6 +443,7 @@ class SQLDataProvider extends BaseSQLDataProvider
             /** @var SQLColumn $col */
             $col = null;
             if(!isset($this->columns[$formKey])) {
+                //TODO: Throw library-specific exceptions
                 throw new \Exception ("Unknown column");
             }
             $col = $this->columns[$formKey];
@@ -473,6 +476,7 @@ class SQLDataProvider extends BaseSQLDataProvider
             /** @var SQLColumn $col */
             $col = null;
             if(!isset($this->columns[$formKey])) {
+                //TODO: Throw library-specific exceptions
                 throw new \Exception ("Unknown column");
             }
             $col = $this->columns[$formKey];
@@ -560,6 +564,7 @@ class SQLDataProvider extends BaseSQLDataProvider
             return $extProvider->getForeignValues($forOpts['fk_extKey'], $id);
         }
         else {
+            //TODO: Throw library-specific exceptions
             throw new \Exception("Unknown relationship value");
         }
         return array();

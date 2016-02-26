@@ -265,6 +265,17 @@ class SQLDataProviderTest extends CrudKitTest
         $this->assertArrayHasKey('LastName', $errorsForInvalidData);
     }
 
+
+    /**
+     * @test
+     * @expectedException \Exception
+     */
+    public function it_throws_an_exception_if_validating_a_row_for_missing_fields_with_unknown_columns()
+    {
+        $unknownColumn = ['Foo' => 'Bar'];
+        SqlDataProviderFactory::defaultSqlDataProvider()->validateRequiredRow($unknownColumn);
+    }
+
     /** @test */
     public function it_validates_a_row_of_data_using_a_custom_validator()
     {
@@ -290,6 +301,17 @@ class SQLDataProviderTest extends CrudKitTest
         $this->assertEmpty($failuresForValidData);
         $this->assertArrayHasKey('Email', $failuresForInvalidData);
         $this->assertEquals($invalidData['Email'], $failuresForInvalidData['Email']);
+    }
+
+    /**
+     * @test
+     * @expectedException \Exception
+     */
+    public function it_throws_an_exception_if_validating_a_row_with_unknown_columns()
+    {
+        $unknownColumn = ['Foo' => 'Bar'];
+
+        SqlDataProviderFactory::defaultSqlDataProvider()->validateRow($unknownColumn);
     }
 
     public function tearDown()
