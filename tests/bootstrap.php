@@ -9,4 +9,3 @@ $ php composer.phar install
 EOT
     );
 }
-$loader->setPsr4('CrudKitTests\\', __DIR__);
