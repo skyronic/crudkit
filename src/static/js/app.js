@@ -6,7 +6,7 @@ var ck = window.ck = {
 var ckUrl = {
     resetGetParams: function (params) {
         var url = new Url();
-        url.query.clear();
+        url.clearQuery();
 
         for (var key in params) {
             if (params.hasOwnProperty(key)) {

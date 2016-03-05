@@ -10,7 +10,7 @@ class DateTimeFormItem extends HorizontalItem{
 
         return <<<COMP
         <div class="input-group">
-        <datepicker show-weeks="true" class="well well-sm" $directives/>
+        <input type="date" $directives/>
         </div>
 COMP;
     }

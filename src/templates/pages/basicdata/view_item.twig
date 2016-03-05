@@ -18,7 +18,11 @@
 	<dl class="dl-horizontal">
 		{% for key, col in schema %}
 		<dt style={% if not loop.first %}"margin-top: 15px"{% endif %}>{{ col['label'] }}</dt>
+		{% if col['type'] == 'datetime' %}
+		<dd style="margin-top: 15px">{{ row[key]|date('m/d/Y', "UTC")}} </dd>
+		{% else %}
 		<dd style="margin-top: 15px">{{ row[key] }} </dd>
+		{% endif %}
 		{% endfor %}
 	</dl>
 	</div>

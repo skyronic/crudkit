@@ -48,7 +48,7 @@ class CrudKitApp {
     protected $login = null;
     public function useLogin ($login) {
         $this->login = $login;
-        $login->preprocess ();
+        $login->preprocess ($this);
         if (!$login->check ()) {
             $this->addPage ($login);
             $this->render ();
