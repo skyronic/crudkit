@@ -156,9 +156,12 @@ class BasicDataPage extends BasePage{
         $url = new UrlHelper();
         $rowId = $url->get("item_id", null);
         $route = new RouteGenerator();
+        $summaryKey = $this->dataProvider->getSummaryColumns()[0]['key'];
+        $rowData = $this->dataProvider->getRow ($rowId);
+        $rowName = $rowData[$summaryKey];
 
         $status = $this->dataProvider->deleteItem ($rowId);
-        FlashBag::add("alert", "Item has been deleted", "success");
+        FlashBag::add("alert", "Item $rowName has been deleted", "success");
 
         // Redirect back to the pageme
         return array(
@@ -236,7 +239,7 @@ class BasicDataPage extends BasePage{
             $this->dataProvider->validateRequiredRow($values));
         if(empty($failedValues)){
             $new_pk = $this->dataProvider->createItem($values);
-            FlashBag::add("alert", "Item has been created", "success");
+            FlashBag::add("alert", "Item $new_pk has been created", "success");
             return array(
                 'type' => 'json',
                 'data' => array(
@@ -281,8 +284,14 @@ class BasicDataPage extends BasePage{
         //validate
         $failedValues = $this->dataProvider->validateRow($values);
         if(empty($failedValues)) {
+            $url = new UrlHelper();
+            $rowId = $url->get("item_id", null);
+            $summaryKey = $this->dataProvider->getSummaryColumns()[0]['key'];
+            $rowData = $this->dataProvider->getRow ($rowId);
+            $rowName = $rowData[$summaryKey];
+
             $this->dataProvider->setRow($url->get("item_id", null), $values);
-            FlashBag::add("alert", "Item has been updated", "success");
+            FlashBag::add("alert", "Item $rowName has been updated", "success");
             return array(
                 'type' => 'json',
                 'data' => array(
@@ -339,5 +348,5 @@ class BasicDataPage extends BasePage{
         parent::init($app);
         $this->dataProvider->init();
     }
-
 }
+
