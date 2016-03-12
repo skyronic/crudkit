@@ -58,10 +58,10 @@ abstract class SQLColumn {
         switch($this->typeName) {
             case "number":
                 return floatval($value);
-            break;
+                break;
             case "string":
                 return "".$value;
-            break;
+                break;
             case "datetime":
                 $timezone = isset($this->options['timezone']) ? $this->options['timezone'] : "UTC";
                 // Assuming that the value that client has given is in UTC
@@ -70,7 +70,12 @@ abstract class SQLColumn {
                 // Now convert this into the target timezone
                 $timeObject->setTimezone($timezone);
                 return $timeObject;
-            break;
+                break;
+            case "date":
+                $date = date_create($value);
+                $date = date_format($date,'m-d-Y');
+                return $date;
+                break;
             default:
                 throw new \Exception("Unknown type {$this->typeName}");
         }
@@ -90,6 +95,11 @@ abstract class SQLColumn {
                 // Convert that into UTC
                 $timeObject->setTimezone("UTC");
                 return $timeObject->getTimestamp();
+                break;
+            case "date":
+                $date = date_create($value);
+                $date = date_format($date,'m-d-Y');
+                return $date;
                 break;
             default:
                 throw new \Exception("Unknown type {$this->typeName}");
