@@ -36,3 +36,5 @@ vendor
 composer.lock
 
 adminer.php
+
+demo/crudkit

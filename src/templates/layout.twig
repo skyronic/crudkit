@@ -8,7 +8,7 @@
 <div class="wrapper">
 
     <header class="main-header">
-        <a href="/" class="logo">CrudKit</a>
+        <a href="{{ defaultUrl }}" class="logo">CrudKit</a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
             <!-- Sidebar toggle button-->
@@ -27,7 +27,7 @@
             <ul class="sidebar-menu">
                 <li class="header">PAGES</li>
                 {% for item in pageMap %}
-                    <li role="presentation"><a href="{{ route.openPage(item.id)|raw }}"><i class="fa fa-book"></i> {{ item.name }}</a></li>
+                    <li role="presentation" {% if item.id == currentId %}class="active"{% endif %}><a href="{{ route.openPage(item.id)|raw }}"><i class="fa fa-book"></i> {{ item.name }}</a></li>
                 {% endfor %}
             </ul>
         </section>

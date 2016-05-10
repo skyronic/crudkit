@@ -8,18 +8,16 @@ abstract class BasePage {
     protected $name = "";
     protected $id = null;
 
+    /**
+     * @param $name
+     * @return $this
+     */
     public function setName ($name) {
         $this->name = $name;
+        return $this;
     }
     public function getName () {
         return $this->name;
-    }
-
-    public function __construct ($id) {
-        if(!isset($id)) {
-            throw new \Exception("Need to set an id for the page");
-        }
-        $this->id = $id;
     }
 
     public function init () {
@@ -32,6 +30,10 @@ abstract class BasePage {
     public function getId()
     {
         return $this->id;
+    }
+
+    protected function setId ($id) {
+        $this->id = $id;
     }
 
 }

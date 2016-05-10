@@ -16,9 +16,9 @@ use Doctrine\DBAL\Schema\Column;
 use PDO;
 use utilphp\util;
 
-class SQLiteDataProvider extends BaseSQLDataProvider{
-    public function __construct($path) {
-        $this->path = $path;
+class SQLDataProvider extends BaseSQLDataProvider{
+    public function setConn ($conn) {
+        $this->conn = $conn;
     }
 
     public function addColumn ($id, $expr, $label, $options = array()) {
@@ -57,12 +57,6 @@ class SQLiteDataProvider extends BaseSQLDataProvider{
 
     public function init () {
         parent::init();
-
-        $params = array(
-            'driver' => 'pdo_sqlite',
-            'path' => $this->path
-        );
-        $this->conn = DriverManager::getConnection($params);
 
         $this->processColumns();
         $this->postProcessColumns();

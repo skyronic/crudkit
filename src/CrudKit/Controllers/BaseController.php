@@ -6,6 +6,7 @@ use CrudKit\CrudKitApp;
 use CrudKit\Pages\BasePage;
 use CrudKit\Util\TwigUtil;
 use CrudKit\Util\ValueBag;
+use CrudKit\Util\RouteGenerator;
 use CrudKit\Util\UrlHelper;
 use Exception;
 
@@ -32,11 +33,18 @@ class BaseController {
     protected $page = null;
 
     /**
+     * Route generator
+     * @var RouteGenerator
+     */
+    protected $routeGen = null;
+
+    /**
      * @param $app CrudKitApp
      */
     public function __construct ($app) {
         $this->app = $app;
         $this->url = new UrlHelper();
+        $this->routeGen = new RouteGenerator();
         $this->twig = new TwigUtil();
     }
 
@@ -93,10 +101,15 @@ class BaseController {
                 $data = array(
                     'valueBag' => json_encode(ValueBag::getValues()),
                     'staticRoot' => $this->app->getStaticRoot(),
-                    'pageMap' => $pageMap
+                    'pageMap' => $pageMap,
+                    'defaultUrl' => $this->routeGen->defaultRoute()
                 );
                 if($this->page !== null) {
                     $data['page'] = $this->page;
+                    $data['currentId'] = $this->page->getId();
+                }
+                else {
+                    $data['currentId'] = -1;
                 }
                 $data['page_content'] = $result['content'];
 

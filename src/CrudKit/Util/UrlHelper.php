@@ -4,6 +4,7 @@ namespace CrudKit\Util;
 
 use League\Url\Url;
 use League\Url\UrlImmutable;
+use League\Url\Components\Query;
 
 
 class UrlHelper {

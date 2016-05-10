@@ -11,7 +11,7 @@ use Twig_Loader_Filesystem;
 
 
 class CrudKitApp {
-    protected $staticRoot;
+    protected $staticRoot = "crudkit/src/static/";
     /**
      * @var array[BasePage]
      */
@@ -45,6 +45,13 @@ class CrudKitApp {
 
     public function getStaticRoot () {
         return $this->staticRoot;
+    }
+
+    public function getDefaultPage () {
+        if(isset($this->pages[0]))
+            return $this->pages [0];
+        else
+            return null;
     }
 
 

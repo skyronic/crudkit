@@ -6,7 +6,16 @@ use CrudKit\Util\ValueBag;
 
 class MainController extends BaseController {
     public function handle_default () {
-        return "TODO";
+        $firstPage = $this->app->getDefaultPage ();
+        if($firstPage !== null) {
+            return array(
+                'type' => 'redirect',
+                'url' => $this->routeGen->openPage ($firstPage->getId())
+            );
+        }
+        else {
+            return "";
+        }
     }
     public function handle_view_page () {
         // Handle the view page action
