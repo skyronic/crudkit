@@ -64,7 +64,7 @@ class BasicLoginPage extends BasePage {
 		return $this->url->resetGetParams (array('__ckLogout' => true));
 	}
 
-	public function preprocess ($app) {
+	public function preprocess ($app = null) {
 		if ($this->url->get ('__ckLogout', false) !== false) {
 			$this->doLogout ();
 		}
