@@ -4,7 +4,7 @@
 
 -----------
 
-A Toolkit to quickly build powerful mobile-friendly CRUD (create/read/update/delete) interfaces for PHP, Laravel, and Codeigniter apps. http://crudkit.com
+A Toolkit to quickly build powerful mobile-friendly CRUD (create/read/update/delete) interfaces. http://crudkit.com
 
 ## Build locally
 Additionally from having PHP installed, make sure you have [nodejs](https://nodejs.org/) installed.
@@ -28,3 +28,7 @@ Demos are listed in `demo/`. Inorder to see the demos in action follow the steps
 - Build static files: `$ grunt buildStatic`
 - Start the server by running `$ php -S 0.0.0.0:8080` from the root of the project
 - Navigate to http://localhost:8080/demo/sql_basic.php
+
+## Laravel Support
+
+Check out [markpurser/laravel-crudkit](https://github.com/markpurser/laravel-crudkit) for a similar project (no code shared with this project) with out of the box support for eloquent and relying on blade templates and Laravel for routing.
