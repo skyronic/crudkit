@@ -32,7 +32,7 @@ class Installer {
 		$root = dirname($vendorPath);
 		$ds = DIRECTORY_SEPARATOR;
 
-		$src = $vendorPath.$ds."skyronic".$ds."crudkit".$ds."src".$ds."static".$ds."build".$ds;
+		$src = $vendorPath.$ds."smith981".$ds."crudkit".$ds."src".$ds."static".$ds."build".$ds;
 		$dest = $root.$ds."static".$ds."crudkit";
 
 		echo "Copying crudkit static files... \n\n";
