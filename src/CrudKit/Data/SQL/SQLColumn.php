@@ -35,6 +35,7 @@ abstract class SQLColumn {
     const TYPE_NUMBER = "number";
     const TYPE_DATETIME = "datetime";
     const TYPE_DATE = "date";
+    const TYPE_BOOLEAN = "boolean";
 
     public function __construct ($id, $category, $options) {
         $this->id = $id;
@@ -101,6 +102,8 @@ abstract class SQLColumn {
                 $date = date_format($date,'m-d-Y');
                 return $date;
                 break;
+            case "boolean":
+                return "".(boolval($value) ? 'true' : 'false')."\n"  ;
             default:
                 throw new \Exception("Unknown type {$this->typeName}");
         }
@@ -158,6 +161,8 @@ abstract class SQLColumn {
                 return self::TYPE_DATETIME;
             case "date":
                 return self::TYPE_DATE;
+            case "boolean":
+                return self::TYPE_STRING;
             default:
                 throw new \Exception("Unknown type $typeName");
         }
